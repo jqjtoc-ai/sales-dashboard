@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>至汇贸易 销售数据分析看板</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f5f7fa; padding: 20px; }
+        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; border-radius: 12px; margin-bottom: 30px; }
+        .header h1 { font-size: 28px; margin-bottom: 10px; }
+        .header p { opacity: 0.9; font-size: 14px; }
+        
+        .stats { display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px; margin-bottom: 30px; }
+        .stat-card { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .stat-card .label { color: #666; font-size: 13px; margin-bottom: 8px; }
+        .stat-card .value { font-size: 24px; font-weight: bold; color: #333; }
+        .stat-card .sub { font-size: 11px; color: #999; }
+        
+        .section { background: white; border-radius: 12px; padding: 25px; margin-bottom: 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .section h2 { font-size: 20px; color: #333; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid #f0f0f0; }
+        .pie-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; margin-bottom: 30px; }
+        .pie-card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .pie-card h3 { font-size: 16px; color: #333; margin-bottom: 15px; text-align: center; }
+        .pie-container { position: relative; height: 320px; }
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+        .tab { padding: 10px 20px; background: #f0f0f0; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; }
+        .tab.active { background: #667eea; color: white; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .cat-section { margin-bottom: 30px; }
+        .cat-section h4 { color: #667eea; font-size: 15px; margin-bottom: 10px; padding: 8px 12px; background: #f8f9fa; border-radius: 6px; }
+        .product-table { width: 100%; border-collapse: collapse; }
+        .product-table th { background: #f8f9fa; padding: 10px; text-align: left; font-size: 11px; color: #666; }
+        .product-table td { padding: 8px 10px; font-size: 11px; border-bottom: 1px solid #f0f0f0; }
+        .product-table .danger { color: #e74c3c; font-weight: 600; }
+        .product-table .warning { color: #f39c12; font-weight: 600; }
+        
+        /* 部门网格 - 4列 */
+        .dept-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; }
+        .dept-card { border: 1px solid #eee; border-radius: 8px; padding: 12px; }
+        .dept-card h4 { color: #667eea; font-size: 12px; margin-bottom: 8px; white-space: nowrap; }
+        .dept-card .rank { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid #f5f5f5; font-size: 11px; }
+        .dept-card .rank:last-child { border-bottom: none; }
+        .dept-card .rank .name { color: #333; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-right: 5px; }
+        .dept-card .rank .amount { color: #e74c3c; font-weight: 600; white-space: nowrap; }
+        
+        .summary-box { background: #f8f9fa; padding: 20px; border-radius: 8px; margin-top: 20px; }
+        .summary-box ul { margin-left: 20px; color: #666; font-size: 13px; line-height: 1.8; }
+        @media (max-width: 1200px) { .dept-grid { grid-template-columns: repeat(3, 1fr); } }
+        @media (max-width: 900px) { .dept-grid { grid-template-columns: repeat(2, 1fr); } }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>至汇贸易 销售数据分析看板</h1>
+        <p>数据周期：2026年3月1-17日 | 已排除物料类产品</p>
+    </div>
+    
+    <div class="stats">
+        <div class="stat-card"><div class="label">销售总额</div><div class="value">¥7,134,913</div></div>
+        <div class="stat-card"><div class="label">毛利</div><div class="value" style="color:#27ae60">¥1,229,722</div><div class="sub">毛利率 17.2%</div></div>
+        <div class="stat-card"><div class="label">部门数量</div><div class="value">12</div></div>
+        <div class="stat-card" style="border-left:4px solid #e74c3c"><div class="label">滞销品</div><div class="value" style="color:#e74c3c">128</div></div>
+        <div class="stat-card" style="border-left:4px solid #f39c12"><div class="label">缺货产品</div><div class="value" style="color:#f39c12">407</div></div>
+    </div>
+    
+    <div class="section">
+        <h2>一、销售占比分析（饼图）</h2>
+        <div class="pie-grid">
+            <div class="pie-card"><h3>各部门销售占比</h3><div class="pie-container"><canvas id="deptPie"></canvas></div></div>
+            <div class="pie-card"><h3>产品分类销售占比</h3><div class="pie-container"><canvas id="typePie"></canvas></div></div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2>二、各部门TOP10客户</h2>
+        <div class="dept-grid">
+<div class="dept-card"><h4>01南区包场 (12.3%)</h4><div class="rank"><span class="name">1. 马踏平民散柜（星期日不收货）</span><span class="amount">¥13.7万</span></div><div class="rank"><span class="name">2. （骏华）龙山多客隆（散柜）</span><span class="amount">¥11.1万</span></div><div class="rank"><span class="name">3. 明湖超市散柜（水东总店）</span><span class="amount">¥5.6万</span></div><div class="rank"><span class="name">4. 北斗星散柜(分界店)</span><span class="amount">¥4.7万</span></div><div class="rank"><span class="name">5. 北斗星散柜（万达广场店）</span><span class="amount">¥4.0万</span></div><div class="rank"><span class="name">6. （骏华）林头多客隆（散柜）</span><span class="amount">¥3.8万</span></div><div class="rank"><span class="name">7. 南盛振伟（散柜）</span><span class="amount">¥3.5万</span></div><div class="rank"><span class="name">8. 北斗星散柜（公馆市场店）</span><span class="amount">¥3.3万</span></div><div class="rank"><span class="name">9. 水东华附学校</span><span class="amount">¥3.1万</span></div><div class="rank"><span class="name">10. 1+1超市袂花店散柜</span><span class="amount">¥2.8万</span></div></div><div class="dept-card"><h4>02北区包场-信宜 (2.1%)</h4><div class="rank"><span class="name">1. 信宜水口惠民2店（散柜）</span><span class="amount">¥3.4万</span></div><div class="rank"><span class="name">2. 信宜白石惠民超市散柜</span><span class="amount">¥2.7万</span></div><div class="rank"><span class="name">3. 钱排惠民散柜</span><span class="amount">¥2.6万</span></div><div class="rank"><span class="name">4. 信宜市水口惠民散柜</span><span class="amount">¥2.3万</span></div><div class="rank"><span class="name">5. 信宜惠民散柜竹山店</span><span class="amount">¥2.2万</span></div><div class="rank"><span class="name">6. 信宜喜来客特惠超市（散柜）</span><span class="amount">¥2.0万</span></div><div class="rank"><span class="name">7. 信宜安莪宏安超市（散柜）</span><span class="amount">¥1.6万</span></div><div class="rank"><span class="name">8. 金垌宏安超市（散柜）</span><span class="amount">¥0.9万</span></div><div class="rank"><span class="name">9. 信宜市城北蜂鸟超市（散柜）</span><span class="amount">¥0.8万</span></div><div class="rank"><span class="name">10. 六运宏安（散柜）</span><span class="amount">¥0.8万</span></div></div><div class="dept-card"><h4>02北区包场-高州 (12.9%)</h4><div class="rank"><span class="name">1. （宇越）高州金港湾包场（散柜）</span><span class="amount">¥22.8万</span></div><div class="rank"><span class="name">2. （宇越）高州金港湾（五谷杂粮柜）</span><span class="amount">¥13.6万</span></div><div class="rank"><span class="name">3. 大井坚惠散柜</span><span class="amount">¥9.9万</span></div><div class="rank"><span class="name">4. 长坡坚惠散柜（星期六不收货）</span><span class="amount">¥7.9万</span></div><div class="rank"><span class="name">5. 石鼓好而多散柜</span><span class="amount">¥6.8万</span></div><div class="rank"><span class="name">6. 南湖塘家嘉福（散柜）</span><span class="amount">¥5.5万</span></div><div class="rank"><span class="name">7. 高州南塘坚惠超市（散柜）</span><span class="amount">¥5.4万</span></div><div class="rank"><span class="name">8. 马贵坚惠（散柜）</span><span class="amount">¥4.9万</span></div><div class="rank"><span class="name">9. 平定百川百货超市（散柜）</span><span class="amount">¥3.2万</span></div><div class="rank"><span class="name">10. 泗水惠民优选（散柜）</span><span class="amount">¥3.1万</span></div></div><div class="dept-card"><h4>04茂南区 (3.9%)</h4><div class="rank"><span class="name">1. 茂名明湖超市散柜（官山店）</span><span class="amount">¥1.8万</span></div><div class="rank"><span class="name">2. 袂花明湖(徐达专柜)</span><span class="amount">¥1.4万</span></div><div class="rank"><span class="name">3. 兰石益乐家超市</span><span class="amount">¥1.3万</span></div><div class="rank"><span class="name">4. 茂名明湖超市散柜(龙湖店)</span><span class="amount">¥1.1万</span></div><div class="rank"><span class="name">5. 新圩十里超市</span><span class="amount">¥1.1万</span></div><div class="rank"><span class="name">6. 顺翔生鲜超市(山阁荔园店)</span><span class="amount">¥0.9万</span></div><div class="rank"><span class="name">7. 红旗路盈惠</span><span class="amount">¥0.8万</span></div><div class="rank"><span class="name">8. 厂前店明湖散柜</span><span class="amount">¥0.8万</span></div><div class="rank"><span class="name">9. （正合安）电白区电城镇融汇超市</span><span class="amount">¥0.7万</span></div><div class="rank"><span class="name">10. 新坡满家乐</span><span class="amount">¥0.7万</span></div></div><div class="dept-card"><h4>05电白区 (5.0%)</h4><div class="rank"><span class="name">1. 惠多多超市（电城清源湾）</span><span class="amount">¥1.8万</span></div><div class="rank"><span class="name">2. 惠多多超市（电城岭门店）</span><span class="amount">¥1.7万</span></div><div class="rank"><span class="name">3. 惠多多超市(霞洞坡田店)</span><span class="amount">¥1.2万</span></div><div class="rank"><span class="name">4. 惠多多超市（林头汇通店）</span><span class="amount">¥1.1万</span></div><div class="rank"><span class="name">5. 惠多多超市（观珠正街店）</span><span class="amount">¥1.1万</span></div><div class="rank"><span class="name">6. 惠多多超市（麻岗聚龙店）</span><span class="amount">¥1.1万</span></div><div class="rank"><span class="name">7. 水东邻家鲜仓嘉和店</span><span class="amount">¥0.9万</span></div><div class="rank"><span class="name">8. 惠多多超市（霞洞新霞店）</span><span class="amount">¥0.8万</span></div><div class="rank"><span class="name">9. 惠多多超市（树仔新城店）</span><span class="amount">¥0.7万</span></div><div class="rank"><span class="name">10. 惠多多超市（林头店）</span><span class="amount">¥0.7万</span></div></div><div class="dept-card"><h4>06化州区 (4.3%)</h4><div class="rank"><span class="name">1. 益乐家生活超市（塘缀店）</span><span class="amount">¥2.6万</span></div><div class="rank"><span class="name">2. 石湾惠广</span><span class="amount">¥1.7万</span></div><div class="rank"><span class="name">3. 江湖佳顺生鲜超市</span><span class="amount">¥1.6万</span></div><div class="rank"><span class="name">4. 良光惠广</span><span class="amount">¥1.4万</span></div><div class="rank"><span class="name">5. 大正大生鲜超市（板桥店）</span><span class="amount">¥1.4万</span></div><div class="rank"><span class="name">6. 兰山惠广生鲜超市</span><span class="amount">¥1.1万</span></div><div class="rank"><span class="name">7. 新安惠广</span><span class="amount">¥1.0万</span></div><div class="rank"><span class="name">8. 笪桥鸿鑫生鲜超市</span><span class="amount">¥1.0万</span></div><div class="rank"><span class="name">9. 宝圩万客隆</span><span class="amount">¥0.9万</span></div><div class="rank"><span class="name">10. 良光益禾购物中心</span><span class="amount">¥0.9万</span></div></div><div class="dept-card"><h4>07高州区 (3.5%)</h4><div class="rank"><span class="name">1. 高州山姆优选</span><span class="amount">¥1.8万</span></div><div class="rank"><span class="name">2. 火星场新美佳生活超市（散柜）</span><span class="amount">¥1.3万</span></div><div class="rank"><span class="name">3. 潭头源广惠生活超市</span><span class="amount">¥1.0万</span></div><div class="rank"><span class="name">4. 高州山美新美佳生活超市（散柜）</span><span class="amount">¥0.9万</span></div><div class="rank"><span class="name">5. 荷塘乐购生鲜超市</span><span class="amount">¥0.9万</span></div><div class="rank"><span class="name">6. 高州容易饮料批发</span><span class="amount">¥0.8万</span></div><div class="rank"><span class="name">7. 荷塘家多福</span><span class="amount">¥0.8万</span></div><div class="rank"><span class="name">8. 高州勇丰行饮料批发</span><span class="amount">¥0.8万</span></div><div class="rank"><span class="name">9. 高州乐事多明珠店（二中）</span><span class="amount">¥0.7万</span></div><div class="rank"><span class="name">10. 曹江平山铺惠的超市（上午不收货的，下午收货）</span><span class="amount">¥0.7万</span></div></div><div class="dept-card"><h4>08信宜区 (1.6%)</h4><div class="rank"><span class="name">1. 思贺联诚生活超市（散柜）</span><span class="amount">¥2.2万</span></div><div class="rank"><span class="name">2. 信宜市镇隆镇贺家汇生鲜超市</span><span class="amount">¥1.1万</span></div><div class="rank"><span class="name">3. 白石国发</span><span class="amount">¥1.1万</span></div><div class="rank"><span class="name">4. 信宜旺沙宏安超市（散柜）</span><span class="amount">¥1.0万</span></div><div class="rank"><span class="name">5. 信宜润佳生鲜超市（南环岛店）</span><span class="amount">¥1.0万</span></div><div class="rank"><span class="name">6. 信宜水口骏业百货商场（桥头店）</span><span class="amount">¥0.6万</span></div><div class="rank"><span class="name">7. 广西金福来超市（六王店）</span><span class="amount">¥0.6万</span></div><div class="rank"><span class="name">8. 信宜市宏安超市散柜（高坡店）</span><span class="amount">¥0.6万</span></div><div class="rank"><span class="name">9. 信宜池洞宏安超市（散柜）</span><span class="amount">¥0.6万</span></div><div class="rank"><span class="name">10. 信宜市银湖东路妙馋零食屋（锦湖宏安隔离）</span><span class="amount">¥0.6万</span></div></div><div class="dept-card"><h4>09包装部 (0.0%)</h4><div class="rank"><span class="name">1. 邻家达水果（油城六路）</span><span class="amount">¥0.4万</span></div><div class="rank"><span class="name">2. 三角圩顺兴购物商场</span><span class="amount">¥0.1万</span></div><div class="rank"><span class="name">3. 羊角沙场蔬果园</span><span class="amount">¥0.1万</span></div><div class="rank"><span class="name">4. 水果汇百货商行（新圩）</span><span class="amount">¥0.1万</span></div><div class="rank"><span class="name">5. 茂名大道家成超市</span><span class="amount">¥0.1万</span></div><div class="rank"><span class="name">6. 红旗路金明发</span><span class="amount">¥0.0万</span></div><div class="rank"><span class="name">7. 红旗路鸣粤（明月）2225655</span><span class="amount">¥0.0万</span></div><div class="rank"><span class="name">8. 星瑶果业（隔坑）</span><span class="amount">¥0.0万</span></div><div class="rank"><span class="name">9. 河东迎宾三路一家超市（原乐享）</span><span class="amount">¥0.0万</span></div><div class="rank"><span class="name">10. 文兄水果店包装（高山）</span><span class="amount">¥-0.5万</span></div></div><div class="dept-card"><h4>茂名市至汇贸易有限公司 (0.6%)</h4><div class="rank"><span class="name">1. 徐华东老板</span><span class="amount">¥1.8万</span></div><div class="rank"><span class="name">2. （正合安）化州市官桥富贵林百货（散柜）</span><span class="amount">¥0.5万</span></div><div class="rank"><span class="name">3. 泗水惠民优选（散柜）</span><span class="amount">¥0.4万</span></div><div class="rank"><span class="name">4. 茂名聚诚贸易有限公司</span><span class="amount">¥0.4万</span></div><div class="rank"><span class="name">5. 朱秋眉团购客户</span><span class="amount">¥0.4万</span></div><div class="rank"><span class="name">6. 团购客户</span><span class="amount">¥0.4万</span></div><div class="rank"><span class="name">7. 公司员工</span><span class="amount">¥0.3万</span></div><div class="rank"><span class="name">8. 徐福记食品</span><span class="amount">¥0.2万</span></div><div class="rank"><span class="name">9. 茂名明湖(储运仓)</span><span class="amount">¥0.2万</span></div><div class="rank"><span class="name">10. 泗水洪尤阿莲小卖部</span><span class="amount">¥0.1万</span></div></div><div class="dept-card"><h4>茂名文员部 (0.0%)</h4><div class="rank"><span class="name">1. 团购客户</span><span class="amount">¥0.3万</span></div><div class="rank"><span class="name">2. 朱秋眉团购客户</span><span class="amount">¥0.0万</span></div><div class="rank"><span class="name">3. 信宜市水口惠民散柜</span><span class="amount">¥0.0万</span></div><div class="rank"><span class="name">4. 信宜水口惠民2店（散柜）</span><span class="amount">¥0.0万</span></div><div class="rank"><span class="name">5. 北斗星散柜(分界店)</span><span class="amount">¥0.0万</span></div><div class="rank"><span class="name">6. 北斗星散柜（万达广场店）</span><span class="amount">¥0.0万</span></div><div class="rank"><span class="name">7. 北斗星散柜（公馆市场店）</span><span class="amount">¥0.0万</span></div><div class="rank"><span class="name">8. 北斗星散柜（米粮店）</span><span class="amount">¥0.0万</span></div><div class="rank"><span class="name">9. 北斗星散柜（钟鼓岭店）</span><span class="amount">¥0.0万</span></div><div class="rank"><span class="name">10. 北斗星散柜（镇盛市场店）</span><span class="amount">¥0.0万</span></div></div><div class="dept-card"><h4>茂名销售部 (3.8%)</h4><div class="rank"><span class="name">1. 水东华附学校</span><span class="amount">¥9.3万</span></div><div class="rank"><span class="name">2. 茂名明湖超市散柜（东信店）</span><span class="amount">¥7.7万</span></div><div class="rank"><span class="name">3. 北斗星散柜(红旗店）</span><span class="amount">¥3.3万</span></div><div class="rank"><span class="name">4. 明湖超市包装（水东总店）</span><span class="amount">¥1.9万</span></div><div class="rank"><span class="name">5. 北斗星有限公司（钟鼓岭店）</span><span class="amount">¥1.1万</span></div><div class="rank"><span class="name">6. （骏华）麻岗多客隆（散柜）</span><span class="amount">¥0.8万</span></div><div class="rank"><span class="name">7. 明湖超市散柜（水东总店）</span><span class="amount">¥0.7万</span></div><div class="rank"><span class="name">8. 北斗星有限公司（万达广场店）</span><span class="amount">¥0.7万</span></div><div class="rank"><span class="name">9. 北斗星散柜（鳌头市场店）</span><span class="amount">¥0.7万</span></div><div class="rank"><span class="name">10. 北斗星散柜（万达广场店）</span><span class="amount">¥0.5万</span></div></div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2>三、各部门TOP3业务员</h2>
+        <div class="dept-grid">
+<div class="dept-card"><h4>01南区包场</h4><div class="rank"><span class="name">1. （骏华）龙山多客隆（散柜）</span><span class="amount">¥11.1万</span></div><div class="rank"><span class="name">2. 马踏平民散柜（星期日不收货）</span><span class="amount">¥9.1万</span></div><div class="rank"><span class="name">3. 0101朱秋眉</span><span class="amount">¥7.3万</span></div></div><div class="dept-card"><h4>02北区包场-信宜</h4><div class="rank"><span class="name">1. 信宜水口惠民2店（散柜）</span><span class="amount">¥3.4万</span></div><div class="rank"><span class="name">2. 城北蜂鸟（宏安）喜来客</span><span class="amount">¥3.3万</span></div><div class="rank"><span class="name">3. 信宜白石惠民超市散柜</span><span class="amount">¥2.7万</span></div></div><div class="dept-card"><h4>02北区包场-高州</h4><div class="rank"><span class="name">1. （宇越）金港湾</span><span class="amount">¥39.5万</span></div><div class="rank"><span class="name">2. 0201傅豪运</span><span class="amount">¥7.6万</span></div><div class="rank"><span class="name">3. 石鼓好而多散柜</span><span class="amount">¥6.8万</span></div></div><div class="dept-card"><h4>04茂南区</h4><div class="rank"><span class="name">1. 0403黄小燕</span><span class="amount">¥6.7万</span></div><div class="rank"><span class="name">2. 0402张沥分</span><span class="amount">¥5.9万</span></div><div class="rank"><span class="name">3. 0406邹玉媚</span><span class="amount">¥5.9万</span></div></div><div class="dept-card"><h4>05电白区</h4><div class="rank"><span class="name">1. 0503柯莲珠</span><span class="amount">¥7.3万</span></div><div class="rank"><span class="name">2. 0505林来娣</span><span class="amount">¥7.1万</span></div><div class="rank"><span class="name">3. 0507梁晓萍</span><span class="amount">¥6.5万</span></div></div><div class="dept-card"><h4>06化州区</h4><div class="rank"><span class="name">1. 0605曾春兰</span><span class="amount">¥6.9万</span></div><div class="rank"><span class="name">2. 0607杨维维</span><span class="amount">¥6.7万</span></div><div class="rank"><span class="name">3. 0608陈红飞</span><span class="amount">¥6.2万</span></div></div><div class="dept-card"><h4>07高州区</h4><div class="rank"><span class="name">1. 0705李海霞</span><span class="amount">¥6.2万</span></div><div class="rank"><span class="name">2. 0706何艳玲</span><span class="amount">¥5.0万</span></div><div class="rank"><span class="name">3. 0702梁翠媚</span><span class="amount">¥4.9万</span></div></div><div class="dept-card"><h4>08信宜区</h4><div class="rank"><span class="name">1. 0802钟云芝</span><span class="amount">¥4.6万</span></div><div class="rank"><span class="name">2. 0804冼婷</span><span class="amount">¥3.1万</span></div><div class="rank"><span class="name">3. 0803梁华秀</span><span class="amount">¥2.9万</span></div></div><div class="dept-card"><h4>09包装部</h4><div class="rank"><span class="name">1. 李思敏</span><span class="amount">¥0.4万</span></div></div><div class="dept-card"><h4>茂名市至汇贸易有限公司</h4><div class="rank"><span class="name">1. 待分配</span><span class="amount">¥2.1万</span></div><div class="rank"><span class="name">2. （正合安）化州市官桥富贵林百货（散柜）</span><span class="amount">¥0.5万</span></div><div class="rank"><span class="name">3. 0801柯永铭</span><span class="amount">¥0.5万</span></div></div><div class="dept-card"><h4>茂名文员部</h4><div class="rank"><span class="name">1. 陈春花</span><span class="amount">¥0.3万</span></div><div class="rank"><span class="name">2. 至汇采购</span><span class="amount">¥0.0万</span></div></div><div class="dept-card"><h4>茂名销售部</h4><div class="rank"><span class="name">1. 0101朱秋眉</span><span class="amount">¥26.7万</span></div><div class="rank"><span class="name">2. 0103黎国彪</span><span class="amount">¥0.1万</span></div></div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2>四、各品类滞销品</h2>
+        <p style="color:#666;font-size:12px;margin-bottom:15px;">*散称产品：库存天数>21天为滞销 | 其他产品：库存天数>90天为滞销</p>
+        <div class="tabs">
+<button class="tab active" onclick="showTab('slow_其他')">其他 (12)</button><button class="tab " onclick="showTab('slow_定量装')">定量装 (3)</button><button class="tab " onclick="showTab('slow_凉果')">凉果 (15)</button><button class="tab " onclick="showTab('slow_散称')">散称 (2)</button><button class="tab " onclick="showTab('slow_五谷杂粮')">五谷杂粮 (15)</button>
+        </div>
+<div id="slow_其他" class="tab-content active"><div class="cat-section"><h4>其他 - 滞销品TOP15 (库存>90天)</h4><table class="product-table"><tr><th>产品名称</th><th>当前库存</th><th>17天销量</th><th>库存天数</th></tr><tr><td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">至汇缸垫长形27.5*22.5*8（套）</td><td>6,882</td><td>290</td><td class="danger">403天</td></tr><tr><td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">[包装]奥利奥荷氏炫果缤纷什果口味34g*240条（4061003）</td><td>231</td><td>12</td><td class="danger">327天</td></tr><tr><td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">[包装]奥利奥荷氏特强味薄荷糖34g*240条（4061812）</td><td>231</td><td>12</td><td class="danger">327天</td></tr><tr><td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">蜡笔小新缸贴</td><td>500</td><td>30</td><td class="danger">283天</td></tr><tr><td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">点小轩芝芝椰蓉1*2.5kg</td><td>7</td><td>0</td><td class="danger">252天</td></tr><tr><td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">谭小泡鱼豆腐香辣味2.5kg*4袋</td><td>20</td><td>1</td><td class="danger">239天</td></tr><tr><td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">tt-甜蜜1派40克心爱物语草莓1*5kg（A3002）</td><td>4</td><td>0</td><td class="danger">232天</td></tr><tr><td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">魔术长气球</td><td>3,650</td><td>300</td><td class="danger">207天</td></tr><tr><td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">宇越分隔板</td><td>640</td><td>60</td><td class="danger">181天</td></tr><tr><td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">蜡笔小新插卡</td><td>200</td><td>20</td><td class="danger">170天</td></tr><tr><td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">港荣藜麦蒸吐司面包（蒸）1*2kg</td><td>5</td><td>1</td><td class="danger">146天</td></tr><tr><td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">蜡笔小新纸巾</td><td>1,550</td><td>200</td><td class="danger">132天</td></tr></table></div></div><div id="slow_定量装" class="tab-content "><div class="cat-section"><h4>定量装 - 滞销品TOP15 (库存>90天)</h4><table class="product-table"><tr><th>产品名称</th><th>当前库存</th><th>17天销量</th><th>库存天数</th></tr><tr><td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">[包装]食神兽风干鸡肉香辣味82克30罐</td><td>12</td><td>1</td><td class="danger">204天</td></tr><tr><td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">[包装]食神兽风干鸡肉五香味82克30罐</td><td>9</td><td>1</td><td class="danger">153天</td></tr><tr><td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">[包装]食神兽风干猪肉五香味58克*30罐</td><td>12</td><td>2</td><td class="danger">102天</td></tr></table></div></div><div id="slow_凉果" class="tab-content "><div class="cat-section"><h4>凉果 - 滞销品TOP15 (库存>90天)</h4><table class="product-table"><tr><th>产品名称</th><th>当前库存</th><th>17天销量</th><th>库存天数</th></tr><tr><td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">回货登记表</td><td>44</td><td>1</td><td class="danger">748天</td></tr><tr><td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">玫瑰梅条1*2.5kg</td><td>166</td><td>4</td><td class="danger">707天</td></tr><tr><td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">情人梅1*5kg</td><td>772</td><td>23</td><td class="danger">572天</td></tr><tr><td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">甘草桔1*2.5kg</td><td>700</td><td>23</td><td class="danger">515天</td></tr><tr><td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">甘草榄1*5kg</td><td>108</td><td>4</td><td class="danger">437天</td></tr><tr><td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">桂花梅1*5kg</td><td>519</td><td>22</td><td class="danger">410天</td></tr><tr><td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">申请表</td><td>44</td><td>2</td><td class="danger">374天</td></tr><tr><td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">喉香果肉（佛手果）1*3kg</td><td>177</td><td>9</td><td class="danger">334天</td></tr><tr><td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">盐津陈皮丝1*2.5kg</td><td>131</td><td>7</td><td class="danger">322天</td></tr><tr><td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">小方山楂1*2.5kg</td><td>141</td><td>8</td><td class="danger">319天</td></tr><tr><td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">玫瑰梅1*5kg</td><td>780</td><td>42</td><td class="danger">314天</td></tr><tr><td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">保鲜膜</td><td>36</td><td>2</td><td class="danger">306天</td></tr><tr><td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">8C透明密封袋1319(16*24cm)中</td><td>29,600</td><td>1,700</td><td class="danger">296天</td></tr><tr><td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">甘草黄皮1*2.5kg</td><td>27</td><td>2</td><td class="danger">276天</td></tr><tr><td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">甘草陈皮1*2.5kg</td><td>39</td><td>2</td><td class="danger">265天</td></tr></table></div></div><div id="slow_散称" class="tab-content "><div class="cat-section"><h4>散称 - 滞销品TOP15 (库存>21天)</h4><table class="product-table"><tr><th>产品名称</th><th>当前库存</th><th>17天销量</th><th>库存天数</th></tr><tr><td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">tt-徐福记（1540）沙琪玛袋新装702香酥全蛋味12*469GCN</td><td>11</td><td>4</td><td class="danger">47天</td></tr><tr><td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">徐福记（0561/3047/8064）熊博士剥皮果汁软糖芒果袋装6（10*60g）</td><td>79</td><td>39</td><td class="danger">34天</td></tr></table></div></div><div id="slow_五谷杂粮" class="tab-content "><div class="cat-section"><h4>五谷杂粮 - 滞销品TOP15 (库存>90天)</h4><table class="product-table"><tr><th>产品名称</th><th>当前库存</th><th>17天销量</th><th>库存天数</th></tr><tr><td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">霸王花</td><td>74</td><td>0</td><td class="danger">5014天</td></tr><tr><td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">玉竹</td><td>163</td><td>1</td><td class="danger">4935天</td></tr><tr><td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">雪梨干</td><td>31</td><td>0</td><td class="danger">1038天</td></tr><tr><td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">木耳</td><td>531</td><td>9</td><td class="danger">976天</td></tr><tr><td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">党参</td><td>83</td><td>2</td><td class="danger">793天</td></tr><tr><td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">枣仁</td><td>20</td><td>0</td><td class="danger">680天</td></tr><tr><td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">茶树菇</td><td>97</td><td>2</td><td class="danger">660天</td></tr><tr><td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">焦糖瓜子</td><td>810</td><td>24</td><td class="danger">563天</td></tr><tr><td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">裙带菜</td><td>59</td><td>2</td><td class="danger">498天</td></tr><tr><td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">开边红莲子</td><td>58</td><td>2</td><td class="danger">495天</td></tr><tr><td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">核桃花生</td><td>1,633</td><td>58</td><td class="danger">483天</td></tr><tr><td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">山楂干</td><td>14</td><td>0</td><td class="danger">481天</td></tr><tr><td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">生地</td><td>41</td><td>2</td><td class="danger">464天</td></tr><tr><td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">核桃瓜子</td><td>1,480</td><td>60</td><td class="danger">419天</td></tr><tr><td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">龙眼干</td><td>1,318</td><td>54</td><td class="danger">419天</td></tr></table></div></div>
+    </div>
+    
+    <div class="section">
+        <h2>五、分析建议</h2>
+        <div class="summary-box">
+            <ul>
+                <li><strong>重点区域：</strong>02北区包场-高州和01南区包场是核心区域，合计占比超过25%</li>
+                <li><strong>产品分类：</strong>五谷杂粮(7.4%)、散称(2.2%)、凉果(2.0%)、定量装(1.6%)需针对性运营</li>
+                <li><strong>库存预警：</strong>128个产品滞销需清理，407个产品缺货需补货</li>
+            </ul>
+        </div>
+    </div>
+    
+    <script>
+    const deptData = [{"name": "02北区包场-高州", "value": 917879.83}, {"name": "01南区包场", "value": 879781.17}, {"name": "05电白区", "value": 356411.2}, {"name": "06化州区", "value": 304803.63}, {"name": "04茂南区", "value": 280015.55}, {"name": "茂名销售部", "value": 268418.32}, {"name": "07高州区", "value": 248622.58}, {"name": "02北区包场-信宜", "value": 146448.04}, {"name": "08信宜区", "value": 117681.58}, {"name": "茂名市至汇贸易有限公司", "value": 40726.44}, {"name": "09包装部", "value": 3556.1}, {"name": "茂名文员部", "value": 3112.0}];
+    const typeData = [{"name": "其他", "value": 6193803.74}, {"name": "五谷杂粮", "value": 524804.7}, {"name": "散称", "value": 155868.25}, {"name": "凉果", "value": 141319.01}, {"name": "定量装", "value": 119117.18}];
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        const deptCtx = document.getElementById('deptPie').getContext('2d');
+        const deptTotal = deptData.reduce((sum, d) => sum + d.value, 0);
+        new Chart(deptCtx, {
+            type: 'pie',
+            data: {
+                labels: deptData.map(d => d.name + ' (' + (d.value/deptTotal*100).toFixed(1) + '%)'),
+                datasets: [{
+                    data: deptData.map(d => d.value),
+                    backgroundColor: ['#667eea','#f093fb','#f5576c','#4facfe','#00f2fe','#43e97b','#fa709a','#fee140','#30cfd0','#a8edea','#ff9a9e','#fecfef']
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'right', labels: { font: { size: 10 }, boxWidth: 12 } },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const value = context.raw;
+                                const pct = (value / deptTotal * 100).toFixed(1);
+                                return '¥' + (value/10000).toFixed(1) + '万 (' + pct + '%)';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        
+        const typeCtx = document.getElementById('typePie').getContext('2d');
+        const typeTotal = typeData.reduce((sum, d) => sum + d.value, 0);
+        new Chart(typeCtx, {
+            type: 'pie',
+            data: {
+                labels: typeData.map(d => d.name + ' (' + (d.value/typeTotal*100).toFixed(1) + '%)'),
+                datasets: [{
+                    data: typeData.map(d => d.value),
+                    backgroundColor: ['#667eea','#f093fb','#f5576c','#4facfe','#00f2fe']
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'right', labels: { font: { size: 12 }, boxWidth: 12 } },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const value = context.raw;
+                                const pct = (value / typeTotal * 100).toFixed(1);
+                                return '¥' + (value/10000).toFixed(1) + '万 (' + pct + '%)';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    });
+    
+    function showTab(id) {
+        document.querySelectorAll('.tab-content').forEach(t => {
+            if(t.id.startsWith('slow_')) t.classList.remove('active');
+        });
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        event.target.classList.add('active');
+    }
+    </script>
+</body>
+</html>
