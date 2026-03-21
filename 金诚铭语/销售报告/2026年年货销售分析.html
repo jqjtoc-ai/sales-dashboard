@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>金诚公司2026年年货销售分析</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            color: #fff;
+            padding: 40px;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        h1 { 
+            font-size: 2.5em; 
+            text-align: center; 
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #ffd700, #ff8c00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .subtitle { text-align: center; color: #888; margin-bottom: 40px; }
+        .card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .card h2 { 
+            color: #ffd700; 
+            margin-bottom: 20px;
+            font-size: 1.3em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .card h3 {
+            color: #fff;
+            margin: 20px 0 15px;
+            font-size: 1.1em;
+            border-left: 3px solid #ffd700;
+            padding-left: 10px;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+        .stat-box {
+            background: rgba(255,255,255,0.08);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+        .stat-value { font-size: 1.8em; font-weight: bold; color: #ffd700; }
+        .stat-label { color: #888; margin-top: 5px; font-size: 0.9em; }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        th { color: #ffd700; font-weight: 600; }
+        tr:hover { background: rgba(255,255,255,0.05); }
+        .rank { color: #ffd700; font-weight: bold; width: 50px; }
+        .warning { color: #ff6b6b; }
+        .success { color: #51cf66; }
+        
+        .progress-bar {
+            height: 8px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+        .progress-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+        .progress-low { background: #ff6b6b; }
+        .progress-mid { background: #ffd700; }
+        .progress-high { background: #51cf66; }
+        
+        .highlight { 
+            background: linear-gradient(90deg, #ff6b6b, #ffd700); 
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: bold;
+        }
+        
+        .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+        @media (max-width: 768px) { .two-col { grid-template-columns: 1fr; } }
+        
+        .metric-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; }
+        .metric-value { font-weight: bold; }
+        
+        /* 业务员品类表格 */
+        .salesman-card {
+            background: rgba(255,255,255,0.03);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+        .salesman-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .salesman-name { font-size: 1.1em; color: #ffd700; font-weight: bold; }
+        .salesman-total { color: #fff; }
+        .category-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+        .category-tag {
+            background: rgba(255,215,0,0.1);
+            border: 1px solid rgba(255,215,0,0.3);
+            border-radius: 20px;
+            padding: 4px 12px;
+            font-size: 0.85em;
+            color: #ffd700;
+        }
+        .category-tag.high { background: rgba(81,207,102,0.2); border-color: rgba(81,207,102,0.5); color: #51cf66; }
+        
+        /* 建议部分 */
+        .suggestion-section {
+            background: linear-gradient(135deg, rgba(255,215,0,0.1) 0%, rgba(255,140,0,0.1) 100%);
+            border: 1px solid rgba(255,215,0,0.3);
+        }
+        .suggestion-item {
+            margin-bottom: 20px;
+        }
+        .suggestion-title {
+            color: #ffd700;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .suggestion-content {
+            color: #ccc;
+            line-height: 1.8;
+            padding-left: 24px;
+        }
+        .suggestion-content li { margin-bottom: 8px; }
+        
+        .tag { 
+            display: inline-block; 
+            padding: 2px 8px; 
+            border-radius: 4px; 
+            font-size: 0.8em;
+            margin-right: 5px;
+        }
+        .tag-red { background: rgba(255,107,107,0.2); color: #ff6b6b; }
+        .tag-green { background: rgba(81,207,102,0.2); color: #51cf66; }
+        .tag-gold { background: rgba(255,215,0,0.2); color: #ffd700; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🐲 金诚公司2026年春節年貨销售分析</h1>
+        <p class="subtitle">销售期间: 2025-12-15 ~ 2026-02-28</p>
+        
+        <!-- 整体概览 -->
+        <div class="card">
+            <h2>📊 整体销售概况</h2>
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="stat-value">6,198</div>
+                    <div class="stat-label">订单笔数</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value">¥656.2万</div>
+                    <div class="stat-label">总销售额</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value">¥73.0万</div>
+                    <div class="stat-label">总毛利</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value">11.12%</div>
+                    <div class="stat-label">毛利率</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 同比分析 -->
+        <div class="card">
+            <h2>📉 2026 vs 2025 同比分析</h2>
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="stat-value">¥945.7万</div>
+                    <div class="stat-label">2025年同期</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value">¥656.2万</div>
+                    <div class="stat-label">2026年</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value warning">-30.61%</div>
+                    <div class="stat-label">同比增长率</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 产品和客户排行 -->
+        <div class="two-col">
+            <div class="card">
+                <h2>🏆 产品销售排行 (Top 10)</h2>
+                <table>
+                    <tr><th>#</th><th>产品</th><th>销售额</th></tr>
+                    <tr><td class="rank">1</td><td>金诚铭语乌鸡蛋40枚</td><td>¥347,048</td></tr>
+                    <tr><td class="rank">2</td><td>邱太太金华1号火腿2.5kg</td><td>¥167,482</td></tr>
+                    <tr><td class="rank">3</td><td>金豆芽金银花柚子汁礼盒</td><td>¥158,604</td></tr>
+                    <tr><td class="rank">4</td><td>正儿八经有机五谷杂粮2.24kg</td><td>¥151,796</td></tr>
+                    <tr><td class="rank">5</td><td>熹象银耳燕窝新年款</td><td>¥147,597</td></tr>
+                    <tr><td class="rank">6</td><td>正儿八经有机黄小米2.1kg</td><td>¥143,058</td></tr>
+                    <tr><td class="rank">7</td><td>邱太太金华火腿竹盒2.5kg</td><td>¥135,075</td></tr>
+                    <tr><td class="rank">8</td><td>沃隆每日坚果A750g</td><td>¥132,517</td></tr>
+                    <tr><td class="rank">9</td><td>熹象黑枸杞240g</td><td>¥126,072</td></tr>
+                    <tr><td class="rank">10</td><td>沃隆新年快乐礼盒1.59kg</td><td>¥122,344</td></tr>
+                </table>
+            </div>
+            
+            <div class="card">
+                <h2>🏪 客户销售排行 (Top 10)</h2>
+                <table>
+                    <tr><th>#</th><th>客户</th><th>销售额</th></tr>
+                    <tr><td class="rank">1</td><td>首衡集配</td><td>¥502,766</td></tr>
+                    <tr><td class="rank">2</td><td>洋洋--韩娜</td><td>¥451,800</td></tr>
+                    <tr><td class="rank">3</td><td>洋洋--总店</td><td>¥432,572</td></tr>
+                    <tr><td class="rank">4</td><td>毛毛</td><td>¥409,994</td></tr>
+                    <tr><td class="rank">5</td><td>棠棣鲜集购物1</td><td>¥388,282</td></tr>
+                    <tr><td class="rank">6</td><td>丁丁果</td><td>¥265,578</td></tr>
+                    <tr><td class="rank">7</td><td>呼呼</td><td>¥253,910</td></tr>
+                    <tr><td class="rank">8</td><td>小阿璐</td><td>¥211,361</td></tr>
+                    <tr><td class="rank">9</td><td>洋洋--秦泰</td><td>¥169,150</td></tr>
+                    <tr><td class="rank">10</td><td>洋洋--鸿浩车</td><td>¥154,641</td></tr>
+                </table>
+            </div>
+        </div>
+        
+        <!-- 品类分析 -->
+        <div class="card">
+            <h2>📦 品类销售与目标达成</h2>
+            <table>
+                <tr><th>品类</th><th>销售额</th><th>占比</th><th>目标</th><th>达成率</th><th>进度</th></tr>
+                <tr>
+                    <td>坚果礼盒</td><td>¥136.9万</td><td>20.9%</td><td>¥300万</td>
+                    <td class="warning">45.6%</td>
+                    <td><div class="progress-bar"><div class="progress-fill progress-mid" style="width:45.6%"></div></div></td>
+                </tr>
+                <tr>
+                    <td>滋补礼盒</td><td>¥107.8万</td><td>16.4%</td><td>¥400万</td>
+                    <td class="warning">26.9%</td>
+                    <td><div class="progress-bar"><div class="progress-fill progress-low" style="width:26.9%"></div></div></td>
+                </tr>
+                <tr>
+                    <td>肉类礼盒</td><td>¥105.0万</td><td>16.0%</td><td>¥150万</td>
+                    <td class="success">70.0%</td>
+                    <td><div class="progress-bar"><div class="progress-fill progress-high" style="width:70%"></div></div></td>
+                </tr>
+                <tr>
+                    <td>农特礼盒</td><td>¥41.7万</td><td>6.4%</td><td>¥120万</td>
+                    <td class="warning">34.7%</td>
+                    <td><div class="progress-bar"><div class="progress-fill progress-low" style="width:34.7%"></div></div></td>
+                </tr>
+                <tr>
+                    <td>水饮礼盒</td><td>¥25.5万</td><td>3.9%</td><td>¥5万</td>
+                    <td class="success">510%</td>
+                    <td><div class="progress-bar"><div class="progress-fill progress-high" style="width:100%"></div></div></td>
+                </tr>
+                <tr>
+                    <td>糖巧礼盒</td><td>¥12.2万</td><td>1.9%</td><td>¥3万</td>
+                    <td class="success">406%</td>
+                    <td><div class="progress-bar"><div class="progress-fill progress-high" style="width:100%"></div></div></td>
+                </tr>
+                <tr>
+                    <td>糕点礼盒</td><td>¥12.8万</td><td>2.0%</td><td>¥50万</td>
+                    <td class="warning">25.7%</td>
+                    <td><div class="progress-bar"><div class="progress-fill progress-low" style="width:25.7%"></div></div></td>
+                </tr>
+                <tr>
+                    <td>蛋类礼盒</td><td>¥11.5万</td><td>1.7%</td><td>¥200万</td>
+                    <td class="warning">5.7%</td>
+                    <td><div class="progress-bar"><div class="progress-fill progress-low" style="width:5.7%"></div></div></td>
+                </tr>
+            </table>
+        </div>
+        
+        <!-- 业务员分析 -->
+        <div class="card">
+            <h2>👤 业务员销售排行及品类分布</h2>
+            
+            <div class="salesman-card">
+                <div class="salesman-header">
+                    <span class="salesman-name">🥇 周涛</span>
+                    <span class="salesman-total">¥143.4万 (21.9%)</span>
+                </div>
+                <div class="category-tags">
+                    <span class="category-tag">坚果礼盒 19.9%</span>
+                    <span class="category-tag">滋补礼盒 19.0%</span>
+                    <span class="category-tag">肉类礼盒 14.5%</span>
+                    <span class="category-tag high">农特礼盒 6.4%</span>
+                </div>
+            </div>
+            
+            <div class="salesman-card">
+                <div class="salesman-header">
+                    <span class="salesman-name">🥈 李薇</span>
+                    <span class="salesman-total">¥131.3万 (20.0%)</span>
+                </div>
+                <div class="category-tags">
+                    <span class="category-tag">坚果礼盒 16.2%</span>
+                    <span class="category-tag">滋补礼盒 14.6%</span>
+                    <span class="category-tag high">水饮礼盒 6.8%</span>
+                    <span class="category-tag high">农特礼盒 10.5%</span>
+                </div>
+            </div>
+            
+            <div class="salesman-card">
+                <div class="salesman-header">
+                    <span class="salesman-name">🥉 付玉冰1</span>
+                    <span class="salesman-total">¥105.0万 (16.0%)</span>
+                </div>
+                <div class="category-tags">
+                    <span class="category-tag high">肉类礼盒 25.6%</span>
+                    <span class="category-tag">坚果礼盒 21.2%</span>
+                    <span class="category-tag">滋补礼盒 15.3%</span>
+                </div>
+            </div>
+            
+            <div class="salesman-card">
+                <div class="salesman-header">
+                    <span class="salesman-name">4. 付玉冰</span>
+                    <span class="salesman-total">¥75.6万 (11.5%)</span>
+                </div>
+                <div class="category-tags">
+                    <span class="category-tag">滋补礼盒 20.4%</span>
+                    <span class="category-tag">肉类礼盒 13.2%</span>
+                    <span class="category-tag high">农特礼盒 11.2%</span>
+                </div>
+            </div>
+            
+            <div class="salesman-card">
+                <div class="salesman-header">
+                    <span class="salesman-name">5. 杨宇</span>
+                    <span class="salesman-total">¥62.1万 (9.5%)</span>
+                </div>
+                <div class="category-tags">
+                    <span class="category-tag high">肉类礼盒 31.7%</span>
+                    <span class="category-tag high">坚果礼盒 31.1%</span>
+                    <span class="category-tag">滋补礼盒 16.3%</span>
+                </div>
+            </div>
+            
+            <div class="salesman-card">
+                <div class="salesman-header">
+                    <span class="salesman-name">6. 田金丽</span>
+                    <span class="salesman-total">¥55.2万 (8.4%)</span>
+                </div>
+                <div class="category-tags">
+                    <span class="category-tag">坚果礼盒 28.7%</span>
+                    <span class="category-tag">滋补礼盒 21.8%</span>
+                    <span class="category-tag high">糖巧礼盒 3.1%</span>
+                </div>
+            </div>
+            
+            <div class="salesman-card">
+                <div class="salesman-header">
+                    <span class="salesman-name">7. 门店</span>
+                    <span class="salesman-total">¥44.8万 (6.8%)</span>
+                </div>
+                <div class="category-tags">
+                    <span class="category-tag">坚果礼盒 30.6%</span>
+                    <span class="category-tag high">水饮礼盒 23.9%</span>
+                    <span class="category-tag high">糖巧礼盒 4.6%</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 分析总结 -->
+        <div class="card">
+            <h2>💡 分析总结</h2>
+            <div class="metric-row">
+                <span>📉 整体下滑</span>
+                <span class="metric-value warning">2026年春節年貨销售同比下降 30.61%</span>
+            </div>
+            <div class="metric-row">
+                <span>✅ 超额完成品类</span>
+                <span class="metric-value success">水饮礼盒(510%)、糖巧礼盒(406%)、肉类礼盒(70%)</span>
+            </div>
+            <div class="metric-row">
+                <span>⚠️ 表现较差品类</span>
+                <span class="metric-value warning">蛋类礼盒(5.7%)、茶饮礼盒(6.4%)、罐头礼盒(6.8%)</span>
+            </div>
+            <div class="metric-row">
+                <span>🔥 爆款产品</span>
+                <span class="metric-value">乌鸡蛋、火腿礼盒、金豆芽礼盒</span>
+            </div>
+            <div class="metric-row">
+                <span>👥 客户集中度</span>
+                <span class="metric-value">前5大客户占比超过40%</span>
+            </div>
+        </div>
+        
+        <!-- 农历60天对比 -->
+        <div class="card">
+            <h2>📅 2025 vs 2026 农历新年前60天每日对比</h2>
+            <div class="stats-grid" style="margin-bottom:20px">
+                <div class="stat-box">
+                    <div class="stat-value">¥814.4万</div>
+                    <div class="stat-label">2025年60天</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value">¥666.0万</div>
+                    <div class="stat-label">2026年60天</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value warning">-18.2%</div>
+                    <div class="stat-label">同比增长率</div>
+                </div>
+            </div>
+            <div style="max-height:400px;overflow-y:auto">
+                <table>
+                    <tr><th>日期</th><th>2025年</th><th>2026年</th><th>同比</th><th>同比%</th><th></th></tr>
+                    <tr><td>2025-12-15</td><td>0</td><td>3,512</td><td style="color:#51cf66">+3,512</td><td style="color:#51cf66">+0.0%</td><td>📈</td></tr><tr><td>2025-12-16</td><td>0</td><td>2,476</td><td style="color:#51cf66">+2,476</td><td style="color:#51cf66">+0.0%</td><td>📈</td></tr><tr><td>2025-12-17</td><td>0</td><td>27,419</td><td style="color:#51cf66">+27,419</td><td style="color:#51cf66">+0.0%</td><td>📈</td></tr><tr><td>2025-12-18</td><td>0</td><td>5,174</td><td style="color:#51cf66">+5,174</td><td style="color:#51cf66">+0.0%</td><td>📈</td></tr><tr><td>2025-12-19</td><td>0</td><td>37,709</td><td style="color:#51cf66">+37,709</td><td style="color:#51cf66">+0.0%</td><td>📈</td></tr><tr><td>2025-12-20</td><td>1,058</td><td>20,712</td><td style="color:#51cf66">+19,654</td><td style="color:#51cf66">+1858.2%</td><td>📈</td></tr><tr><td>2025-12-21</td><td>1,889</td><td>21,487</td><td style="color:#51cf66">+19,598</td><td style="color:#51cf66">+1037.3%</td><td>📈</td></tr><tr><td>2025-12-22</td><td>2,860</td><td>10,141</td><td style="color:#51cf66">+7,281</td><td style="color:#51cf66">+254.6%</td><td>📈</td></tr><tr><td>2025-12-23</td><td>6,172</td><td>3,067</td><td style="color:#ff6b6b">-3,105</td><td style="color:#ff6b6b">-50.3%</td><td>📉</td></tr><tr><td>2025-12-24</td><td>6,205</td><td>18,826</td><td style="color:#51cf66">+12,621</td><td style="color:#51cf66">+203.4%</td><td>📈</td></tr><tr><td>2025-12-25</td><td>2,305</td><td>3,241</td><td style="color:#51cf66">+936</td><td style="color:#51cf66">+40.6%</td><td>📈</td></tr><tr><td>2025-12-26</td><td>4,990</td><td>44,848</td><td style="color:#51cf66">+39,857</td><td style="color:#51cf66">+798.7%</td><td>📈</td></tr><tr><td>2025-12-27</td><td>2,467</td><td>26,916</td><td style="color:#51cf66">+24,449</td><td style="color:#51cf66">+991.0%</td><td>📈</td></tr><tr><td>2025-12-28</td><td>8,818</td><td>27,068</td><td style="color:#51cf66">+18,250</td><td style="color:#51cf66">+207.0%</td><td>📈</td></tr><tr><td>2025-12-29</td><td>53,070</td><td>23,838</td><td style="color:#ff6b6b">-29,232</td><td style="color:#ff6b6b">-55.1%</td><td>📉</td></tr><tr><td>2025-12-30</td><td>11,448</td><td>17,535</td><td style="color:#51cf66">+6,087</td><td style="color:#51cf66">+53.2%</td><td>📈</td></tr><tr><td>2025-12-31</td><td>8,392</td><td>10,846</td><td style="color:#51cf66">+2,455</td><td style="color:#51cf66">+29.3%</td><td>📈</td></tr><tr><td>2026-01-01</td><td>11,374</td><td>34,460</td><td style="color:#51cf66">+23,086</td><td style="color:#51cf66">+203.0%</td><td>📈</td></tr><tr><td>2026-01-02</td><td>27,996</td><td>36,110</td><td style="color:#51cf66">+8,114</td><td style="color:#51cf66">+29.0%</td><td>📈</td></tr><tr><td>2026-01-03</td><td>26,224</td><td>15,898</td><td style="color:#ff6b6b">-10,325</td><td style="color:#ff6b6b">-39.4%</td><td>📉</td></tr><tr><td>2026-01-04</td><td>56,056</td><td>14,589</td><td style="color:#ff6b6b">-41,467</td><td style="color:#ff6b6b">-74.0%</td><td>📉</td></tr><tr><td>2026-01-05</td><td>53,323</td><td>16,684</td><td style="color:#ff6b6b">-36,639</td><td style="color:#ff6b6b">-68.7%</td><td>📉</td></tr><tr><td>2026-01-06</td><td>4,250</td><td>19,503</td><td style="color:#51cf66">+15,252</td><td style="color:#51cf66">+358.8%</td><td>📈</td></tr><tr><td>2026-01-07</td><td>21,398</td><td>71,064</td><td style="color:#51cf66">+49,666</td><td style="color:#51cf66">+232.1%</td><td>📈</td></tr><tr><td>2026-01-08</td><td>103,465</td><td>62,951</td><td style="color:#ff6b6b">-40,515</td><td style="color:#ff6b6b">-39.2%</td><td>📉</td></tr><tr><td>2026-01-09</td><td>80,011</td><td>85,843</td><td style="color:#51cf66">+5,832</td><td style="color:#51cf66">+7.3%</td><td>📈</td></tr><tr><td>2026-01-10</td><td>47,345</td><td>103,566</td><td style="color:#51cf66">+56,221</td><td style="color:#51cf66">+118.7%</td><td>📈</td></tr><tr><td>2026-01-11</td><td>74,879</td><td>63,288</td><td style="color:#ff6b6b">-11,591</td><td style="color:#ff6b6b">-15.5%</td><td>📉</td></tr><tr><td>2026-01-12</td><td>53,373</td><td>94,322</td><td style="color:#51cf66">+40,949</td><td style="color:#51cf66">+76.7%</td><td>📈</td></tr><tr><td>2026-01-13</td><td>26,488</td><td>181,063</td><td style="color:#51cf66">+154,575</td><td style="color:#51cf66">+583.6%</td><td>📈</td></tr><tr><td>2026-01-14</td><td>78,081</td><td>119,352</td><td style="color:#51cf66">+41,271</td><td style="color:#51cf66">+52.9%</td><td>📈</td></tr><tr><td>2026-01-15</td><td>75,088</td><td>68,743</td><td style="color:#ff6b6b">-6,344</td><td style="color:#ff6b6b">-8.4%</td><td>📉</td></tr><tr><td>2026-01-16</td><td>310,360</td><td>66,579</td><td style="color:#ff6b6b">-243,781</td><td style="color:#ff6b6b">-78.5%</td><td>📉</td></tr><tr><td>2026-01-17</td><td>90,132</td><td>199,871</td><td style="color:#51cf66">+109,739</td><td style="color:#51cf66">+121.8%</td><td>📈</td></tr><tr><td>2026-01-18</td><td>142,026</td><td>286,498</td><td style="color:#51cf66">+144,471</td><td style="color:#51cf66">+101.7%</td><td>📈</td></tr><tr><td>2026-01-19</td><td>75,915</td><td>89,800</td><td style="color:#51cf66">+13,885</td><td style="color:#51cf66">+18.3%</td><td>📈</td></tr><tr><td>2026-01-20</td><td>128,550</td><td>72,850</td><td style="color:#ff6b6b">-55,700</td><td style="color:#ff6b6b">-43.3%</td><td>📉</td></tr><tr><td>2026-01-21</td><td>120,570</td><td>179,706</td><td style="color:#51cf66">+59,136</td><td style="color:#51cf66">+49.0%</td><td>📈</td></tr><tr><td>2026-01-22</td><td>99,845</td><td>186,313</td><td style="color:#51cf66">+86,468</td><td style="color:#51cf66">+86.6%</td><td>📈</td></tr><tr><td>2026-01-23</td><td>78,362</td><td>178,314</td><td style="color:#51cf66">+99,952</td><td style="color:#51cf66">+127.6%</td><td>📈</td></tr><tr><td>2026-01-24</td><td>176,347</td><td>121,664</td><td style="color:#ff6b6b">-54,682</td><td style="color:#ff6b6b">-31.0%</td><td>📉</td></tr><tr><td>2026-01-25</td><td>434,147</td><td>119,655</td><td style="color:#ff6b6b">-314,492</td><td style="color:#ff6b6b">-72.4%</td><td>📉</td></tr><tr><td>2026-01-26</td><td>334,716</td><td>198,990</td><td style="color:#ff6b6b">-135,726</td><td style="color:#ff6b6b">-40.5%</td><td>📉</td></tr><tr><td>2026-01-27</td><td>412,912</td><td>217,469</td><td style="color:#ff6b6b">-195,443</td><td style="color:#ff6b6b">-47.3%</td><td>📉</td></tr><tr><td>2026-01-28</td><td>349,380</td><td>207,803</td><td style="color:#ff6b6b">-141,576</td><td style="color:#ff6b6b">-40.5%</td><td>📉</td></tr><tr><td>2026-01-29</td><td>346,644</td><td>233,800</td><td style="color:#ff6b6b">-112,844</td><td style="color:#ff6b6b">-32.6%</td><td>📉</td></tr><tr><td>2026-01-30</td><td>272,878</td><td>425,428</td><td style="color:#51cf66">+152,549</td><td style="color:#51cf66">+55.9%</td><td>📈</td></tr><tr><td>2026-01-31</td><td>371,605</td><td>126,179</td><td style="color:#ff6b6b">-245,426</td><td style="color:#ff6b6b">-66.0%</td><td>📉</td></tr><tr><td>2026-02-01</td><td>259,085</td><td>151,020</td><td style="color:#ff6b6b">-108,065</td><td style="color:#ff6b6b">-41.7%</td><td>📉</td></tr><tr><td>2026-02-02</td><td>358,281</td><td>277,572</td><td style="color:#ff6b6b">-80,709</td><td style="color:#ff6b6b">-22.5%</td><td>📉</td></tr><tr><td>2026-02-03</td><td>291,002</td><td>202,593</td><td style="color:#ff6b6b">-88,409</td><td style="color:#ff6b6b">-30.4%</td><td>📉</td></tr><tr><td>2026-02-04</td><td>399,587</td><td>318,528</td><td style="color:#ff6b6b">-81,059</td><td style="color:#ff6b6b">-20.3%</td><td>📉</td></tr><tr><td>2026-02-05</td><td>306,546</td><td>191,636</td><td style="color:#ff6b6b">-114,910</td><td style="color:#ff6b6b">-37.5%</td><td>📉</td></tr><tr><td>2026-02-06</td><td>423,746</td><td>239,354</td><td style="color:#ff6b6b">-184,392</td><td style="color:#ff6b6b">-43.5%</td><td>📉</td></tr><tr><td>2026-02-07</td><td>325,544</td><td>144,322</td><td style="color:#ff6b6b">-181,222</td><td style="color:#ff6b6b">-55.7%</td><td>📉</td></tr><tr><td>2026-02-08</td><td>295,065</td><td>254,658</td><td style="color:#ff6b6b">-40,407</td><td style="color:#ff6b6b">-13.7%</td><td>📉</td></tr><tr><td>2026-02-09</td><td>307,591</td><td>197,684</td><td style="color:#ff6b6b">-109,907</td><td style="color:#ff6b6b">-35.7%</td><td>📉</td></tr><tr><td>2026-02-10</td><td>258,017</td><td>186,680</td><td style="color:#ff6b6b">-71,337</td><td style="color:#ff6b6b">-27.6%</td><td>📉</td></tr><tr><td>2026-02-11</td><td>180,700</td><td>168,869</td><td style="color:#ff6b6b">-11,831</td><td style="color:#ff6b6b">-6.5%</td><td>📉</td></tr><tr><td>2026-02-12</td><td>144,995</td><td>123,768</td><td style="color:#ff6b6b">-21,227</td><td style="color:#ff6b6b">-14.6%</td><td>📉</td></tr>
+                </table>
+            </div>
+        </div>
+        
+        <!-- 明年建议 -->
+        <div class="card suggestion-section">
+            <h2>🚀 2027年年货布局安排与选品建议</h2>
+            
+            <div class="suggestion-item">
+                <div class="suggestion-title">
+                    <span class="tag tag-red">止损</span> 1. 调整目标设定，聚焦核心品类
+                </div>
+                <ul class="suggestion-content">
+                    <li><strong>降低不切实际的目标</strong>：蛋类礼盒目标200万仅完成5.7%，茶饮礼盒目标80万仅完成6.4%，建议明年下调至合理水平</li>
+                    <li><strong>聚焦高周转品类</strong>：肉类礼盒(70%)、水饮礼盒(510%)、糖巧礼盒(406%)证明市场需求存在，应作为主力</li>
+                    <li><strong>坚果礼盒仍为核心</strong>：虽达成率45.6%但销售额最高(136.9万)，仍是年货礼盒最大品类</li>
+                </ul>
+            </div>
+            
+            <div class="suggestion-item">
+                <div class="suggestion-title">
+                    <span class="tag tag-green">增长</span> 2. 优化产品结构，打造爆款矩阵
+                </div>
+                <ul class="suggestion-content">
+                    <li><strong>延续爆款策略</strong>：乌鸡蛋(34.7万)、火腿礼盒(16.7万+13.5万)、金豆芽礼盒(15.9万)表现突出明年继续深耕</li>
+                    <li><strong>补充中价位产品</strong>：当前高价礼盒占比过高，可增加99-199元中端礼盒覆盖更多消费群体</li>
+                    <li><strong>开发组合套装</strong>：将热销的滋补+坚果组合打包，提升客单价</li>
+                </ul>
+            </div>
+            
+            <div class="suggestion-item">
+                <div class="suggestion-title">
+                    <span class="tag tag-gold">渠道</span> 3. 强化客户开发，降低集中度风险
+                </div>
+                <ul class="suggestion-content">
+                    <li><strong>分散客户依赖</strong>：前5大客户占比超40%，需加快新客户开发</li>
+                    <li><strong>复制成功经验</strong>："洋洋"系列客户贡献超100万，可复制其运作模式到其他区域</li>
+                    <li><strong>开拓新渠道</strong>：门店渠道水饮礼盒表现突出(23.9%)，可增加门店陈列和推荐力度</li>
+                </ul>
+            </div>
+            
+            <div class="suggestion-item">
+                <div class="suggestion-title">
+                    <span class="tag tag-gold">团队</span> 4. 人效提升与品类分工优化
+                </div>
+                <ul class="suggestion-content">
+                    <li><strong>发挥业务员特长</strong>：杨宇肉类+坚果强(62.8%)，周涛/李薇全品类均衡，付玉冰1肉类突出(25.6%)</li>
+                    <li><strong>补齐短板品类</strong>：各业务员蛋类/茶饮礼盒占比均极低，需专项培训产品知识</li>
+                    <li><strong>设置品类专项奖</strong>：针对滞销品类(蛋类、茶饮)设置专项激励</li>
+                </ul>
+            </div>
+            
+            <div class="suggestion-item">
+                <div class="suggestion-title">
+                    <span class="tag tag-red">复盘</span> 5. 提前布局年货节
+                </div>
+                <ul class="suggestion-content">
+                    <li><strong>倒排时间表</strong>：今年12月下旬-1月销售高峰集中在春节前2周，建议11月启动预热</li>
+                    <li><strong>提前备货锁货</strong>：爆款产品需提前1个月与供应商锁定库存</li>
+                    <li><strong>每日对标复盘</strong>：参考2025年每日销售曲线，合理规划进度</li>
+                </ul>
+            </div>
+        </div>
+        
+        <p style="text-align: center; color: #666; margin-top: 40px; padding-bottom: 20px;">
+            报告生成时间: 2026-03-21 | 至汇贸易数据分析
+        </p>
+    </div>
+</body>
+</html>
