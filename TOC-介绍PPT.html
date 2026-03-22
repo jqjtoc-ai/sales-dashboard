@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOC 制约理论 - 介绍PPT</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        /* 幻灯片样式 */
+        .slide {
+            display: none;
+            min-height: 100vh;
+            padding: 60px 80px;
+            font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #fff;
+        }
+        
+        .slide.active { display: flex; flex-direction: column; }
+        
+        /* 封面 */
+        .slide-cover {
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+        }
+        
+        .slide-cover h1 {
+            font-size: 4em;
+            background: linear-gradient(90deg, #ffd700, #ff8c00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+        }
+        
+        .slide-cover .subtitle {
+            font-size: 1.8em;
+            color: #aaa;
+            margin-bottom: 40px;
+        }
+        
+        .slide-cover .author {
+            font-size: 1.2em;
+            color: #888;
+        }
+        
+        /* 标题页 */
+        .slide-title {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            justify-content: center;
+        }
+        
+        .slide-title h2 {
+            font-size: 3em;
+            margin-bottom: 30px;
+        }
+        
+        .slide-title p {
+            font-size: 1.5em;
+            opacity: 0.9;
+        }
+        
+        /* 内容页 */
+        .slide-content h2 {
+            font-size: 2.2em;
+            color: #ffd700;
+            margin-bottom: 40px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(255,215,0,0.3);
+        }
+        
+        /* 卡片 */
+        .card {
+            background: rgba(255,255,255,0.08);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .card h3 {
+            color: #ffd700;
+            font-size: 1.4em;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        /* 列表 */
+        ul { list-style: none; }
+        
+        ul li {
+            padding: 12px 0;
+            padding-left: 30px;
+            position: relative;
+            font-size: 1.2em;
+            line-height: 1.6;
+        }
+        
+        ul li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: #ffd700;
+        }
+        
+        /* 网格 */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .grid-2 { grid-template-columns: repeat(2, 1fr); }
+        
+        .grid-item {
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: transform 0.3s;
+        }
+        
+        .grid-item:hover { transform: translateY(-5px); }
+        
+        .grid-item .number {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #ffd700;
+            margin-bottom: 15px;
+        }
+        
+        .grid-item .title {
+            font-size: 1.3em;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+        
+        .grid-item .desc {
+            font-size: 0.95em;
+            color: #aaa;
+        }
+        
+        /* 公式框 */
+        .formula {
+            background: rgba(255,215,0,0.1);
+            border: 2px solid #ffd700;
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .formula .text {
+            font-size: 1.8em;
+            color: #ffd700;
+            margin-bottom: 10px;
+        }
+        
+        .formula .sub {
+            font-size: 1em;
+            color: #aaa;
+        }
+        
+        /* 流程图 */
+        .flow {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 40px 0;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .flow-step {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            padding: 25px 20px;
+            text-align: center;
+            flex: 1;
+            min-width: 150px;
+            position: relative;
+        }
+        
+        .flow-step .num {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #ffd700;
+            color: #000;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .flow-step .step-title {
+            font-size: 1.2em;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+        
+        .flow-step .step-desc {
+            font-size: 0.9em;
+            color: rgba(255,255,255,0.8);
+        }
+        
+        .flow-arrow {
+            font-size: 2em;
+            color: #ffd700;
+        }
+        
+        /* 对比表格 */
+        .compare-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 30px 0;
+        }
+        
+        .compare-table th, .compare-table td {
+            padding: 18px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .compare-table th {
+            background: rgba(255,215,0,0.2);
+            color: #ffd700;
+            font-size: 1.2em;
+        }
+        
+        .compare-table td {
+            font-size: 1.1em;
+        }
+        
+        .compare-table td:first-child {
+            color: #fff;
+            font-weight: bold;
+        }
+        
+        /* 案例卡片 */
+        .case-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 15px 0;
+            border-left: 4px solid #ffd700;
+        }
+        
+        .case-card h4 {
+            color: #ffd700;
+            font-size: 1.3em;
+            margin-bottom: 15px;
+        }
+        
+        .case-card .result {
+            display: flex;
+            gap: 30px;
+            margin-top: 15px;
+        }
+        
+        .case-card .result-item {
+            text-align: center;
+        }
+        
+        .case-card .result-item .num {
+            font-size: 2em;
+            color: #51cf66;
+            font-weight: bold;
+        }
+        
+        .case-card .result-item .label {
+            font-size: 0.9em;
+            color: #aaa;
+        }
+        
+        /* 图标 */
+        .icon { font-size: 1.5em; margin-right: 10px; }
+        
+        /* 底部导航 */
+        .nav {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .nav button {
+            background: rgba(255,215,0,0.2);
+            border: 1px solid #ffd700;
+            color: #ffd700;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s;
+        }
+        
+        .nav button:hover {
+            background: #ffd700;
+            color: #000;
+        }
+        
+        .slide-number {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            color: #666;
+            font-size: 1em;
+        }
+        
+        /* 总结页 */
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .summary-item {
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .summary-item .emoji {
+            font-size: 2em;
+        }
+        
+        .summary-item .text {
+            font-size: 1.1em;
+        }
+        
+        /* 关键词 */
+        .keyword {
+            display: inline-block;
+            background: rgba(255,215,0,0.2);
+            color: #ffd700;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- 封面 -->
+<div class="slide slide-cover active">
+    <h1>🔧 TOC 制约理论</h1>
+    <p class="subtitle">企业持续增长的核心方法论</p>
+    <p class="author">休闲食品经销商必备思维框架</p>
+    <div style="margin-top: 60px;">
+        <span class="keyword">有效产出</span>
+        <span class="keyword">瓶颈突破</span>
+        <span class="keyword">持续改进</span>
+    </div>
+</div>
+
+<!-- 什么是TOC -->
+<div class="slide slide-title">
+    <h2>📌 什么是 TOC？</h2>
+    <p>制约理论 (Theory of Constraints)</p>
+    <div style="margin-top: 50px; max-width: 800px;">
+        <div class="card">
+            <h3><span class="icon">💡</span>核心思想</h3>
+            <p style="font-size: 1.4em; line-height: 1.8;">
+                任何系统都存在少数<strong style="color:#ffd700">"制约因素"</strong>（瓶颈），<br>
+                只要找出并突破这些瓶颈，就能<strong style="color:#ffd700">提升整体绩效</strong>。
+            </p>
+        </div>
+        <div class="card" style="margin-top: 30px;">
+            <h3><span class="icon">🪵</span>木桶原理</h3>
+            <p style="font-size: 1.3em; line-height: 1.8;">
+                系统的强度取决于<strong style="color:#ff6b6b">最薄弱的环节</strong>，<br>
+                改进的关键在于<strong style="color:#51cf66">集中资源解决制约</strong>，而非盲目优化局部。
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- 创始人 -->
+<div class="slide slide-content">
+    <h2>👨‍🏫 创始人</h2>
+    <div class="grid">
+        <div class="grid-item" style="grid-column: span 3;">
+            <div class="number" style="font-size: 2em;">Eliyahu M. Goldratt</div>
+            <div class="title">以色利物理学家 & 企业管理顾问</div>
+            <div class="desc">1970年代末创立制约理论TOC</div>
+            <div class="desc" style="margin-top: 20px;">
+                <span class="keyword">《目标》</span>
+                <span class="keyword">《关键链》</span>
+                <span class="keyword">《仍然不足够》</span>
+            </div>
+        </div>
+    </div>
+    <div class="formula" style="margin-top: 50px;">
+        <div class="text">《目标》- 以小说形式阐述TOC原理</div>
+        <div class="sub">企业管理必读经典</div>
+    </div>
+</div>
+
+<!-- 三大指标 -->
+<div class="slide slide-content">
+    <h2>📊 三大核心指标</h2>
+    <div class="grid">
+        <div class="grid-item">
+            <div class="number">T</div>
+            <div class="title">有效产出</div>
+            <div class="desc">Throughput<br>销售产生的收入</div>
+        </div>
+        <div class="grid-item">
+            <div class="number">I</div>
+            <div class="title">库存</div>
+            <div class="desc">Inventory<br>投入的资金</div>
+        </div>
+        <div class="grid-item">
+            <div class="number">OE</div>
+            <div class="title">运营费用</div>
+            <div class="desc">Operating Expense<br>运转花费</div>
+        </div>
+    </div>
+    <div class="formula">
+        <div class="text">净利润 = 有效产出(T) - 运营费用(OE)</div>
+        <div class="sub">有效产出可以无限增长，库存和费用需要控制</div>
+    </div>
+</div>
+
+<!-- 有效产出详解 -->
+<div class="slide slide-content">
+    <h2>💰 有效产出 (Throughput)</h2>
+    <div class="card">
+        <h3>📐 计算公式</h3>
+        <p style="font-size: 1.5em; text-align: center; color: #ffd700; margin: 20px 0;">
+            有效产出 = 销售收入 - 完全变动成本(原材料)
+        </p>
+    </div>
+    <div class="grid grid-2">
+        <div class="card">
+            <h3>✅ 核心原则</h3>
+            <ul>
+                <li>必须已销售才算有效产出</li>
+                <li>有效产出可以<strong style="color:#51cf66">无限增长</strong></li>
+                <li>生产多 ≠ 有效产出高</li>
+                <li>不卖 = 0产出</li>
+            </ul>
+        </div>
+        <div class="card">
+            <h3>❌ 传统误区</h3>
+            <ul>
+                <li>生产越多越好 → 卖出去才算</li>
+                <li>库存是资产 → 库存是负债</li>
+                <li>成本越低越好 → 关注有效产出增长</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- 库存详解 -->
+<div class="slide slide-content">
+    <h2>📦 库存 (Inventory)</h2>
+    <div class="card">
+        <h3>🔍 TOC 观点</h3>
+        <p style="font-size: 1.5em; text-align: center; color: #ff6b6b; margin: 20px 0;">
+            库存是<strong>负债</strong>，不是资产！
+        </p>
+    </div>
+    <div class="grid grid-2">
+        <div class="card">
+            <h3>包含内容</h3>
+            <ul>
+                <li>原材料</li>
+                <li>在制品 (WIP)</li>
+                <li>成品</li>
+                <li>报废物品</li>
+            </ul>
+        </div>
+        <div class="card">
+            <h3>管理方法</h3>
+            <ul>
+                <li>动态缓冲管理</li>
+                <li>瓶颈导向</li>
+                <li>保持"刚刚好"库存</li>
+                <li>避免积压资金</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- 五大步骤 -->
+<div class="slide slide-content">
+    <h2>🔄 五大步骤</h2>
+    <p style="font-size: 1.3em; color: #aaa; margin-bottom: 30px;">持续改进的闭环流程</p>
+    <div class="flow">
+        <div class="flow-step">
+            <span class="num">1</span>
+            <div class="step-title">识别制约</div>
+            <div class="step-desc">找出瓶颈</div>
+        </div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-step">
+            <span class="num">2</span>
+            <div class="step-title">开发制约</div>
+            <div class="step-desc">最大化利用</div>
+        </div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-step">
+            <span class="num">3</span>
+            <div class="step-title">从属同步</div>
+            <div class="step-desc">配合瓶颈</div>
+        </div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-step">
+            <span class="num">4</span>
+            <div class="step-title">提升制约</div>
+            <div class="step-desc">突破瓶颈</div>
+        </div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-step">
+            <span class="num">5</span>
+            <div class="step-title">循环改进</div>
+            <div class="step-desc">找新瓶颈</div>
+        </div>
+    </div>
+    <div class="card" style="margin-top: 40px;">
+        <p style="font-size: 1.2em; text-align: center;">
+            🔁 打破一个瓶颈后，新瓶颈会出现 → 回到步骤1继续
+        </p>
+    </div>
+</div>
+
+<!-- 步骤详解 -->
+<div class="slide slide-content">
+    <h2>📝 步骤详解</h2>
+    <div class="grid">
+        <div class="grid-item">
+            <div class="number">1</div>
+            <div class="title">识别制约</div>
+            <div class="desc">找出限制系统实现目标的唯一因素</div>
+        </div>
+        <div class="grid-item">
+            <div class="number">2</div>
+            <div class="title">开发制约</div>
+            <div class="desc">不投入新资源，最大化利用现有产能</div>
+        </div>
+        <div class="grid-item">
+            <div class="number">3</div>
+            <div class="title">从属同步</div>
+            <div class="desc">其他环节服从瓶颈节奏</div>
+        </div>
+        <div class="grid-item">
+            <div class="number">4</div>
+            <div class="title">提升制约</div>
+            <div class="desc">投入资源（设备/人手）突破瓶颈</div>
+        </div>
+        <div class="grid-item">
+            <div class="number">5</div>
+            <div class="title">循环改进</div>
+            <div class="desc">避免惰性，持续寻找新瓶颈</div>
+        </div>
+    </div>
+</div>
+
+<!-- 思维工具 -->
+<div class="slide slide-content">
+    <h2>🧠 思维工具</h2>
+    <p style="font-size: 1.3em; color: #aaa; margin-bottom: 30px;">回答三个核心问题</p>
+    <div class="grid">
+        <div class="card" style="text-align: center;">
+            <div style="font-size: 3em; margin-bottom: 15px;">❓</div>
+            <h3 style="color: #fff;">改变什么？</h3>
+            <p style="color: #aaa; margin-top: 10px;">找核心问题</p>
+            <p style="color: #ffd700; margin-top: 10px; font-weight: bold;">现状树 CRT</p>
+        </div>
+        <div class="card" style="text-align: center;">
+            <div style="font-size: 3em; margin-bottom: 15px;">🎯</div>
+            <h3 style="color: #fff;">改成什么？</h3>
+            <p style="color: #aaa; margin-top: 10px;">设计解决方案</p>
+            <p style="color: #ffd700; margin-top: 10px; font-weight: bold;">未来树 FRT</p>
+        </div>
+        <div class="card" style="text-align: center;">
+            <div style="font-size: 3em; margin-bottom: 15px;">🛠️</div>
+            <h3 style="color: #fff;">如何改变？</h3>
+            <p style="color: #aaa; margin-top: 10px;">制定行动计划</p>
+            <p style="color: #ffd700; margin-top: 10px; font-weight: bold;">冲突图+前提树+转化树</p>
+        </div>
+    </div>
+</div>
+
+<!-- TOC vs 传统 -->
+<div class="slide slide-content">
+    <h2>⚖️ TOC vs 传统管理</h2>
+    <table class="compare-table">
+        <tr>
+            <th>维度</th>
+            <th>传统管理</th>
+            <th>TOC</th>
+        </tr>
+        <tr>
+            <td>焦点</td>
+            <td>局部优化</td>
+            <td style="color:#51cf66;">整体系统</td>
+        </tr>
+        <tr>
+            <td>指标</td>
+            <td>成本会计</td>
+            <td style="color:#51cf66;">有效产出</td>
+        </tr>
+        <tr>
+            <td>库存</td>
+            <td>资产</td>
+            <td style="color:#ff6b6b;">负债</td>
+        </tr>
+        <tr>
+            <td>生产</td>
+            <td>越多越好</td>
+            <td style="color:#51cf66;">卖出去才算</td>
+        </tr>
+        <tr>
+            <td>思维</td>
+            <td>解决所有问题</td>
+            <td style="color:#ffd700;">聚焦关键问题</td>
+        </tr>
+    </table>
+</div>
+
+<!-- 应用案例 -->
+<div class="slide slide-content">
+    <h2>📈 应用案例</h2>
+    <div class="case-card">
+        <h4>🎯 通用效果 - 100+企业研究</h4>
+        <div class="result">
+            <div class="result-item">
+                <div class="num">68%</div>
+                <div class="label">平均收入增长</div>
+            </div>
+            <div class="result-item">
+                <div class="num">82%</div>
+                <div class="label">平均利润增长</div>
+            </div>
+        </div>
+    </div>
+    <div class="grid grid-2">
+        <div class="case-card">
+            <h4>🏭 制造业</h4>
+            <p>通用汽车、波音、英特尔</p>
+            <p style="color: #aaa; margin-top: 10px;">缩短交付周期、提高准时率</p>
+        </div>
+        <div class="case-card">
+            <h4>🔧 得克萨斯食品</h4>
+            <p>不增加投资实现增产</p>
+            <p style="color: #aaa; margin-top: 10px;">18个月交付周期缩短75%</p>
+        </div>
+    </div>
+</div>
+
+<!-- 休闲食品应用 -->
+<div class="slide slide-content">
+    <h2>🍪 休闲食品经销商应用</h2>
+    <div class="grid grid-2">
+        <div class="card">
+            <h3>🔍 常见瓶颈</h3>
+            <ul>
+                <li>客户集中度过高（前5大占比）</li>
+                <li>产品结构单一（依赖少数SKU）</li>
+                <li>渠道单一（批发为主，ToC低）</li>
+                <li>配送能力有限</li>
+                <li>资金周转（应收款）</li>
+            </ul>
+        </div>
+        <div class="card">
+            <h3>💡 解决方案</h3>
+            <ul>
+                <li>客户多元化 - 分散风险</li>
+                <li>产品组合优化 - 增加高毛利品</li>
+                <li>渠道扩展 - ToC/电商</li>
+                <li>供应链优化 - 提升配送效率</li>
+                <li>资金管理 - 加快应收款回收</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- 总结 -->
+<div class="slide slide-content">
+    <h2>📌 总结</h2>
+    <div class="summary-grid">
+        <div class="summary-item">
+            <span class="emoji">🎯</span>
+            <span class="text">聚焦瓶颈 - 只解决关键问题</span>
+        </div>
+        <div class="summary-item">
+            <span class="emoji">📈</span>
+            <span class="text">关注有效产出 - 收入增长优先</span>
+        </div>
+        <div class="summary-item">
+            <span class="emoji">🔄</span>
+            <span class="text">持续改进 - 不断寻找新瓶颈</span>
+        </div>
+        <div class="summary-item">
+            <span class="emoji">🧠</span>
+            <span class="text">系统思维 - 全局最优非局部</span>
+        </div>
+    </div>
+    <div class="formula" style="margin-top: 60px;">
+        <div class="text" style="font-size: 1.5em;">TOC = 找到制约 → 突破制约 → 持续增长</div>
+    </div>
+</div>
+
+<!-- 结束页 -->
+<div class="slide slide-cover">
+    <h1>谢谢观看</h1>
+    <p class="subtitle">🔧 TOC 制约理论</p>
+    <p class="author">让业务持续增长的思维框架</p>
+    <div style="margin-top: 60px;">
+        <span class="keyword">有效产出</span>
+        <span class="keyword">五大步骤</span>
+        <span class="keyword">持续改进</span>
+    </div>
+</div>
+
+<!-- 导航 -->
+<div class="nav">
+    <button onclick="prevSlide()">◀ 上一页</button>
+    <button onclick="nextSlide()">下一页 ▶</button>
+</div>
+<div class="slide-number">
+    <span id="currentSlide">1</span> / <span id="totalSlides">14</span>
+</div>
+
+<script>
+let currentSlide = 0;
+const slides = document.querySelectorAll('.slide');
+const totalSlides = slides.length;
+
+document.getElementById('totalSlides').textContent = totalSlides;
+
+function showSlide(n) {
+    slides[currentSlide].classList.remove('active');
+    currentSlide = (n + totalSlides) % totalSlides;
+    slides[currentSlide].classList.add('active');
+    document.getElementById('currentSlide').textContent = currentSlide + 1;
+}
+
+function nextSlide() {
+    showSlide(currentSlide + 1);
+}
+
+function prevSlide() {
+    showSlide(currentSlide - 1);
+}
+
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowRight' || e.key === ' ') {
+        nextSlide();
+    } else if (e.key === 'ArrowLeft') {
+        prevSlide();
+    }
+});
+</script>
+
+</body>
+</html>
