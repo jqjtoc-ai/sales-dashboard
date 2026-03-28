@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>深红果 - 销售数据看板 V5</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f7fa; padding: 20px; }
+        .container { max-width: 1400px; margin: 0 auto; }
+        h1 { color: #2c3e50; margin-bottom: 20px; font-size: 28px; }
+        h2 { color: #34495e; font-size: 18px; margin-bottom: 15px; border-bottom: 2px solid #e74c3c; padding-bottom: 10px; }
+        h3 { color: #555; font-size: 16px; margin: 20px 0 10px; }
+        .nav { margin-bottom: 20px; }
+        .nav a { color: #e74c3c; text-decoration: none; margin-right: 15px; }
+        .card { background: white; border-radius: 10px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        
+        .kpi { display: flex; gap: 20px; flex-wrap: wrap; }
+        .kpi-item { flex: 1; min-width: 180px; background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%); color: white; padding: 20px; border-radius: 10px; text-align: center; }
+        .kpi-item:nth-child(2) { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+        .kpi-item:nth-child(3) { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+        .kpi-item:nth-child(4) { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
+        .kpi-item:nth-child(5) { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .kpi-value { font-size: 32px; font-weight: bold; }
+        .kpi-label { font-size: 14px; opacity: 0.9; }
+        
+        .overall-target { background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%); color: white; padding: 25px; border-radius: 10px; text-align: center; margin-bottom: 20px; }
+        .overall-target .rate { font-size: 48px; font-weight: bold; }
+        .overall-target .label { font-size: 16px; opacity: 0.9; }
+        .overall-target .detail { font-size: 14px; margin-top: 10px; opacity: 0.8; }
+        
+        table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
+        th, td { padding: 10px; text-align: left; border-bottom: 1px solid #eee; font-size: 14px; }
+        th { background: #f8f9fa; color: #666; font-weight: 600; }
+        tr:hover { background: #f8f9fa; }
+        .num { text-align: right; font-family: 'Monaco', monospace; }
+        
+        .pie-chart { display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; margin: 20px 0; }
+        .pie-container { position: relative; width: 180px; height: 180px; }
+        .pie-circle { width: 100%; height: 100%; border-radius: 50%; background: conic-gradient(#e74c3c 0% 42.46421828210487%, #ddd 42.46421828210487% 100%); }
+        .pie-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 120px; height: 120px; background: white; border-radius: 50%; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        .pie-value { font-size: 24px; font-weight: bold; color: #e74c3c; }
+        .pie-label { font-size: 12px; color: #666; text-align: center; }
+        .pie-legend { display: flex; flex-direction: column; justify-content: center; gap: 10px; }
+        .legend-item { display: flex; align-items: center; gap: 8px; }
+        .legend-color { width: 16px; height: 16px; border-radius: 4px; }
+        
+        .salesman-table td { padding: 8px; }
+        .salesman-name { font-weight: 600; }
+        
+        .target-achieved { color: #4caf50; font-weight: bold; }
+        .target-failed { color: #f44336; font-weight: bold; }
+        
+        .recommendation { margin-top: 30px; }
+        .rec-section { margin-bottom: 25px; }
+        .rec-header { padding: 15px; border-radius: 8px; margin-bottom: 15px; }
+        .rec-risk { background: #ffebee; border-left: 4px solid #f44336; }
+        .rec-opportunity { background: #e8f5e9; border-left: 4px solid #4caf50; }
+        .rec-advantage { background: #e3f2fd; border-left: 4px solid #2196f3; }
+        .rec-advice { background: #fff3e0; border-left: 4px solid #ff9800; }
+        .rec-icon { font-size: 24px; margin-right: 10px; }
+        .rec-title { font-size: 18px; font-weight: bold; }
+        .rec-content { background: white; padding: 15px; border-radius: 8px; }
+        .rec-content ul { margin: 0; padding-left: 20px; }
+        .rec-content li { margin: 8px 0; line-height: 1.6; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="nav">
+            <a href="../index.html">← 返回首页</a>
+        </div>
+        <h1>深红果 - 销售数据看板 V5</h1>
+        
+        <div class="card">
+            <h2>整体目标达成</h2>
+            <div class="overall-target">
+                <div class="rate">74.9%</div>
+                <div class="label">整体目标达成率</div>
+                <div class="detail">实际: 1158.4万 | 目标: 1546.7万</div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2>核心指标 (2025.12 - 2026.02)</h2>
+            <div class="kpi">
+                <div class="kpi-item">
+                    <div class="kpi-value">2846.8万</div>
+                    <div class="kpi-label">总销售额</div>
+                </div>
+                <div class="kpi-item">
+                    <div class="kpi-value">615.6万</div>
+                    <div class="kpi-label">总毛利</div>
+                </div>
+                <div class="kpi-item">
+                    <div class="kpi-value">21.6%</div>
+                    <div class="kpi-label">综合毛利率</div>
+                </div>
+                <div class="kpi-item">
+                    <div class="kpi-value">54,373</div>
+                    <div class="kpi-label">订单数</div>
+                </div>
+                <div class="kpi-item">
+                    <div class="kpi-value">60</div>
+                    <div class="kpi-label">有目标品牌</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2>有目标单品销售占比</h2>
+            <div class="pie-chart">
+                <div class="pie-container">
+                    <div class="pie-circle"></div>
+                    <div class="pie-center">
+                        <div class="pie-value">42.5%</div>
+                        <div class="pie-label">有目标单品<br>销售占比</div>
+                    </div>
+                </div>
+                <div class="pie-legend">
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #e74c3c;"></div>
+                        <span>有目标单品销售: 1208.9万</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #ddd;"></div>
+                        <span>其他销售: 1638.0万</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2>品类目标达成</h2>
+            <table>
+                <tr><th>品类</th><th>销售额</th><th>占比</th><th>目标</th><th>达成率</th></tr>
+                <tr><td>葡萄酒</td><td class="num">538.5万</td><td class="num">18.91%</td><td class="num">962.2万</td><td class="num target-failed">50.57%</td></tr>
+                <tr><td>果酒</td><td class="num">476.8万</td><td class="num">16.75%</td><td class="num">335.0万</td><td class="num target-achieved">122.7%</td></tr>
+                <tr><td>啤酒</td><td class="num">211.5万</td><td class="num">7.43%</td><td class="num">91.5万</td><td class="num target-achieved">194.97%</td></tr>
+                <tr><td>古法酒</td><td class="num">102.9万</td><td class="num">3.61%</td><td class="num">133.0万</td><td class="num target-failed">44.14%</td></tr>
+                <tr><td>洋酒</td><td class="num">56.4万</td><td class="num">1.98%</td><td class="num">25.0万</td><td class="num target-failed">95.14%</td></tr>
+            </table>
+        </div>
+        
+        <div class="card">
+            <h2>业务员业绩与品类分布</h2>
+            <table class="salesman-table">
+                <tr>
+                    <th>业务员</th>
+                    <th class="num">总销售额</th>
+                    <th class="num">总毛利</th>
+                    <th class="num">毛利率</th>
+                    <th class="num">葡萄酒</th>
+                    <th class="num">果酒</th>
+                    <th class="num">啤酒</th>
+                    <th class="num">古法酒</th>
+                    <th class="num">洋酒</th>
+                </tr>
+                <tr>
+                    <td class="salesman-name">李位位</td>
+                    <td class="num">590.5万</td>
+                    <td class="num">116.1万</td>
+                    <td class="num">19.66%</td>
+                    <td class="num">103.2万</td>
+                    <td class="num">87.8万</td>
+                    <td class="num">39.5万</td>
+                    <td class="num">24.3万</td>
+                    <td class="num">6.9万</td>
+                </tr>
+                <tr>
+                    <td class="salesman-name">杨晓</td>
+                    <td class="num">582.1万</td>
+                    <td class="num">116.7万</td>
+                    <td class="num">20.04%</td>
+                    <td class="num">100.1万</td>
+                    <td class="num">72.3万</td>
+                    <td class="num">34.1万</td>
+                    <td class="num">14.3万</td>
+                    <td class="num">12.8万</td>
+                </tr>
+                <tr>
+                    <td class="salesman-name">闫梦</td>
+                    <td class="num">568.0万</td>
+                    <td class="num">134.1万</td>
+                    <td class="num">23.62%</td>
+                    <td class="num">100.6万</td>
+                    <td class="num">118.5万</td>
+                    <td class="num">46.1万</td>
+                    <td class="num">19.9万</td>
+                    <td class="num">20.9万</td>
+                </tr>
+                <tr>
+                    <td class="salesman-name">魏冬冬</td>
+                    <td class="num">342.6万</td>
+                    <td class="num">73.5万</td>
+                    <td class="num">21.44%</td>
+                    <td class="num">56.4万</td>
+                    <td class="num">58.8万</td>
+                    <td class="num">22.7万</td>
+                    <td class="num">18.3万</td>
+                    <td class="num">4.5万</td>
+                </tr>
+                <tr>
+                    <td class="salesman-name">杨巧瑞</td>
+                    <td class="num">260.2万</td>
+                    <td class="num">62.7万</td>
+                    <td class="num">24.08%</td>
+                    <td class="num">65.7万</td>
+                    <td class="num">43.8万</td>
+                    <td class="num">27.5万</td>
+                    <td class="num">5.1万</td>
+                    <td class="num">3.1万</td>
+                </tr>
+                <tr>
+                    <td class="salesman-name">杨玲</td>
+                    <td class="num">154.0万</td>
+                    <td class="num">34.5万</td>
+                    <td class="num">22.37%</td>
+                    <td class="num">30.3万</td>
+                    <td class="num">23.1万</td>
+                    <td class="num">13.8万</td>
+                    <td class="num">10.3万</td>
+                    <td class="num">1.1万</td>
+                </tr>
+                <tr>
+                    <td class="salesman-name">蒋秋焕</td>
+                    <td class="num">125.1万</td>
+                    <td class="num">28.1万</td>
+                    <td class="num">22.44%</td>
+                    <td class="num">30.5万</td>
+                    <td class="num">27.5万</td>
+                    <td class="num">11.8万</td>
+                    <td class="num">3.5万</td>
+                    <td class="num">2.6万</td>
+                </tr>
+                <tr>
+                    <td class="salesman-name">杨书静</td>
+                    <td class="num">84.8万</td>
+                    <td class="num">20.1万</td>
+                    <td class="num">23.75%</td>
+                    <td class="num">23.5万</td>
+                    <td class="num">17.4万</td>
+                    <td class="num">5.7万</td>
+                    <td class="num">1.5万</td>
+                    <td class="num">2.8万</td>
+                </tr>
+                <tr>
+                    <td class="salesman-name">徐经纬</td>
+                    <td class="num">44.5万</td>
+                    <td class="num">9.7万</td>
+                    <td class="num">21.86%</td>
+                    <td class="num">6.6万</td>
+                    <td class="num">8.7万</td>
+                    <td class="num">3.5万</td>
+                    <td class="num">2.8万</td>
+                    <td class="num">0.7万</td>
+                </tr>
+                <tr>
+                    <td class="salesman-name">韩宗</td>
+                    <td class="num">43.8万</td>
+                    <td class="num">9.1万</td>
+                    <td class="num">20.86%</td>
+                    <td class="num">9.1万</td>
+                    <td class="num">8.3万</td>
+                    <td class="num">4.2万</td>
+                    <td class="num">2.4万</td>
+                    <td class="num">0.6万</td>
+                </tr>
+                <tr>
+                    <td class="salesman-name">小帅</td>
+                    <td class="num">21.2万</td>
+                    <td class="num">5.0万</td>
+                    <td class="num">23.53%</td>
+                    <td class="num">4.7万</td>
+                    <td class="num">6.9万</td>
+                    <td class="num">0.9万</td>
+                    <td class="num">0.0万</td>
+                    <td class="num">0.2万</td>
+                </tr>
+                <tr>
+                    <td class="salesman-name">杨党华</td>
+                    <td class="num">16.9万</td>
+                    <td class="num">3.7万</td>
+                    <td class="num">22.13%</td>
+                    <td class="num">2.7万</td>
+                    <td class="num">3.2万</td>
+                    <td class="num">1.5万</td>
+                    <td class="num">0.4万</td>
+                    <td class="num">0.0万</td>
+                </tr>
+                <tr>
+                    <td class="salesman-name">和道·红酒坊</td>
+                    <td class="num">5.0万</td>
+                    <td class="num">0.7万</td>
+                    <td class="num">14.13%</td>
+                    <td class="num">0.7万</td>
+                    <td class="num">0.2万</td>
+                    <td class="num">0.1万</td>
+                    <td class="num">0.0万</td>
+                    <td class="num">0.0万</td>
+                </tr>
+                <tr>
+                    <td class="salesman-name">冯文娟</td>
+                    <td class="num">4.6万</td>
+                    <td class="num">0.9万</td>
+                    <td class="num">18.56%</td>
+                    <td class="num">3.3万</td>
+                    <td class="num">0.1万</td>
+                    <td class="num">0.0万</td>
+                    <td class="num">0.1万</td>
+                    <td class="num">0.2万</td>
+                </tr>
+                <tr>
+                    <td class="salesman-name">王梓铭</td>
+                    <td class="num">1.6万</td>
+                    <td class="num">0.5万</td>
+                    <td class="num">30.63%</td>
+                    <td class="num">0.5万</td>
+                    <td class="num">0.0万</td>
+                    <td class="num">0.0万</td>
+                    <td class="num">0.0万</td>
+                    <td class="num">0.0万</td>
+                </tr>
+            </table>
+        </div>
+        
+        <div class="card">
+            <h2>TOP10产品</h2>
+            <table>
+                <tr><th>排名</th><th>产品</th><th>销售额</th><th>占比</th></tr>
+                <tr><td>1291</td><td>贝尔嘉[啤酒棍子]礼盒500ml*12瓶</td><td class="num">1,039,888</td><td class="num">3.65%</td></tr>
+                <tr><td>1555</td><td>高升中式热红酒750ml</td><td class="num">429,951</td><td class="num">1.51%</td></tr>
+                <tr><td>1552</td><td>高升10度暖姜红枣中式热红酒750ml</td><td class="num">422,655</td><td class="num">1.48%</td></tr>
+                <tr><td>1085</td><td>红动6℃山楂酒720ml(瓶装)</td><td class="num">395,540</td><td class="num">1.39%</td></tr>
+                <tr><td>1478</td><td>青大师12生肖[啤酒棍子]礼盒500ml*12瓶</td><td class="num">391,199</td><td class="num">1.37%</td></tr>
+                <tr><td>1086</td><td>红动6℃桑葚酒720ml(瓶装)</td><td class="num">324,812</td><td class="num">1.14%</td></tr>
+                <tr><td>1551</td><td>高升10度五黑饮葡萄果酒(新品)750ml</td><td class="num">291,078</td><td class="num">1.02%</td></tr>
+                <tr><td>6</td><td>(新款)智利大黄狗12°干红750ml</td><td class="num">283,433</td><td class="num">1.0%</td></tr>
+                <tr><td>565</td><td>小花样6°(巴乐)酒258ml</td><td class="num">266,364</td><td class="num">0.94%</td></tr>
+                <tr><td>1550</td><td>高升10度九红饮葡萄果酒(新品)750ml</td><td class="num">259,222</td><td class="num">0.91%</td></tr>
+            </table>
+        </div>
+        
+        <div class="recommendation">
+            <div class="rec-section">
+                <div class="rec-header rec-risk">
+                    <span class="rec-icon">!</span>
+                    <span class="rec-title">风险警示</span>
+                </div>
+                <div class="rec-content">
+                    <ul>
+                        <li><strong>整体目标达成率仅75%</strong>，需加快Q1进度</li>
+                        <li><strong>葡萄酒达成率仅51%</strong>，大黄狗(-52%)、高升(-54%)表现不佳</li>
+                        <li><strong>古法酒仅44%</strong>，壹整支仅完成10%需关注</li>
+                        <li><strong>临期库存9.7万</strong>，需尽快清理</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="rec-section">
+                <div class="rec-header rec-opportunity">
+                    <span class="rec-icon">*</span>
+                    <span class="rec-title">机会点</span>
+                </div>
+                <div class="rec-content">
+                    <ul>
+                        <li><strong>啤酒超额195%</strong>，青大师(285%)表现强劲</li>
+                        <li><strong>果酒超额123%</strong>，小花样、老虎先森增长快</li>
+                        <li><strong>洋酒接近目标</strong>，纹银百两(299%)表现突出</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="rec-section">
+                <div class="rec-header rec-advantage">
+                    <span class="rec-icon">+</span>
+                    <span class="rec-title">优势分析</span>
+                </div>
+                <div class="rec-content">
+                    <ul>
+                        <li><strong>葡萄酒毛利率30.6%</strong>，是利润主力</li>
+                        <li><strong>闫梦毛利最高23.6%</strong>，可复制经验</li>
+                        <li><strong>李位位/杨晓/闫梦</strong>贡献50%销售</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="rec-section">
+                <div class="rec-header rec-advice">
+                    <span class="rec-icon">></span>
+                    <span class="rec-title">行动建议</span>
+                </div>
+                <div class="rec-content">
+                    <ul>
+                        <li>加速葡萄酒促销，提升Q1达成率</li>
+                        <li>加大啤酒/果酒备货，满足市场需求</li>
+                        <li>清理临期库存，避免损失</li>
+                        <li>复制西北区域成功经验到薄弱地区</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
