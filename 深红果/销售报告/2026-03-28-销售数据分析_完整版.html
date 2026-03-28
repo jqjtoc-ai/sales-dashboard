@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>深红果 - 销售数据看板</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f7fa; padding: 20px; }
+        .container { max-width: 1400px; margin: 0 auto; }
+        h1 { color: #2c3e50; margin-bottom: 20px; font-size: 28px; }
+        h2 { color: #34495e; font-size: 18px; margin-bottom: 15px; border-bottom: 2px solid #e74c3c; padding-bottom: 10px; }
+        h3 { color: #555; font-size: 16px; margin: 20px 0 10px; }
+        h4 { color: #666; font-size: 14px; margin: 15px 0 8px; }
+        .nav { margin-bottom: 20px; }
+        .nav a { color: #e74c3c; text-decoration: none; margin-right: 15px; }
+        .card { background: white; border-radius: 10px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        
+        .kpi { display: flex; gap: 15px; flex-wrap: wrap; }
+        .kpi-item { flex: 1; min-width: 150px; background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%); color: white; padding: 15px; border-radius: 10px; text-align: center; }
+        .kpi-item:nth-child(2) { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+        .kpi-item:nth-child(3) { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+        .kpi-item:nth-child(4) { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
+        .kpi-item:nth-child(5) { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .kpi-value { font-size: 28px; font-weight: bold; }
+        .kpi-label { font-size: 12px; opacity: 0.9; }
+        
+        .overall-target { background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%); color: white; padding: 20px; border-radius: 10px; text-align: center; margin-bottom: 20px; }
+        .overall-target .rate { font-size: 42px; font-weight: bold; }
+        .overall-target .label { font-size: 14px; opacity: 0.9; }
+        .overall-target .detail { font-size: 13px; margin-top: 8px; opacity: 0.8; }
+        
+        table { width: 100%; border-collapse: collapse; margin-bottom: 15px; font-size: 13px; }
+        th, td { padding: 8px; text-align: left; border-bottom: 1px solid #eee; }
+        th { background: #f8f9fa; color: #666; font-weight: 600; }
+        tr:hover { background: #f8f9fa; }
+        .num { text-align: right; font-family: 'Monaco', monospace; }
+        
+        .pie-chart { display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; margin: 15px 0; }
+        .pie-container { position: relative; width: 160px; height: 160px; }
+        .pie-circle { width: 100%; height: 100%; border-radius: 50%; background: conic-gradient(#e74c3c 0% 42.46421828210487%, #ddd 42.46421828210487% 100%); }
+        .pie-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 100px; height: 100px; background: white; border-radius: 50%; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        .pie-value { font-size: 20px; font-weight: bold; color: #e74c3c; }
+        .pie-label { font-size: 11px; color: #666; text-align: center; }
+        .pie-legend { display: flex; flex-direction: column; justify-content: center; gap: 8px; font-size: 13px; }
+        .legend-item { display: flex; align-items: center; gap: 8px; }
+        .legend-color { width: 14px; height: 14px; border-radius: 3px; }
+        
+        .category-section { margin-bottom: 25px; }
+        .category-header { display: flex; justify-content: space-between; align-items: center; background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%); color: white; padding: 12px 15px; border-radius: 8px 8px 0 0; }
+        .category-title { font-size: 18px; font-weight: bold; }
+        .category-stats { font-size: 12px; }
+        .category-content { background: white; border-radius: 0 0 8px 8px; padding: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        
+        .target-box { background: #f5f5f5; border-radius: 8px; padding: 12px; margin: 10px 0; }
+        .target-row { display: flex; justify-content: space-between; padding: 4px 0; font-size: 13px; }
+        
+        .tag { display: inline-block; padding: 1px 6px; border-radius: 3px; font-size: 11px; margin-right: 4px; }
+        .tag-main { background: #4caf50; color: white; }
+        .tag-process { background: #ff9800; color: white; }
+        
+        .target-achieved { color: #4caf50; font-weight: bold; }
+        .target-failed { color: #f44336; font-weight: bold; }
+        
+        .rec-section { margin-bottom: 20px; }
+        .rec-header { padding: 12px; border-radius: 8px; margin-bottom: 10px; font-weight: bold; }
+        .rec-risk { background: #ffebee; border-left: 4px solid #f44336; }
+        .rec-opportunity { background: #e8f5e9; border-left: 4px solid #4caf50; }
+        .rec-advantage { background: #e3f2fd; border-left: 4px solid #2196f3; }
+        .rec-advice { background: #fff3e0; border-left: 4px solid #ff9800; }
+        .rec-content ul { margin: 0; padding-left: 18px; font-size: 13px; line-height: 1.8; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="nav">
+            <a href="../index.html">返回首页</a>
+        </div>
+        <h1>深红果 - 销售数据看板</h1>
+        
+        <div class="card">
+            <h2>整体目标达成</h2>
+            <div class="overall-target">
+                <div class="rate">74.9%</div>
+                <div class="label">整体目标达成率</div>
+                <div class="detail">实际: 1158.4万 | 目标: 1546.7万</div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2>核心指标</h2>
+            <div class="kpi">
+                <div class="kpi-item">
+                    <div class="kpi-value">2846.8万</div>
+                    <div class="kpi-label">总销售额</div>
+                </div>
+                <div class="kpi-item">
+                    <div class="kpi-value">615.6万</div>
+                    <div class="kpi-label">总毛利</div>
+                </div>
+                <div class="kpi-item">
+                    <div class="kpi-value">21.6%</div>
+                    <div class="kpi-label">综合毛利率</div>
+                </div>
+                <div class="kpi-item">
+                    <div class="kpi-value">54,373</div>
+                    <div class="kpi-label">订单数</div>
+                </div>
+                <div class="kpi-item">
+                    <div class="kpi-value">60</div>
+                    <div class="kpi-label">有目标品牌</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2>有目标单品销售占比</h2>
+            <div class="pie-chart">
+                <div class="pie-container">
+                    <div class="pie-circle"></div>
+                    <div class="pie-center">
+                        <div class="pie-value">42.5%</div>
+                        <div class="pie-label">有目标<br>单品占比</div>
+                    </div>
+                </div>
+                <div class="pie-legend">
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #e74c3c;"></div>
+                        <span>有目标单品: 1208.9万</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #ddd;"></div>
+                        <span>其他销售: 1638.0万</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2>品类目标达成</h2>
+            <table>
+                <tr><th>品类</th><th>销售额</th><th>占比</th><th>毛利率</th><th>目标</th><th>达成率</th></tr>
+                <tr><td>葡萄酒</td><td class="num">538.5万</td><td class="num">18.91%</td><td class="num">30.57%</td><td class="num">962.2万</td><td class="num target-failed">50.57%</td></tr>
+                <tr><td>果酒</td><td class="num">476.8万</td><td class="num">16.75%</td><td class="num">24.91%</td><td class="num">335.0万</td><td class="num target-achieved">122.7%</td></tr>
+                <tr><td>啤酒</td><td class="num">211.5万</td><td class="num">7.43%</td><td class="num">23.23%</td><td class="num">91.5万</td><td class="num target-achieved">194.97%</td></tr>
+                <tr><td>古法酒</td><td class="num">102.9万</td><td class="num">3.61%</td><td class="num">24.42%</td><td class="num">133.0万</td><td class="num target-failed">44.14%</td></tr>
+                <tr><td>洋酒</td><td class="num">56.4万</td><td class="num">1.98%</td><td class="num">22.27%</td><td class="num">25.0万</td><td class="num target-failed">95.14%</td></tr>
+            </table>
+        </div>
+        
+        <div class="card">
+            <h2>全局TOP10品牌</h2>
+            <table>
+                <tr><th>排名</th><th>品牌</th><th>销量</th><th>销售额</th><th>毛利</th><th>占比</th><th>毛利率</th></tr>
+                <tr><td>71</td><td>高升</td><td class="num">16,674</td><td class="num">187.3万</td><td class="num">60.0万</td><td class="num">6.58%</td><td class="num">32.05%</td></tr>
+                <tr><td>69</td><td>青大师</td><td class="num">18,678</td><td class="num">143.6万</td><td class="num">29.2万</td><td class="num">5.04%</td><td class="num">20.35%</td></tr>
+                <tr><td>27</td><td>小花样</td><td class="num">5,319</td><td class="num">128.8万</td><td class="num">24.0万</td><td class="num">4.52%</td><td class="num">18.64%</td></tr>
+                <tr><td>20</td><td>大黄狗</td><td class="num">3,008</td><td class="num">101.8万</td><td class="num">27.9万</td><td class="num">3.58%</td><td class="num">27.43%</td></tr>
+                <tr><td>54</td><td>红动</td><td class="num">4,557</td><td class="num">72.0万</td><td class="num">22.2万</td><td class="num">2.53%</td><td class="num">30.8%</td></tr>
+                <tr><td>51</td><td>生龙</td><td class="num">4,865</td><td class="num">47.0万</td><td class="num">12.5万</td><td class="num">1.65%</td><td class="num">26.65%</td></tr>
+                <tr><td>60</td><td>老虎先森</td><td class="num">3,132</td><td class="num">46.4万</td><td class="num">11.5万</td><td class="num">1.63%</td><td class="num">24.79%</td></tr>
+                <tr><td>52</td><td>知食</td><td class="num">3,626</td><td class="num">44.0万</td><td class="num">8.7万</td><td class="num">1.54%</td><td class="num">19.75%</td></tr>
+                <tr><td>8</td><td>兽够了</td><td class="num">2,884</td><td class="num">34.3万</td><td class="num">8.7万</td><td class="num">1.21%</td><td class="num">25.32%</td></tr>
+                <tr><td>17</td><td>嗄玛尼</td><td class="num">2,195</td><td class="num">34.1万</td><td class="num">7.9万</td><td class="num">1.2%</td><td class="num">23.05%</td></tr>
+            </table>
+        </div>
+        
+        <div class="card">
+            <h2>全局TOP10产品</h2>
+            <table>
+                <tr><th>排名</th><th>产品</th><th>销售额</th><th>毛利</th><th>占比</th></tr>
+                <tr><td>1291</td><td>贝尔嘉[啤酒棍子]礼盒500ml*12瓶</td><td class="num">104.0万</td><td class="num">15.2万</td><td class="num">3.65%</td></tr>
+                <tr><td>1555</td><td>高升中式热红酒750ml</td><td class="num">43.0万</td><td class="num">11.5万</td><td class="num">1.51%</td></tr>
+                <tr><td>1552</td><td>高升10度暖姜红枣中式热红酒750ml</td><td class="num">42.3万</td><td class="num">16.4万</td><td class="num">1.48%</td></tr>
+                <tr><td>1085</td><td>红动6℃山楂酒720ml(瓶装)</td><td class="num">39.6万</td><td class="num">12.2万</td><td class="num">1.39%</td></tr>
+                <tr><td>1478</td><td>青大师12生肖[啤酒棍子]礼盒500ml*12瓶</td><td class="num">39.1万</td><td class="num">9.0万</td><td class="num">1.37%</td></tr>
+                <tr><td>1086</td><td>红动6℃桑葚酒720ml(瓶装)</td><td class="num">32.5万</td><td class="num">10.0万</td><td class="num">1.14%</td></tr>
+                <tr><td>1551</td><td>高升10度五黑饮葡萄果酒(新品)750ml</td><td class="num">29.1万</td><td class="num">9.8万</td><td class="num">1.02%</td></tr>
+                <tr><td>6</td><td>(新款)智利大黄狗12°干红750ml</td><td class="num">28.3万</td><td class="num">8.3万</td><td class="num">1.0%</td></tr>
+                <tr><td>565</td><td>小花样6°(巴乐)酒258ml</td><td class="num">26.6万</td><td class="num">4.9万</td><td class="num">0.94%</td></tr>
+                <tr><td>1550</td><td>高升10度九红饮葡萄果酒(新品)750ml</td><td class="num">25.9万</td><td class="num">8.8万</td><td class="num">0.91%</td></tr>
+            </table>
+        </div>
+        
+        <div class="card">
+            <h2>区域销售</h2>
+            <table>
+                <tr><th>区域</th><th>销售额</th><th>毛利</th><th>毛利率</th></tr>
+                <tr><td>5西北1</td><td class="num">566.4万</td><td class="num">131.6万</td><td class="num">23.24%</td></tr>
+                <tr><td>2东南</td><td class="num">439.1万</td><td class="num">90.8万</td><td class="num">20.68%</td></tr>
+                <tr><td>4西南1</td><td class="num">373.9万</td><td class="num">72.7万</td><td class="num">19.43%</td></tr>
+                <tr><td>1东北</td><td class="num">365.3万</td><td class="num">83.8万</td><td class="num">22.93%</td></tr>
+                <tr><td>3华东1</td><td class="num">296.2万</td><td class="num">65.4万</td><td class="num">22.09%</td></tr>
+                <tr><td>5西北2</td><td class="num">259.9万</td><td class="num">58.9万</td><td class="num">22.68%</td></tr>
+                <tr><td>3华东2</td><td class="num">216.9万</td><td class="num">43.2万</td><td class="num">19.91%</td></tr>
+                <tr><td>4西南2</td><td class="num">178.5万</td><td class="num">37.8万</td><td class="num">21.16%</td></tr>
+                <tr><td>6郑州地区</td><td class="num">80.2万</td><td class="num">16.0万</td><td class="num">19.97%</td></tr>
+                <tr><td>总经办</td><td class="num">70.4万</td><td class="num">15.4万</td><td class="num">21.95%</td></tr>
+            </table>
+        </div>
+        
+        <div class="card">
+            <h2>业务员业绩与品类分布</h2>
+            <table>
+                <tr>
+                    <th>业务员</th>
+                    <th class="num">总销售额</th>
+                    <th class="num">总毛利</th>
+                    <th class="num">毛利率</th>
+                    <th class="num">葡萄酒</th>
+                    <th class="num">果酒</th>
+                    <th class="num">啤酒</th>
+                    <th class="num">古法酒</th>
+                    <th class="num">洋酒</th>
+                </tr>
+                <tr>
+                    <td>李位位</td>
+                    <td class="num">590.5万</td>
+                    <td class="num">116.1万</td>
+                    <td class="num">19.66%</td>
+                    <td class="num">103.2万</td>
+                    <td class="num">87.8万</td>
+                    <td class="num">39.5万</td>
+                    <td class="num">24.3万</td>
+                    <td class="num">6.9万</td>
+                </tr>
+                <tr>
+                    <td>杨晓</td>
+                    <td class="num">582.1万</td>
+                    <td class="num">116.7万</td>
+                    <td class="num">20.04%</td>
+                    <td class="num">100.1万</td>
+                    <td class="num">72.3万</td>
+                    <td class="num">34.1万</td>
+                    <td class="num">14.3万</td>
+                    <td class="num">12.8万</td>
+                </tr>
+                <tr>
+                    <td>闫梦</td>
+                    <td class="num">568.0万</td>
+                    <td class="num">134.1万</td>
+                    <td class="num">23.62%</td>
+                    <td class="num">100.6万</td>
+                    <td class="num">118.5万</td>
+                    <td class="num">46.1万</td>
+                    <td class="num">19.9万</td>
+                    <td class="num">20.9万</td>
+                </tr>
+                <tr>
+                    <td>魏冬冬</td>
+                    <td class="num">342.6万</td>
+                    <td class="num">73.5万</td>
+                    <td class="num">21.44%</td>
+                    <td class="num">56.4万</td>
+                    <td class="num">58.8万</td>
+                    <td class="num">22.7万</td>
+                    <td class="num">18.3万</td>
+                    <td class="num">4.5万</td>
+                </tr>
+                <tr>
+                    <td>杨巧瑞</td>
+                    <td class="num">260.2万</td>
+                    <td class="num">62.7万</td>
+                    <td class="num">24.08%</td>
+                    <td class="num">65.7万</td>
+                    <td class="num">43.8万</td>
+                    <td class="num">27.5万</td>
+                    <td class="num">5.1万</td>
+                    <td class="num">3.1万</td>
+                </tr>
+                <tr>
+                    <td>杨玲</td>
+                    <td class="num">154.0万</td>
+                    <td class="num">34.5万</td>
+                    <td class="num">22.37%</td>
+                    <td class="num">30.3万</td>
+                    <td class="num">23.1万</td>
+                    <td class="num">13.8万</td>
+                    <td class="num">10.3万</td>
+                    <td class="num">1.1万</td>
+                </tr>
+                <tr>
+                    <td>蒋秋焕</td>
+                    <td class="num">125.1万</td>
+                    <td class="num">28.1万</td>
+                    <td class="num">22.44%</td>
+                    <td class="num">30.5万</td>
+                    <td class="num">27.5万</td>
+                    <td class="num">11.8万</td>
+                    <td class="num">3.5万</td>
+                    <td class="num">2.6万</td>
+                </tr>
+                <tr>
+                    <td>杨书静</td>
+                    <td class="num">84.8万</td>
+                    <td class="num">20.1万</td>
+                    <td class="num">23.75%</td>
+                    <td class="num">23.5万</td>
+                    <td class="num">17.4万</td>
+                    <td class="num">5.7万</td>
+                    <td class="num">1.5万</td>
+                    <td class="num">2.8万</td>
+                </tr>
+                <tr>
+                    <td>徐经纬</td>
+                    <td class="num">44.5万</td>
+                    <td class="num">9.7万</td>
+                    <td class="num">21.86%</td>
+                    <td class="num">6.6万</td>
+                    <td class="num">8.7万</td>
+                    <td class="num">3.5万</td>
+                    <td class="num">2.8万</td>
+                    <td class="num">0.7万</td>
+                </tr>
+                <tr>
+                    <td>韩宗</td>
+                    <td class="num">43.8万</td>
+                    <td class="num">9.1万</td>
+                    <td class="num">20.86%</td>
+                    <td class="num">9.1万</td>
+                    <td class="num">8.3万</td>
+                    <td class="num">4.2万</td>
+                    <td class="num">2.4万</td>
+                    <td class="num">0.6万</td>
+                </tr>
+                <tr>
+                    <td>小帅</td>
+                    <td class="num">21.2万</td>
+                    <td class="num">5.0万</td>
+                    <td class="num">23.53%</td>
+                    <td class="num">4.7万</td>
+                    <td class="num">6.9万</td>
+                    <td class="num">0.9万</td>
+                    <td class="num">0.0万</td>
+                    <td class="num">0.2万</td>
+                </tr>
+                <tr>
+                    <td>杨党华</td>
+                    <td class="num">16.9万</td>
+                    <td class="num">3.7万</td>
+                    <td class="num">22.13%</td>
+                    <td class="num">2.7万</td>
+                    <td class="num">3.2万</td>
+                    <td class="num">1.5万</td>
+                    <td class="num">0.4万</td>
+                    <td class="num">0.0万</td>
+                </tr>
+                <tr>
+                    <td>和道·红酒坊</td>
+                    <td class="num">5.0万</td>
+                    <td class="num">0.7万</td>
+                    <td class="num">14.13%</td>
+                    <td class="num">0.7万</td>
+                    <td class="num">0.2万</td>
+                    <td class="num">0.1万</td>
+                    <td class="num">0.0万</td>
+                    <td class="num">0.0万</td>
+                </tr>
+                <tr>
+                    <td>冯文娟</td>
+                    <td class="num">4.6万</td>
+                    <td class="num">0.9万</td>
+                    <td class="num">18.56%</td>
+                    <td class="num">3.3万</td>
+                    <td class="num">0.1万</td>
+                    <td class="num">0.0万</td>
+                    <td class="num">0.1万</td>
+                    <td class="num">0.2万</td>
+                </tr>
+                <tr>
+                    <td>王梓铭</td>
+                    <td class="num">1.6万</td>
+                    <td class="num">0.5万</td>
+                    <td class="num">30.63%</td>
+                    <td class="num">0.5万</td>
+                    <td class="num">0.0万</td>
+                    <td class="num">0.0万</td>
+                    <td class="num">0.0万</td>
+                    <td class="num">0.0万</td>
+                </tr>
+            </table>
+        </div>
+        
+        <div class="card">
+            <h2>库存情况</h2>
+            <table>
+                <tr><th>指标</th><th>数值</th></tr>
+                <tr><td>总库存</td><td class="num">387.5万 (657 SKU)</td></tr>
+                <tr><td>临期库存</td><td class="num">9.7万 (128 SKU)</td></tr>
+            </table>
+        </div>
+
+        <div class="category-section">
+            <div class="category-header">
+                <div class="category-title">古法酒</div>
+                <div class="category-stats">
+                    实际:102.9万 | 目标:133.0万 | 达成:44.14% | 占比:3.61%
+                </div>
+            </div>
+            <div class="category-content">
+                <div class="target-box">
+                    <div class="target-row"><span>目标: 133.0万</span><span>实际: 102.9万</span><span class="target-failed">达成: 44.14%</span></div>
+                </div>
+                
+                <h4>TOP3品牌 (占品类93.5%)</h4>
+                <table>
+                    <tr><th>品牌</th><th>销量</th><th>销售额</th><th>类内占比</th></tr>
+                    <tr><td>生龙</td><td class="num">4,865</td><td class="num">47.0万</td><td class="num">45.74%</td></tr>
+                    <tr><td>知食</td><td class="num">3,626</td><td class="num">44.0万</td><td class="num">42.76%</td></tr>
+                    <tr><td>壹整支</td><td class="num">453</td><td class="num">5.2万</td><td class="num">5.01%</td></tr>
+                </table>
+                
+                <h4>品牌目标</h4>
+                <table>
+                    <tr><th>品牌</th><th>类型</th><th>目标</th><th>实际</th><th>达成率</th></tr>
+                    <tr><td>生龙</td><td><span class='tag tag-main'>主推</span></td><td class="num">600,000</td><td class="num">469,656</td><td class="num target-failed">78%</td></tr>
+                    <tr><td>壹整支</td><td><span class='tag tag-main'>主推</span></td><td class="num">500,000</td><td class="num">51,486</td><td class="num target-failed">10%</td></tr>
+                    <tr><td>井奈</td><td><span class='tag tag-main'>主推</span></td><td class="num">150,000</td><td class="num">43,387</td><td class="num target-failed">29%</td></tr>
+                    <tr><td>钦町</td><td><span class='tag tag-process'>处理</span></td><td class="num">50,000</td><td class="num">6,843</td><td class="num target-failed">14%</td></tr>
+                    <tr><td>龟本</td><td><span class='tag tag-main'>主推</span></td><td class="num">30,000</td><td class="num">15,706</td><td class="num target-failed">52%</td></tr>
+                </table>
+                
+                <h4>TOP10产品 (占品类86.3%)</h4>
+                <table>
+                    <tr><th>排名</th><th>产品</th><th>销量</th><th>销售额</th><th>类内占比</th></tr>
+                    <tr><td>17</td><td>知食红枣枸杞味米酒</td><td class="num">1,823</td><td class="num">22.1万</td><td class="num">21.49%</td></tr>
+                    <tr><td>16</td><td>知食山楂陈皮罗汉果味米酒</td><td class="num">1,803</td><td class="num">21.9万</td><td class="num">21.26%</td></tr>
+                    <tr><td>14</td><td>生龙鲜榨米酒3°桂花味1L</td><td class="num">996</td><td class="num">8.9万</td><td class="num">8.7%</td></tr>
+                    <tr><td>8</td><td>生龙牌鲜榨米酒黄桃味1L装</td><td class="num">918</td><td class="num">8.3万</td><td class="num">8.08%</td></tr>
+                    <tr><td>7</td><td>生龙牌鲜榨米酒荔枝味1L装</td><td class="num">846</td><td class="num">7.7万</td><td class="num">7.46%</td></tr>
+                    <tr><td>13</td><td>生龙鲜榨米酒3°原味1L</td><td class="num">774</td><td class="num">6.1万</td><td class="num">5.9%</td></tr>
+                    <tr><td>3</td><td>壹整支东方谷物发酵米酿300ml</td><td class="num">376</td><td class="num">3.9万</td><td class="num">3.78%</td></tr>
+                    <tr><td>10</td><td>生龙荔枝冰酿无醇310ml</td><td class="num">327</td><td class="num">3.6万</td><td class="num">3.46%</td></tr>
+                    <tr><td>9</td><td>生龙秋梨枇杷冰酿无醇310ml</td><td class="num">311</td><td class="num">3.4万</td><td class="num">3.26%</td></tr>
+                    <tr><td>5</td><td>生龙宝玫瑰红曲5红酿490ml</td><td class="num">280</td><td class="num">3.0万</td><td class="num">2.89%</td></tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="category-section">
+            <div class="category-header">
+                <div class="category-title">啤酒</div>
+                <div class="category-stats">
+                    实际:211.5万 | 目标:91.5万 | 达成:194.97% | 占比:7.43%
+                </div>
+            </div>
+            <div class="category-content">
+                <div class="target-box">
+                    <div class="target-row"><span>目标: 91.5万</span><span>实际: 211.5万</span><span class="target-achieved">达成: 194.97%</span></div>
+                </div>
+                
+                <h4>TOP3品牌 (占品类94.8%)</h4>
+                <table>
+                    <tr><th>品牌</th><th>销量</th><th>销售额</th><th>类内占比</th></tr>
+                    <tr><td>青大师</td><td class="num">18,678</td><td class="num">143.6万</td><td class="num">67.88%</td></tr>
+                    <tr><td>崂大师</td><td class="num">1,931</td><td class="num">32.0万</td><td class="num">15.13%</td></tr>
+                    <tr><td>即刻</td><td class="num">3,711</td><td class="num">25.0万</td><td class="num">11.8%</td></tr>
+                </table>
+                
+                <h4>品牌目标</h4>
+                <table>
+                    <tr><th>品牌</th><th>类型</th><th>目标</th><th>实际</th><th>达成率</th></tr>
+                    <tr><td>青大师</td><td><span class='tag tag-main'>主推</span></td><td class="num">500,000</td><td class="num">1,424,730</td><td class="num target-achieved">285%</td></tr>
+                    <tr><td>即刻</td><td></td><td class="num">200,000</td><td class="num">249,670</td><td class="num target-achieved">125%</td></tr>
+                    <tr><td>皮浪</td><td><span class='tag tag-main'>主推</span></td><td class="num">100,000</td><td class="num">0</td><td class="num target-failed">0%</td></tr>
+                    <tr><td>318</td><td></td><td class="num">100,000</td><td class="num">104,957</td><td class="num target-achieved">105%</td></tr>
+                    <tr><td>Harboe</td><td><span class='tag tag-process'>处理</span></td><td class="num">15,000</td><td class="num">4,619</td><td class="num target-failed">31%</td></tr>
+                </table>
+                
+                <h4>TOP10产品 (占品类63.5%)</h4>
+                <table>
+                    <tr><th>排名</th><th>产品</th><th>销量</th><th>销售额</th><th>类内占比</th></tr>
+                    <tr><td>11</td><td>即刻酿造.2.5°黄油风味啤酒630ml</td><td class="num">3,711</td><td class="num">25.0万</td><td class="num">11.8%</td></tr>
+                    <tr><td>28</td><td>青大师5.3°后海的猫酒花拉格啤酒（招财猫)</td><td class="num">891</td><td class="num">23.5万</td><td class="num">11.11%</td></tr>
+                    <tr><td>14</td><td>崂大师马跃丰年精酿啤酒</td><td class="num">1,202</td><td class="num">23.1万</td><td class="num">10.9%</td></tr>
+                    <tr><td>23</td><td>青大师4.1°金马贺岁酒花拉格精酿啤酒</td><td class="num">2,928</td><td class="num">16.1万</td><td class="num">7.61%</td></tr>
+                    <tr><td>27</td><td>青大师5.3°后海的猫酒花拉格啤酒10L（招财猫)</td><td class="num">1,248</td><td class="num">10.6万</td><td class="num">5.02%</td></tr>
+                    <tr><td>22</td><td>青大师4.1°金马贺岁(礼盒)酒花拉格精酿啤酒</td><td class="num">602</td><td class="num">10.2万</td><td class="num">4.81%</td></tr>
+                    <tr><td>24</td><td>青大师4.2°后海的猫奶皮子风味精酿啤酒</td><td class="num">505</td><td class="num">7.6万</td><td class="num">3.59%</td></tr>
+                    <tr><td>35</td><td>青大师后海的猫巧克力牛奶世涛啤酒 500ml罐</td><td class="num">961</td><td class="num">6.5万</td><td class="num">3.07%</td></tr>
+                    <tr><td>38</td><td>青大师后海的猫烈性艾尔啤酒 500ml罐</td><td class="num">930</td><td class="num">6.3万</td><td class="num">2.96%</td></tr>
+                    <tr><td>34</td><td>青大师后海的猫IAP印度淡色艾尔啤酒 500ml罐</td><td class="num">824</td><td class="num">5.6万</td><td class="num">2.63%</td></tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="category-section">
+            <div class="category-header">
+                <div class="category-title">果酒</div>
+                <div class="category-stats">
+                    实际:476.8万 | 目标:335.0万 | 达成:122.7% | 占比:16.75%
+                </div>
+            </div>
+            <div class="category-content">
+                <div class="target-box">
+                    <div class="target-row"><span>目标: 335.0万</span><span>实际: 476.8万</span><span class="target-achieved">达成: 122.7%</span></div>
+                </div>
+                
+                <h4>TOP3品牌 (占品类51.8%)</h4>
+                <table>
+                    <tr><th>品牌</th><th>销量</th><th>销售额</th><th>类内占比</th></tr>
+                    <tr><td>小花样</td><td class="num">5,319</td><td class="num">128.8万</td><td class="num">27.01%</td></tr>
+                    <tr><td>红动</td><td class="num">4,557</td><td class="num">72.0万</td><td class="num">15.11%</td></tr>
+                    <tr><td>老虎先森</td><td class="num">3,132</td><td class="num">46.4万</td><td class="num">9.73%</td></tr>
+                </table>
+                
+                <h4>品牌目标</h4>
+                <table>
+                    <tr><th>品牌</th><th>类型</th><th>目标</th><th>实际</th><th>达成率</th></tr>
+                    <tr><td>小花样</td><td><span class='tag tag-main'>主推</span></td><td class="num">1,000,000</td><td class="num">1,273,847</td><td class="num target-achieved">127%</td></tr>
+                    <tr><td>红动</td><td><span class='tag tag-main'>主推</span></td><td class="num">500,000</td><td class="num">720,040</td><td class="num target-achieved">144%</td></tr>
+                    <tr><td>菊川家</td><td><span class='tag tag-main'>主推</span></td><td class="num">300,000</td><td class="num">163,833</td><td class="num target-failed">55%</td></tr>
+                    <tr><td>兽够了</td><td><span class='tag tag-main'>主推</span></td><td class="num">240,000</td><td class="num">342,289</td><td class="num target-achieved">143%</td></tr>
+                    <tr><td>苏茜皇</td><td><span class='tag tag-main'>主推</span></td><td class="num">200,000</td><td class="num">124,086</td><td class="num target-failed">62%</td></tr>
+                    <tr><td>老虎先森</td><td><span class='tag tag-main'>主推</span></td><td class="num">200,000</td><td class="num">462,204</td><td class="num target-achieved">231%</td></tr>
+                    <tr><td>嗄玛尼</td><td><span class='tag tag-main'>主推</span></td><td class="num">200,000</td><td class="num">341,400</td><td class="num target-achieved">171%</td></tr>
+                    <tr><td>森遇</td><td><span class='tag tag-main'>主推</span></td><td class="num">100,000</td><td class="num">173,876</td><td class="num target-achieved">174%</td></tr>
+                </table>
+                
+                <h4>TOP10产品 (占品类45.2%)</h4>
+                <table>
+                    <tr><th>排名</th><th>产品</th><th>销量</th><th>销售额</th><th>类内占比</th></tr>
+                    <tr><td>71</td><td>红动6℃山楂酒720ml(瓶装)</td><td class="num">2,497</td><td class="num">39.6万</td><td class="num">8.3%</td></tr>
+                    <tr><td>72</td><td>红动6℃桑葚酒720ml(瓶装)</td><td class="num">2,060</td><td class="num">32.5万</td><td class="num">6.81%</td></tr>
+                    <tr><td>40</td><td>小花样6°(巴乐)酒258ml</td><td class="num">1,128</td><td class="num">26.6万</td><td class="num">5.59%</td></tr>
+                    <tr><td>43</td><td>小花样6°(荔枝)酒258ml</td><td class="num">992</td><td class="num">23.0万</td><td class="num">4.82%</td></tr>
+                    <tr><td>42</td><td>小花样6°(芒果)酒258ml</td><td class="num">955</td><td class="num">22.5万</td><td class="num">4.71%</td></tr>
+                    <tr><td>41</td><td>小花样6°(油柑)酒258ml</td><td class="num">788</td><td class="num">18.5万</td><td class="num">3.88%</td></tr>
+                    <tr><td>44</td><td>小花样6°(黄皮)酒258ml</td><td class="num">662</td><td class="num">15.5万</td><td class="num">3.25%</td></tr>
+                    <tr><td>46</td><td>小花样久造7°柚子酒750ml</td><td class="num">498</td><td class="num">14.3万</td><td class="num">2.99%</td></tr>
+                    <tr><td>10</td><td>兽够了4.5°菠萝椰子风味气泡酒290ml</td><td class="num">991</td><td class="num">11.8万</td><td class="num">2.48%</td></tr>
+                    <tr><td>8</td><td>兽够了4.5°白桃乳酸菌风味气泡酒290ml</td><td class="num">957</td><td class="num">11.4万</td><td class="num">2.38%</td></tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="category-section">
+            <div class="category-header">
+                <div class="category-title">洋酒</div>
+                <div class="category-stats">
+                    实际:56.4万 | 目标:25.0万 | 达成:95.14% | 占比:1.98%
+                </div>
+            </div>
+            <div class="category-content">
+                <div class="target-box">
+                    <div class="target-row"><span>目标: 25.0万</span><span>实际: 56.4万</span><span class="target-failed">达成: 95.14%</span></div>
+                </div>
+                
+                <h4>TOP3品牌 (占品类84.2%)</h4>
+                <table>
+                    <tr><th>品牌</th><th>销量</th><th>销售额</th><th>类内占比</th></tr>
+                    <tr><td>宝恪</td><td class="num">1,407</td><td class="num">24.3万</td><td class="num">43.04%</td></tr>
+                    <tr><td>纹银百两</td><td class="num">639</td><td class="num">15.0万</td><td class="num">26.55%</td></tr>
+                    <tr><td>牛小引</td><td class="num">838</td><td class="num">8.2万</td><td class="num">14.57%</td></tr>
+                </table>
+                
+                <h4>品牌目标</h4>
+                <table>
+                    <tr><th>品牌</th><th>类型</th><th>目标</th><th>实际</th><th>达成率</th></tr>
+                    <tr><td>牛引</td><td><span class='tag tag-main'>主推</span></td><td class="num">100,000</td><td class="num">59,374</td><td class="num target-achieved">138%</td></tr>
+                    <tr><td>赢百客</td><td><span class='tag tag-main'>主推</span></td><td class="num">100,000</td><td class="num">28,752</td><td class="num target-failed">29%</td></tr>
+                    <tr><td>纹银百两</td><td><span class='tag tag-main'>主推</span></td><td class="num">50,000</td><td class="num">149,713</td><td class="num target-achieved">299%</td></tr>
+                </table>
+                
+                <h4>TOP10产品 (占品类44.1%)</h4>
+                <table>
+                    <tr><th>排名</th><th>产品</th><th>销量</th><th>销售额</th><th>类内占比</th></tr>
+                    <tr><td>37</td><td>纹银百两银花威士忌100ml</td><td class="num">138</td><td class="num">3.2万</td><td class="num">5.74%</td></tr>
+                    <tr><td>38</td><td>纹银百两银花朗姆酒100ml</td><td class="num">133</td><td class="num">3.1万</td><td class="num">5.42%</td></tr>
+                    <tr><td>36</td><td>纹银百两银花伏特加100ml</td><td class="num">132</td><td class="num">3.1万</td><td class="num">5.42%</td></tr>
+                    <tr><td>40</td><td>纹银百两银花金酒100ml</td><td class="num">126</td><td class="num">2.9万</td><td class="num">5.12%</td></tr>
+                    <tr><td>39</td><td>纹银百两银花白兰地100ml</td><td class="num">110</td><td class="num">2.7万</td><td class="num">4.85%</td></tr>
+                    <tr><td>34</td><td>宝恪RXXX微醺调酒站套装50ml</td><td class="num">58</td><td class="num">2.6万</td><td class="num">4.65%</td></tr>
+                    <tr><td>18</td><td>RXXX宝恪(柠檬)伏特加50ml</td><td class="num">74</td><td class="num">2.0万</td><td class="num">3.47%</td></tr>
+                    <tr><td>32</td><td>宝恪(桔里桔气)调酒套装</td><td class="num">232</td><td class="num">1.9万</td><td class="num">3.39%</td></tr>
+                    <tr><td>35</td><td>宝恪RXXX青柠苏打冰伏桶</td><td class="num">85</td><td class="num">1.7万</td><td class="num">3.04%</td></tr>
+                    <tr><td>17</td><td>RXXX宝恪 白朗姆酒50ml</td><td class="num">55</td><td class="num">1.7万</td><td class="num">3.0%</td></tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="category-section">
+            <div class="category-header">
+                <div class="category-title">葡萄酒</div>
+                <div class="category-stats">
+                    实际:538.5万 | 目标:962.2万 | 达成:50.57% | 占比:18.91%
+                </div>
+            </div>
+            <div class="category-content">
+                <div class="target-box">
+                    <div class="target-row"><span>目标: 962.2万</span><span>实际: 538.5万</span><span class="target-failed">达成: 50.57%</span></div>
+                </div>
+                
+                <h4>TOP3品牌 (占品类59.3%)</h4>
+                <table>
+                    <tr><th>品牌</th><th>销量</th><th>销售额</th><th>类内占比</th></tr>
+                    <tr><td>高升</td><td class="num">16,674</td><td class="num">187.3万</td><td class="num">34.79%</td></tr>
+                    <tr><td>大黄狗</td><td class="num">3,008</td><td class="num">101.8万</td><td class="num">18.91%</td></tr>
+                    <tr><td>粉湖</td><td class="num">968</td><td class="num">30.1万</td><td class="num">5.59%</td></tr>
+                </table>
+                
+                <h4>品牌目标</h4>
+                <table>
+                    <tr><th>品牌</th><th>类型</th><th>目标</th><th>实际</th><th>达成率</th></tr>
+                    <tr><td>高升</td><td><span class='tag tag-main'>主推</span></td><td class="num">4,000,000</td><td class="num">1,830,236</td><td class="num target-failed">46%</td></tr>
+                    <tr><td>大黄狗</td><td><span class='tag tag-main'>主推</span></td><td class="num">2,100,000</td><td class="num">1,012,422</td><td class="num target-failed">48%</td></tr>
+                    <tr><td>奥兰</td><td><span class='tag tag-main'>主推</span></td><td class="num">470,000</td><td class="num">165,655</td><td class="num target-failed">35%</td></tr>
+                    <tr><td>粉湖</td><td><span class='tag tag-main'>主推</span></td><td class="num">400,000</td><td class="num">300,567</td><td class="num target-failed">75%</td></tr>
+                    <tr><td>小丑羊</td><td><span class='tag tag-main'>主推</span></td><td class="num">350,000</td><td class="num">236,388</td><td class="num target-failed">68%</td></tr>
+                    <tr><td>和音符</td><td><span class='tag tag-main'>主推</span></td><td class="num">300,000</td><td class="num">214,518</td><td class="num target-failed">72%</td></tr>
+                    <tr><td>灵魂尖叫</td><td><span class='tag tag-process'>处理</span></td><td class="num">300,000</td><td class="num">87,148</td><td class="num target-failed">29%</td></tr>
+                    <tr><td>澳袋丽</td><td><span class='tag tag-main'>主推</span></td><td class="num">200,000</td><td class="num">121,513</td><td class="num target-failed">61%</td></tr>
+                </table>
+                
+                <h4>TOP10产品 (占品类47.8%)</h4>
+                <table>
+                    <tr><th>排名</th><th>产品</th><th>销量</th><th>销售额</th><th>类内占比</th></tr>
+                    <tr><td>94</td><td>高升中式热红酒750ml</td><td class="num">3,963</td><td class="num">43.0万</td><td class="num">7.98%</td></tr>
+                    <tr><td>91</td><td>高升10度暖姜红枣中式热红酒750ml</td><td class="num">3,706</td><td class="num">42.3万</td><td class="num">7.85%</td></tr>
+                    <tr><td>90</td><td>高升10度五黑饮葡萄果酒(新品)750ml</td><td class="num">2,548</td><td class="num">29.1万</td><td class="num">5.41%</td></tr>
+                    <tr><td>2</td><td>(新款)智利大黄狗12°干红750ml</td><td class="num">969</td><td class="num">28.3万</td><td class="num">5.26%</td></tr>
+                    <tr><td>89</td><td>高升10度九红饮葡萄果酒(新品)750ml</td><td class="num">2,250</td><td class="num">25.9万</td><td class="num">4.81%</td></tr>
+                    <tr><td>4</td><td>(新款)智利大黄狗长相思12°白葡萄750ml</td><td class="num">818</td><td class="num">24.0万</td><td class="num">4.45%</td></tr>
+                    <tr><td>1</td><td>(新款)智利大黄狗12°干红187.5ml*24</td><td class="num">474</td><td class="num">17.3万</td><td class="num">3.21%</td></tr>
+                    <tr><td>3</td><td>(新款)智利大黄狗12°长相思白葡萄187.5ml*24</td><td class="num">464</td><td class="num">17.0万</td><td class="num">3.15%</td></tr>
+                    <tr><td>73</td><td>物享东方驰聘干红礼盒750ml</td><td class="num">304</td><td class="num">15.5万</td><td class="num">2.87%</td></tr>
+                    <tr><td>75</td><td>粉湖咖啡无醇葡萄汁750ml</td><td class="num">526</td><td class="num">15.1万</td><td class="num">2.8%</td></tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="rec-section">
+            <div class="rec-header rec-risk">风险警示</div>
+            <div class="rec-content">
+                <ul>
+                    <li><strong>整体目标达成率仅75%</strong>，需加快Q1进度</li>
+                    <li><strong>葡萄酒达成率仅51%</strong>，大黄狗(-52%)、高升(-54%)表现不佳</li>
+                    <li><strong>古法酒仅44%</strong>，壹整支仅完成10%需关注</li>
+                    <li><strong>临期库存9.7万</strong>，需尽快清理</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="rec-section">
+            <div class="rec-header rec-opportunity">机会点</div>
+            <div class="rec-content">
+                <ul>
+                    <li><strong>啤酒超额195%</strong>，青大师(285%)表现强劲</li>
+                    <li><strong>果酒超额123%</strong>，小花样、老虎先森增长快</li>
+                    <li><strong>洋酒接近目标</strong>，纹银百两(299%)表现突出</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="rec-section">
+            <div class="rec-header rec-advantage">优势分析</div>
+            <div class="rec-content">
+                <ul>
+                    <li><strong>葡萄酒毛利率30.6%</strong>，是利润主力</li>
+                    <li><strong>闫梦毛利最高23.6%</strong>，可复制经验</li>
+                    <li><strong>李位位/杨晓/闫梦</strong>贡献50%销售</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="rec-section">
+            <div class="rec-header rec-advice">行动建议</div>
+            <div class="rec-content">
+                <ul>
+                    <li>加速葡萄酒促销，提升Q1达成率</li>
+                    <li>加大啤酒/果酒备货，满足市场需求</li>
+                    <li>清理临期库存，避免损失</li>
+                    <li>复制西北区域成功经验到薄弱地区</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
