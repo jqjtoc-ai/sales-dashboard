@@ -30,6 +30,14 @@
         .overall-target .label { font-size: 14px; opacity: 0.9; }
         .overall-target .detail { font-size: 13px; margin-top: 8px; opacity: 0.8; }
         
+        .yoy-section { background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%); color: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; }
+        .yoy-section h2 { color: white; border-bottom: none; }
+        .yoy-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; text-align: center; }
+        .yoy-item { background: rgba(255,255,255,0.2); padding: 15px; border-radius: 8px; }
+        .yoy-value { font-size: 24px; font-weight: bold; }
+        .yoy-label { font-size: 12px; opacity: 0.9; }
+        .yoy-highlight { font-size: 36px; font-weight: bold; color: #ffeb3b; }
+        
         table { width: 100%; border-collapse: collapse; margin-bottom: 15px; font-size: 13px; }
         th, td { padding: 8px; border-bottom: 1px solid #eee; }
         th { background: #f8f9fa; color: #666; font-weight: 600; text-align: center; }
@@ -70,6 +78,9 @@
         .rec-advantage { background: #e3f2fd; border-left: 4px solid #2196f3; }
         .rec-advice { background: #fff3e0; border-left: 4px solid #ff9800; }
         .rec-content ul { margin: 0; padding-left: 18px; font-size: 13px; line-height: 1.8; }
+        
+        .insight-box { background: #e8f5e9; border: 2px solid #4caf50; border-radius: 10px; padding: 15px; margin: 15px 0; }
+        .insight-box h4 { color: #2e7d32; margin-bottom: 10px; }
     </style>
 </head>
 <body>
@@ -78,6 +89,34 @@
             <a href="../index.html">返回首页</a>
         </div>
         <h1>深红果 - 销售数据看板</h1>
+        
+        <div class="card">
+            <h2>🎊 农历新年同比分析 (vs 去年同期)</h2>
+            <div class="yoy-section">
+                <div class="yoy-grid">
+                    <div class="yoy-item">
+                        <div class="yoy-value">¥1936万</div>
+                        <div class="yoy-label">去年同期 (2024.11-2025.01)</div>
+                    </div>
+                    <div class="yoy-item">
+                        <div class="yoy-value">¥2847万</div>
+                        <div class="yoy-label">今年同期 (2025.12-2026.02)</div>
+                    </div>
+                    <div class="yoy-item">
+                        <div class="yoy-highlight">+47.1%</div>
+                        <div class="yoy-label">同比增长</div>
+                    </div>
+                </div>
+            </div>
+            <div class="insight-box">
+                <h4>关键发现</h4>
+                <ul style="margin:0; padding-left:18px; line-height:1.8;">
+                    <li><strong>1月爆发式增长 +142%</strong>：春节备货启动更早、力度更大</li>
+                    <li><strong>春节月份 +34%</strong>：2月销售表现优于去年</li>
+                    <li><strong>4个月=去年62%</strong>：全年有望创新高</li>
+                </ul>
+            </div>
+        </div>
         
         <div class="card">
             <h2>整体目标达成</h2>
@@ -639,6 +678,7 @@
                     <li><strong>啤酒超额195%</strong>，青大师(285%)表现强劲</li>
                     <li><strong>果酒超额123%</strong>，小花样、老虎先森增长快</li>
                     <li><strong>洋酒接近目标</strong>，纹银百两(299%)表现突出</li>
+                    <li><strong>农历新年同比+47%</strong>，市场增长强劲</li>
                 </ul>
             </div>
         </div>
@@ -650,6 +690,7 @@
                     <li><strong>葡萄酒毛利率30.6%</strong>，是利润主力</li>
                     <li><strong>闫梦毛利最高23.6%</strong>，可复制经验</li>
                     <li><strong>李位位/杨晓/闫梦</strong>贡献50%销售</li>
+                    <li><strong>1月销售爆发+142%</strong>，春节销售 preparations 充分</li>
                 </ul>
             </div>
         </div>
@@ -661,6 +702,7 @@
                     <li>加速葡萄酒促销，提升Q1达成率</li>
                     <li>加大啤酒/果酒备货，满足市场需求</li>
                     <li>复制西北区域成功经验到薄弱地区</li>
+                    <li>保持春节销售力度，提前规划明年春节</li>
                 </ul>
             </div>
         </div>
