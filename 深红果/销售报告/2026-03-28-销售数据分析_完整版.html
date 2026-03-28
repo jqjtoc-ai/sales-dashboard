@@ -923,19 +923,19 @@
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                plugins: {{
-                    legend: {{ display: false }},
-                    title: {{ display: true, text: '每日销售趋势' }}
-                }},
-                scales: {{
-                    y: {{
+                plugins: {
+                    legend: { display: false },
+                    title: { display: true, text: '每日销售趋势' }
+                },
+                scales: {
+                    y: {
                         beginAtZero: true,
-                        ticks: {{
+                        ticks: {
                             callback: value => (value/10000).toFixed(0) + '万'
-                        }}
-                    }}
-                }}
-            }}
+                        }
+                    }
+                }
+            }
         });
     </script>
 </body>
