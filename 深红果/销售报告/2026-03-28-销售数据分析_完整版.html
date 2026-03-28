@@ -31,10 +31,11 @@
         .overall-target .detail { font-size: 13px; margin-top: 8px; opacity: 0.8; }
         
         table { width: 100%; border-collapse: collapse; margin-bottom: 15px; font-size: 13px; }
-        th, td { padding: 8px; text-align: left; border-bottom: 1px solid #eee; }
-        th { background: #f8f9fa; color: #666; font-weight: 600; }
+        th, td { padding: 8px; border-bottom: 1px solid #eee; }
+        th { background: #f8f9fa; color: #666; font-weight: 600; text-align: center; }
+        td { text-align: left; }
+        td.num { text-align: center; font-family: 'Monaco', monospace; }
         tr:hover { background: #f8f9fa; }
-        .num { text-align: right; font-family: 'Monaco', monospace; }
         
         .pie-chart { display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; margin: 15px 0; }
         .pie-container { position: relative; width: 160px; height: 160px; }
@@ -152,16 +153,16 @@
             <h2>全局TOP10品牌</h2>
             <table>
                 <tr><th>排名</th><th>品牌</th><th>销量</th><th>销售额</th><th>毛利</th><th>占比</th><th>毛利率</th></tr>
-                <tr><td>71</td><td>高升</td><td class="num">16,674</td><td class="num">187.3万</td><td class="num">60.0万</td><td class="num">6.58%</td><td class="num">32.05%</td></tr>
-                <tr><td>69</td><td>青大师</td><td class="num">18,678</td><td class="num">143.6万</td><td class="num">29.2万</td><td class="num">5.04%</td><td class="num">20.35%</td></tr>
-                <tr><td>27</td><td>小花样</td><td class="num">5,319</td><td class="num">128.8万</td><td class="num">24.0万</td><td class="num">4.52%</td><td class="num">18.64%</td></tr>
-                <tr><td>20</td><td>大黄狗</td><td class="num">3,008</td><td class="num">101.8万</td><td class="num">27.9万</td><td class="num">3.58%</td><td class="num">27.43%</td></tr>
-                <tr><td>54</td><td>红动</td><td class="num">4,557</td><td class="num">72.0万</td><td class="num">22.2万</td><td class="num">2.53%</td><td class="num">30.8%</td></tr>
-                <tr><td>51</td><td>生龙</td><td class="num">4,865</td><td class="num">47.0万</td><td class="num">12.5万</td><td class="num">1.65%</td><td class="num">26.65%</td></tr>
-                <tr><td>60</td><td>老虎先森</td><td class="num">3,132</td><td class="num">46.4万</td><td class="num">11.5万</td><td class="num">1.63%</td><td class="num">24.79%</td></tr>
-                <tr><td>52</td><td>知食</td><td class="num">3,626</td><td class="num">44.0万</td><td class="num">8.7万</td><td class="num">1.54%</td><td class="num">19.75%</td></tr>
-                <tr><td>8</td><td>兽够了</td><td class="num">2,884</td><td class="num">34.3万</td><td class="num">8.7万</td><td class="num">1.21%</td><td class="num">25.32%</td></tr>
-                <tr><td>17</td><td>嗄玛尼</td><td class="num">2,195</td><td class="num">34.1万</td><td class="num">7.9万</td><td class="num">1.2%</td><td class="num">23.05%</td></tr>
+                <tr><td class="num">71</td><td>高升</td><td class="num">16,674</td><td class="num">187.3万</td><td class="num">60.0万</td><td class="num">6.58%</td><td class="num">32.05%</td></tr>
+                <tr><td class="num">69</td><td>青大师</td><td class="num">18,678</td><td class="num">143.6万</td><td class="num">29.2万</td><td class="num">5.04%</td><td class="num">20.35%</td></tr>
+                <tr><td class="num">27</td><td>小花样</td><td class="num">5,319</td><td class="num">128.8万</td><td class="num">24.0万</td><td class="num">4.52%</td><td class="num">18.64%</td></tr>
+                <tr><td class="num">20</td><td>大黄狗</td><td class="num">3,008</td><td class="num">101.8万</td><td class="num">27.9万</td><td class="num">3.58%</td><td class="num">27.43%</td></tr>
+                <tr><td class="num">54</td><td>红动</td><td class="num">4,557</td><td class="num">72.0万</td><td class="num">22.2万</td><td class="num">2.53%</td><td class="num">30.8%</td></tr>
+                <tr><td class="num">51</td><td>生龙</td><td class="num">4,865</td><td class="num">47.0万</td><td class="num">12.5万</td><td class="num">1.65%</td><td class="num">26.65%</td></tr>
+                <tr><td class="num">60</td><td>老虎先森</td><td class="num">3,132</td><td class="num">46.4万</td><td class="num">11.5万</td><td class="num">1.63%</td><td class="num">24.79%</td></tr>
+                <tr><td class="num">52</td><td>知食</td><td class="num">3,626</td><td class="num">44.0万</td><td class="num">8.7万</td><td class="num">1.54%</td><td class="num">19.75%</td></tr>
+                <tr><td class="num">8</td><td>兽够了</td><td class="num">2,884</td><td class="num">34.3万</td><td class="num">8.7万</td><td class="num">1.21%</td><td class="num">25.32%</td></tr>
+                <tr><td class="num">17</td><td>嗄玛尼</td><td class="num">2,195</td><td class="num">34.1万</td><td class="num">7.9万</td><td class="num">1.2%</td><td class="num">23.05%</td></tr>
             </table>
         </div>
         
@@ -169,16 +170,16 @@
             <h2>全局TOP10产品</h2>
             <table>
                 <tr><th>排名</th><th>产品</th><th>销售额</th><th>毛利</th><th>占比</th></tr>
-                <tr><td>1291</td><td>贝尔嘉[啤酒棍子]礼盒500ml*12瓶</td><td class="num">104.0万</td><td class="num">15.2万</td><td class="num">3.65%</td></tr>
-                <tr><td>1555</td><td>高升中式热红酒750ml</td><td class="num">43.0万</td><td class="num">11.5万</td><td class="num">1.51%</td></tr>
-                <tr><td>1552</td><td>高升10度暖姜红枣中式热红酒750ml</td><td class="num">42.3万</td><td class="num">16.4万</td><td class="num">1.48%</td></tr>
-                <tr><td>1085</td><td>红动6℃山楂酒720ml(瓶装)</td><td class="num">39.6万</td><td class="num">12.2万</td><td class="num">1.39%</td></tr>
-                <tr><td>1478</td><td>青大师12生肖[啤酒棍子]礼盒500ml*12瓶</td><td class="num">39.1万</td><td class="num">9.0万</td><td class="num">1.37%</td></tr>
-                <tr><td>1086</td><td>红动6℃桑葚酒720ml(瓶装)</td><td class="num">32.5万</td><td class="num">10.0万</td><td class="num">1.14%</td></tr>
-                <tr><td>1551</td><td>高升10度五黑饮葡萄果酒(新品)750ml</td><td class="num">29.1万</td><td class="num">9.8万</td><td class="num">1.02%</td></tr>
-                <tr><td>6</td><td>(新款)智利大黄狗12°干红750ml</td><td class="num">28.3万</td><td class="num">8.3万</td><td class="num">1.0%</td></tr>
-                <tr><td>565</td><td>小花样6°(巴乐)酒258ml</td><td class="num">26.6万</td><td class="num">4.9万</td><td class="num">0.94%</td></tr>
-                <tr><td>1550</td><td>高升10度九红饮葡萄果酒(新品)750ml</td><td class="num">25.9万</td><td class="num">8.8万</td><td class="num">0.91%</td></tr>
+                <tr><td class="num">1291</td><td>贝尔嘉[啤酒棍子]礼盒500ml*12瓶</td><td class="num">104.0万</td><td class="num">15.2万</td><td class="num">3.65%</td></tr>
+                <tr><td class="num">1555</td><td>高升中式热红酒750ml</td><td class="num">43.0万</td><td class="num">11.5万</td><td class="num">1.51%</td></tr>
+                <tr><td class="num">1552</td><td>高升10度暖姜红枣中式热红酒750ml</td><td class="num">42.3万</td><td class="num">16.4万</td><td class="num">1.48%</td></tr>
+                <tr><td class="num">1085</td><td>红动6℃山楂酒720ml(瓶装)</td><td class="num">39.6万</td><td class="num">12.2万</td><td class="num">1.39%</td></tr>
+                <tr><td class="num">1478</td><td>青大师12生肖[啤酒棍子]礼盒500ml*12瓶</td><td class="num">39.1万</td><td class="num">9.0万</td><td class="num">1.37%</td></tr>
+                <tr><td class="num">1086</td><td>红动6℃桑葚酒720ml(瓶装)</td><td class="num">32.5万</td><td class="num">10.0万</td><td class="num">1.14%</td></tr>
+                <tr><td class="num">1551</td><td>高升10度五黑饮葡萄果酒(新品)750ml</td><td class="num">29.1万</td><td class="num">9.8万</td><td class="num">1.02%</td></tr>
+                <tr><td class="num">6</td><td>(新款)智利大黄狗12°干红750ml</td><td class="num">28.3万</td><td class="num">8.3万</td><td class="num">1.0%</td></tr>
+                <tr><td class="num">565</td><td>小花样6°(巴乐)酒258ml</td><td class="num">26.6万</td><td class="num">4.9万</td><td class="num">0.94%</td></tr>
+                <tr><td class="num">1550</td><td>高升10度九红饮葡萄果酒(新品)750ml</td><td class="num">25.9万</td><td class="num">8.8万</td><td class="num">0.91%</td></tr>
             </table>
         </div>
         
@@ -380,15 +381,6 @@
                 </tr>
             </table>
         </div>
-        
-        <div class="card">
-            <h2>库存情况</h2>
-            <table>
-                <tr><th>指标</th><th>数值</th></tr>
-                <tr><td>总库存</td><td class="num">387.5万 (657 SKU)</td></tr>
-                <tr><td>临期库存</td><td class="num">9.7万 (128 SKU)</td></tr>
-            </table>
-        </div>
 
         <div class="category-section">
             <div class="category-header">
@@ -423,16 +415,16 @@
                 <h4>TOP10产品 (占品类86.3%)</h4>
                 <table>
                     <tr><th>排名</th><th>产品</th><th>销量</th><th>销售额</th><th>类内占比</th></tr>
-                    <tr><td>17</td><td>知食红枣枸杞味米酒</td><td class="num">1,823</td><td class="num">22.1万</td><td class="num">21.49%</td></tr>
-                    <tr><td>16</td><td>知食山楂陈皮罗汉果味米酒</td><td class="num">1,803</td><td class="num">21.9万</td><td class="num">21.26%</td></tr>
-                    <tr><td>14</td><td>生龙鲜榨米酒3°桂花味1L</td><td class="num">996</td><td class="num">8.9万</td><td class="num">8.7%</td></tr>
-                    <tr><td>8</td><td>生龙牌鲜榨米酒黄桃味1L装</td><td class="num">918</td><td class="num">8.3万</td><td class="num">8.08%</td></tr>
-                    <tr><td>7</td><td>生龙牌鲜榨米酒荔枝味1L装</td><td class="num">846</td><td class="num">7.7万</td><td class="num">7.46%</td></tr>
-                    <tr><td>13</td><td>生龙鲜榨米酒3°原味1L</td><td class="num">774</td><td class="num">6.1万</td><td class="num">5.9%</td></tr>
-                    <tr><td>3</td><td>壹整支东方谷物发酵米酿300ml</td><td class="num">376</td><td class="num">3.9万</td><td class="num">3.78%</td></tr>
-                    <tr><td>10</td><td>生龙荔枝冰酿无醇310ml</td><td class="num">327</td><td class="num">3.6万</td><td class="num">3.46%</td></tr>
-                    <tr><td>9</td><td>生龙秋梨枇杷冰酿无醇310ml</td><td class="num">311</td><td class="num">3.4万</td><td class="num">3.26%</td></tr>
-                    <tr><td>5</td><td>生龙宝玫瑰红曲5红酿490ml</td><td class="num">280</td><td class="num">3.0万</td><td class="num">2.89%</td></tr>
+                    <tr><td class="num">17</td><td>知食红枣枸杞味米酒</td><td class="num">1,823</td><td class="num">22.1万</td><td class="num">21.49%</td></tr>
+                    <tr><td class="num">16</td><td>知食山楂陈皮罗汉果味米酒</td><td class="num">1,803</td><td class="num">21.9万</td><td class="num">21.26%</td></tr>
+                    <tr><td class="num">14</td><td>生龙鲜榨米酒3°桂花味1L</td><td class="num">996</td><td class="num">8.9万</td><td class="num">8.7%</td></tr>
+                    <tr><td class="num">8</td><td>生龙牌鲜榨米酒黄桃味1L装</td><td class="num">918</td><td class="num">8.3万</td><td class="num">8.08%</td></tr>
+                    <tr><td class="num">7</td><td>生龙牌鲜榨米酒荔枝味1L装</td><td class="num">846</td><td class="num">7.7万</td><td class="num">7.46%</td></tr>
+                    <tr><td class="num">13</td><td>生龙鲜榨米酒3°原味1L</td><td class="num">774</td><td class="num">6.1万</td><td class="num">5.9%</td></tr>
+                    <tr><td class="num">3</td><td>壹整支东方谷物发酵米酿300ml</td><td class="num">376</td><td class="num">3.9万</td><td class="num">3.78%</td></tr>
+                    <tr><td class="num">10</td><td>生龙荔枝冰酿无醇310ml</td><td class="num">327</td><td class="num">3.6万</td><td class="num">3.46%</td></tr>
+                    <tr><td class="num">9</td><td>生龙秋梨枇杷冰酿无醇310ml</td><td class="num">311</td><td class="num">3.4万</td><td class="num">3.26%</td></tr>
+                    <tr><td class="num">5</td><td>生龙宝玫瑰红曲5红酿490ml</td><td class="num">280</td><td class="num">3.0万</td><td class="num">2.89%</td></tr>
                 </table>
             </div>
         </div>
@@ -470,16 +462,16 @@
                 <h4>TOP10产品 (占品类63.5%)</h4>
                 <table>
                     <tr><th>排名</th><th>产品</th><th>销量</th><th>销售额</th><th>类内占比</th></tr>
-                    <tr><td>11</td><td>即刻酿造.2.5°黄油风味啤酒630ml</td><td class="num">3,711</td><td class="num">25.0万</td><td class="num">11.8%</td></tr>
-                    <tr><td>28</td><td>青大师5.3°后海的猫酒花拉格啤酒（招财猫)</td><td class="num">891</td><td class="num">23.5万</td><td class="num">11.11%</td></tr>
-                    <tr><td>14</td><td>崂大师马跃丰年精酿啤酒</td><td class="num">1,202</td><td class="num">23.1万</td><td class="num">10.9%</td></tr>
-                    <tr><td>23</td><td>青大师4.1°金马贺岁酒花拉格精酿啤酒</td><td class="num">2,928</td><td class="num">16.1万</td><td class="num">7.61%</td></tr>
-                    <tr><td>27</td><td>青大师5.3°后海的猫酒花拉格啤酒10L（招财猫)</td><td class="num">1,248</td><td class="num">10.6万</td><td class="num">5.02%</td></tr>
-                    <tr><td>22</td><td>青大师4.1°金马贺岁(礼盒)酒花拉格精酿啤酒</td><td class="num">602</td><td class="num">10.2万</td><td class="num">4.81%</td></tr>
-                    <tr><td>24</td><td>青大师4.2°后海的猫奶皮子风味精酿啤酒</td><td class="num">505</td><td class="num">7.6万</td><td class="num">3.59%</td></tr>
-                    <tr><td>35</td><td>青大师后海的猫巧克力牛奶世涛啤酒 500ml罐</td><td class="num">961</td><td class="num">6.5万</td><td class="num">3.07%</td></tr>
-                    <tr><td>38</td><td>青大师后海的猫烈性艾尔啤酒 500ml罐</td><td class="num">930</td><td class="num">6.3万</td><td class="num">2.96%</td></tr>
-                    <tr><td>34</td><td>青大师后海的猫IAP印度淡色艾尔啤酒 500ml罐</td><td class="num">824</td><td class="num">5.6万</td><td class="num">2.63%</td></tr>
+                    <tr><td class="num">11</td><td>即刻酿造.2.5°黄油风味啤酒630ml</td><td class="num">3,711</td><td class="num">25.0万</td><td class="num">11.8%</td></tr>
+                    <tr><td class="num">28</td><td>青大师5.3°后海的猫酒花拉格啤酒（招财猫)</td><td class="num">891</td><td class="num">23.5万</td><td class="num">11.11%</td></tr>
+                    <tr><td class="num">14</td><td>崂大师马跃丰年精酿啤酒</td><td class="num">1,202</td><td class="num">23.1万</td><td class="num">10.9%</td></tr>
+                    <tr><td class="num">23</td><td>青大师4.1°金马贺岁酒花拉格精酿啤酒</td><td class="num">2,928</td><td class="num">16.1万</td><td class="num">7.61%</td></tr>
+                    <tr><td class="num">27</td><td>青大师5.3°后海的猫酒花拉格啤酒10L（招财猫)</td><td class="num">1,248</td><td class="num">10.6万</td><td class="num">5.02%</td></tr>
+                    <tr><td class="num">22</td><td>青大师4.1°金马贺岁(礼盒)酒花拉格精酿啤酒</td><td class="num">602</td><td class="num">10.2万</td><td class="num">4.81%</td></tr>
+                    <tr><td class="num">24</td><td>青大师4.2°后海的猫奶皮子风味精酿啤酒</td><td class="num">505</td><td class="num">7.6万</td><td class="num">3.59%</td></tr>
+                    <tr><td class="num">35</td><td>青大师后海的猫巧克力牛奶世涛啤酒 500ml罐</td><td class="num">961</td><td class="num">6.5万</td><td class="num">3.07%</td></tr>
+                    <tr><td class="num">38</td><td>青大师后海的猫烈性艾尔啤酒 500ml罐</td><td class="num">930</td><td class="num">6.3万</td><td class="num">2.96%</td></tr>
+                    <tr><td class="num">34</td><td>青大师后海的猫IAP印度淡色艾尔啤酒 500ml罐</td><td class="num">824</td><td class="num">5.6万</td><td class="num">2.63%</td></tr>
                 </table>
             </div>
         </div>
@@ -520,16 +512,16 @@
                 <h4>TOP10产品 (占品类45.2%)</h4>
                 <table>
                     <tr><th>排名</th><th>产品</th><th>销量</th><th>销售额</th><th>类内占比</th></tr>
-                    <tr><td>71</td><td>红动6℃山楂酒720ml(瓶装)</td><td class="num">2,497</td><td class="num">39.6万</td><td class="num">8.3%</td></tr>
-                    <tr><td>72</td><td>红动6℃桑葚酒720ml(瓶装)</td><td class="num">2,060</td><td class="num">32.5万</td><td class="num">6.81%</td></tr>
-                    <tr><td>40</td><td>小花样6°(巴乐)酒258ml</td><td class="num">1,128</td><td class="num">26.6万</td><td class="num">5.59%</td></tr>
-                    <tr><td>43</td><td>小花样6°(荔枝)酒258ml</td><td class="num">992</td><td class="num">23.0万</td><td class="num">4.82%</td></tr>
-                    <tr><td>42</td><td>小花样6°(芒果)酒258ml</td><td class="num">955</td><td class="num">22.5万</td><td class="num">4.71%</td></tr>
-                    <tr><td>41</td><td>小花样6°(油柑)酒258ml</td><td class="num">788</td><td class="num">18.5万</td><td class="num">3.88%</td></tr>
-                    <tr><td>44</td><td>小花样6°(黄皮)酒258ml</td><td class="num">662</td><td class="num">15.5万</td><td class="num">3.25%</td></tr>
-                    <tr><td>46</td><td>小花样久造7°柚子酒750ml</td><td class="num">498</td><td class="num">14.3万</td><td class="num">2.99%</td></tr>
-                    <tr><td>10</td><td>兽够了4.5°菠萝椰子风味气泡酒290ml</td><td class="num">991</td><td class="num">11.8万</td><td class="num">2.48%</td></tr>
-                    <tr><td>8</td><td>兽够了4.5°白桃乳酸菌风味气泡酒290ml</td><td class="num">957</td><td class="num">11.4万</td><td class="num">2.38%</td></tr>
+                    <tr><td class="num">71</td><td>红动6℃山楂酒720ml(瓶装)</td><td class="num">2,497</td><td class="num">39.6万</td><td class="num">8.3%</td></tr>
+                    <tr><td class="num">72</td><td>红动6℃桑葚酒720ml(瓶装)</td><td class="num">2,060</td><td class="num">32.5万</td><td class="num">6.81%</td></tr>
+                    <tr><td class="num">40</td><td>小花样6°(巴乐)酒258ml</td><td class="num">1,128</td><td class="num">26.6万</td><td class="num">5.59%</td></tr>
+                    <tr><td class="num">43</td><td>小花样6°(荔枝)酒258ml</td><td class="num">992</td><td class="num">23.0万</td><td class="num">4.82%</td></tr>
+                    <tr><td class="num">42</td><td>小花样6°(芒果)酒258ml</td><td class="num">955</td><td class="num">22.5万</td><td class="num">4.71%</td></tr>
+                    <tr><td class="num">41</td><td>小花样6°(油柑)酒258ml</td><td class="num">788</td><td class="num">18.5万</td><td class="num">3.88%</td></tr>
+                    <tr><td class="num">44</td><td>小花样6°(黄皮)酒258ml</td><td class="num">662</td><td class="num">15.5万</td><td class="num">3.25%</td></tr>
+                    <tr><td class="num">46</td><td>小花样久造7°柚子酒750ml</td><td class="num">498</td><td class="num">14.3万</td><td class="num">2.99%</td></tr>
+                    <tr><td class="num">10</td><td>兽够了4.5°菠萝椰子风味气泡酒290ml</td><td class="num">991</td><td class="num">11.8万</td><td class="num">2.48%</td></tr>
+                    <tr><td class="num">8</td><td>兽够了4.5°白桃乳酸菌风味气泡酒290ml</td><td class="num">957</td><td class="num">11.4万</td><td class="num">2.38%</td></tr>
                 </table>
             </div>
         </div>
@@ -565,16 +557,16 @@
                 <h4>TOP10产品 (占品类44.1%)</h4>
                 <table>
                     <tr><th>排名</th><th>产品</th><th>销量</th><th>销售额</th><th>类内占比</th></tr>
-                    <tr><td>37</td><td>纹银百两银花威士忌100ml</td><td class="num">138</td><td class="num">3.2万</td><td class="num">5.74%</td></tr>
-                    <tr><td>38</td><td>纹银百两银花朗姆酒100ml</td><td class="num">133</td><td class="num">3.1万</td><td class="num">5.42%</td></tr>
-                    <tr><td>36</td><td>纹银百两银花伏特加100ml</td><td class="num">132</td><td class="num">3.1万</td><td class="num">5.42%</td></tr>
-                    <tr><td>40</td><td>纹银百两银花金酒100ml</td><td class="num">126</td><td class="num">2.9万</td><td class="num">5.12%</td></tr>
-                    <tr><td>39</td><td>纹银百两银花白兰地100ml</td><td class="num">110</td><td class="num">2.7万</td><td class="num">4.85%</td></tr>
-                    <tr><td>34</td><td>宝恪RXXX微醺调酒站套装50ml</td><td class="num">58</td><td class="num">2.6万</td><td class="num">4.65%</td></tr>
-                    <tr><td>18</td><td>RXXX宝恪(柠檬)伏特加50ml</td><td class="num">74</td><td class="num">2.0万</td><td class="num">3.47%</td></tr>
-                    <tr><td>32</td><td>宝恪(桔里桔气)调酒套装</td><td class="num">232</td><td class="num">1.9万</td><td class="num">3.39%</td></tr>
-                    <tr><td>35</td><td>宝恪RXXX青柠苏打冰伏桶</td><td class="num">85</td><td class="num">1.7万</td><td class="num">3.04%</td></tr>
-                    <tr><td>17</td><td>RXXX宝恪 白朗姆酒50ml</td><td class="num">55</td><td class="num">1.7万</td><td class="num">3.0%</td></tr>
+                    <tr><td class="num">37</td><td>纹银百两银花威士忌100ml</td><td class="num">138</td><td class="num">3.2万</td><td class="num">5.74%</td></tr>
+                    <tr><td class="num">38</td><td>纹银百两银花朗姆酒100ml</td><td class="num">133</td><td class="num">3.1万</td><td class="num">5.42%</td></tr>
+                    <tr><td class="num">36</td><td>纹银百两银花伏特加100ml</td><td class="num">132</td><td class="num">3.1万</td><td class="num">5.42%</td></tr>
+                    <tr><td class="num">40</td><td>纹银百两银花金酒100ml</td><td class="num">126</td><td class="num">2.9万</td><td class="num">5.12%</td></tr>
+                    <tr><td class="num">39</td><td>纹银百两银花白兰地100ml</td><td class="num">110</td><td class="num">2.7万</td><td class="num">4.85%</td></tr>
+                    <tr><td class="num">34</td><td>宝恪RXXX微醺调酒站套装50ml</td><td class="num">58</td><td class="num">2.6万</td><td class="num">4.65%</td></tr>
+                    <tr><td class="num">18</td><td>RXXX宝恪(柠檬)伏特加50ml</td><td class="num">74</td><td class="num">2.0万</td><td class="num">3.47%</td></tr>
+                    <tr><td class="num">32</td><td>宝恪(桔里桔气)调酒套装</td><td class="num">232</td><td class="num">1.9万</td><td class="num">3.39%</td></tr>
+                    <tr><td class="num">35</td><td>宝恪RXXX青柠苏打冰伏桶</td><td class="num">85</td><td class="num">1.7万</td><td class="num">3.04%</td></tr>
+                    <tr><td class="num">17</td><td>RXXX宝恪 白朗姆酒50ml</td><td class="num">55</td><td class="num">1.7万</td><td class="num">3.0%</td></tr>
                 </table>
             </div>
         </div>
@@ -615,16 +607,16 @@
                 <h4>TOP10产品 (占品类47.8%)</h4>
                 <table>
                     <tr><th>排名</th><th>产品</th><th>销量</th><th>销售额</th><th>类内占比</th></tr>
-                    <tr><td>94</td><td>高升中式热红酒750ml</td><td class="num">3,963</td><td class="num">43.0万</td><td class="num">7.98%</td></tr>
-                    <tr><td>91</td><td>高升10度暖姜红枣中式热红酒750ml</td><td class="num">3,706</td><td class="num">42.3万</td><td class="num">7.85%</td></tr>
-                    <tr><td>90</td><td>高升10度五黑饮葡萄果酒(新品)750ml</td><td class="num">2,548</td><td class="num">29.1万</td><td class="num">5.41%</td></tr>
-                    <tr><td>2</td><td>(新款)智利大黄狗12°干红750ml</td><td class="num">969</td><td class="num">28.3万</td><td class="num">5.26%</td></tr>
-                    <tr><td>89</td><td>高升10度九红饮葡萄果酒(新品)750ml</td><td class="num">2,250</td><td class="num">25.9万</td><td class="num">4.81%</td></tr>
-                    <tr><td>4</td><td>(新款)智利大黄狗长相思12°白葡萄750ml</td><td class="num">818</td><td class="num">24.0万</td><td class="num">4.45%</td></tr>
-                    <tr><td>1</td><td>(新款)智利大黄狗12°干红187.5ml*24</td><td class="num">474</td><td class="num">17.3万</td><td class="num">3.21%</td></tr>
-                    <tr><td>3</td><td>(新款)智利大黄狗12°长相思白葡萄187.5ml*24</td><td class="num">464</td><td class="num">17.0万</td><td class="num">3.15%</td></tr>
-                    <tr><td>73</td><td>物享东方驰聘干红礼盒750ml</td><td class="num">304</td><td class="num">15.5万</td><td class="num">2.87%</td></tr>
-                    <tr><td>75</td><td>粉湖咖啡无醇葡萄汁750ml</td><td class="num">526</td><td class="num">15.1万</td><td class="num">2.8%</td></tr>
+                    <tr><td class="num">94</td><td>高升中式热红酒750ml</td><td class="num">3,963</td><td class="num">43.0万</td><td class="num">7.98%</td></tr>
+                    <tr><td class="num">91</td><td>高升10度暖姜红枣中式热红酒750ml</td><td class="num">3,706</td><td class="num">42.3万</td><td class="num">7.85%</td></tr>
+                    <tr><td class="num">90</td><td>高升10度五黑饮葡萄果酒(新品)750ml</td><td class="num">2,548</td><td class="num">29.1万</td><td class="num">5.41%</td></tr>
+                    <tr><td class="num">2</td><td>(新款)智利大黄狗12°干红750ml</td><td class="num">969</td><td class="num">28.3万</td><td class="num">5.26%</td></tr>
+                    <tr><td class="num">89</td><td>高升10度九红饮葡萄果酒(新品)750ml</td><td class="num">2,250</td><td class="num">25.9万</td><td class="num">4.81%</td></tr>
+                    <tr><td class="num">4</td><td>(新款)智利大黄狗长相思12°白葡萄750ml</td><td class="num">818</td><td class="num">24.0万</td><td class="num">4.45%</td></tr>
+                    <tr><td class="num">1</td><td>(新款)智利大黄狗12°干红187.5ml*24</td><td class="num">474</td><td class="num">17.3万</td><td class="num">3.21%</td></tr>
+                    <tr><td class="num">3</td><td>(新款)智利大黄狗12°长相思白葡萄187.5ml*24</td><td class="num">464</td><td class="num">17.0万</td><td class="num">3.15%</td></tr>
+                    <tr><td class="num">73</td><td>物享东方驰聘干红礼盒750ml</td><td class="num">304</td><td class="num">15.5万</td><td class="num">2.87%</td></tr>
+                    <tr><td class="num">75</td><td>粉湖咖啡无醇葡萄汁750ml</td><td class="num">526</td><td class="num">15.1万</td><td class="num">2.8%</td></tr>
                 </table>
             </div>
         </div>
@@ -636,7 +628,6 @@
                     <li><strong>整体目标达成率仅75%</strong>，需加快Q1进度</li>
                     <li><strong>葡萄酒达成率仅51%</strong>，大黄狗(-52%)、高升(-54%)表现不佳</li>
                     <li><strong>古法酒仅44%</strong>，壹整支仅完成10%需关注</li>
-                    <li><strong>临期库存9.7万</strong>，需尽快清理</li>
                 </ul>
             </div>
         </div>
@@ -669,7 +660,6 @@
                 <ul>
                     <li>加速葡萄酒促销，提升Q1达成率</li>
                     <li>加大啤酒/果酒备货，满足市场需求</li>
-                    <li>清理临期库存，避免损失</li>
                     <li>复制西北区域成功经验到薄弱地区</li>
                 </ul>
             </div>
