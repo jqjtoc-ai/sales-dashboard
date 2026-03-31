@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>金诚铭语 - 销售数据看板</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f7fa; padding: 20px; }
+        .container { max-width: 1400px; margin: 0 auto; }
+        h1 { color: #2c3e50; margin-bottom: 20px; font-size: 28px; }
+        h2 { color: #34495e; font-size: 18px; margin-bottom: 15px; border-bottom: 2px solid #27ae60; padding-bottom: 10px; }
+        h3 { color: #555; font-size: 16px; margin: 20px 0 10px; }
+        .card { background: white; border-radius: 10px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        
+        .kpi { display: flex; gap: 15px; flex-wrap: wrap; }
+        .kpi-item { flex: 1; min-width: 150px; background: linear-gradient(135deg, #27ae60 0%, #1e8449 100%); color: white; padding: 15px; border-radius: 10px; text-align: center; }
+        .kpi-item:nth-child(2) { background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%); }
+        .kpi-item:nth-child(3) { background: linear-gradient(135deg, #3498db 0%, #2980b9 100%); }
+        .kpi-item:nth-child(4) { background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%); }
+        .kpi-value { font-size: 28px; font-weight: bold; }
+        .kpi-label { font-size: 12px; opacity: 0.9; }
+        
+        table { width: 100%; border-collapse: collapse; margin-bottom: 15px; font-size: 13px; }
+        th, td { padding: 10px; border-bottom: 1px solid #eee; }
+        th { background: #f8f9fa; color: #666; font-weight: 600; text-align: center; }
+        td { text-align: left; }
+        td.num { text-align: center; }
+        tr:hover { background: #f8f9fa; }
+        
+        .monthly-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
+        .month-card { background: white; padding: 20px; border-radius: 10px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .month-name { font-size: 16px; color: #666; margin-bottom: 10px; }
+        .month-sales { font-size: 24px; font-weight: bold; color: #27ae60; }
+        .month-profit { font-size: 14px; color: #666; }
+        
+        .chart-container { height: 300px; margin: 15px 0; }
+        
+        .tag { display: inline-block; padding: 2px 8px; border-radius: 3px; font-size: 11px; margin-right: 4px; }
+        .tag-new { background: #e74c3c; color: white; }
+        .tag-hot { background: #f39c12; color: white; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>金诚铭语 - 销售数据看板</h1>
+        
+        <div class="card">
+            <h2>核心指标</h2>
+            <div class="kpi">
+                <div class="kpi-item">
+                    <div class="kpi-value">1250.3万</div>
+                    <div class="kpi-label">总销售额</div>
+                </div>
+                <div class="kpi-item">
+                    <div class="kpi-value">107.2万</div>
+                    <div class="kpi-label">总毛利</div>
+                </div>
+                <div class="kpi-item">
+                    <div class="kpi-value">8.6%</div>
+                    <div class="kpi-label">综合毛利率</div>
+                </div>
+                <div class="kpi-item">
+                    <div class="kpi-value">22,579</div>
+                    <div class="kpi-label">订单数</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2>月度销售趋势</h2>
+            <div class="monthly-grid">
+                <div class="month-card">
+                    <div class="month-name">2025-12</div>
+                    <div class="month-sales">209.0万</div>
+                    <div class="month-profit">毛利 12.7万 (6.1%)</div>
+                </div>
+                <div class="month-card">
+                    <div class="month-name">2026-1</div>
+                    <div class="month-sales">634.1万</div>
+                    <div class="month-profit">毛利 60.0万 (9.46%)</div>
+                </div>
+                <div class="month-card">
+                    <div class="month-name">2026-2</div>
+                    <div class="month-sales">407.2万</div>
+                    <div class="month-profit">毛利 34.4万 (8.46%)</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2>每日销售趋势</h2>
+            <div class="chart-container">
+                <canvas id="dailyChart"></canvas>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2>品类销售占比</h2>
+            <table>
+                <tr><th>品类</th><th class="num">销售额</th><th class="num">占比</th><th class="num">毛利</th><th class="num">毛利率</th></tr>
+                <tr><td>-</td><td class="num">567.5万</td><td class="num">45.39%</td><td class="num">29.8万</td><td class="num">5.25%</td></tr>
+                <tr><td>滋补礼盒</td><td class="num">193.1万</td><td class="num">15.45%</td><td class="num">31.1万</td><td class="num">16.08%</td></tr>
+                <tr><td>坚果礼盒</td><td class="num">173.6万</td><td class="num">13.88%</td><td class="num">14.0万</td><td class="num">8.06%</td></tr>
+                <tr><td>农特礼盒</td><td class="num">68.2万</td><td class="num">5.46%</td><td class="num">11.1万</td><td class="num">16.2%</td></tr>
+                <tr><td>肉类礼盒</td><td class="num">54.9万</td><td class="num">4.39%</td><td class="num">4.2万</td><td class="num">7.56%</td></tr>
+                <tr><td>蛋类礼盒</td><td class="num">54.5万</td><td class="num">4.36%</td><td class="num">3.9万</td><td class="num">7.13%</td></tr>
+                <tr><td>糕点礼盒</td><td class="num">35.7万</td><td class="num">2.85%</td><td class="num">3.6万</td><td class="num">9.98%</td></tr>
+                <tr><td>水饮礼盒</td><td class="num">25.0万</td><td class="num">2.0%</td><td class="num">1.1万</td><td class="num">4.5%</td></tr>
+                <tr><td>茶饮礼盒</td><td class="num">19.7万</td><td class="num">1.57%</td><td class="num">3.4万</td><td class="num">17.14%</td></tr>
+                <tr><td>糖巧礼盒</td><td class="num">16.4万</td><td class="num">1.31%</td><td class="num">1.1万</td><td class="num">6.97%</td></tr>
+                <tr><td>冲调礼盒</td><td class="num">15.8万</td><td class="num">1.27%</td><td class="num">3.1万</td><td class="num">19.25%</td></tr>
+                <tr><td>菌菇礼盒</td><td class="num">7.7万</td><td class="num">0.61%</td><td class="num">1.3万</td><td class="num">16.47%</td></tr>
+            </table>
+        </div>
+        
+        <div class="card">
+            <h2>TOP15品牌</h2>
+            <table>
+                <tr><th class="num">排名</th><th>品牌</th><th class="num">销售额</th><th class="num">毛利</th><th class="num">占比</th></tr>
+                <tr><td class="num">1</td><td>熹象</td><td class="num">110.0万</td><td class="num">18.5万</td><td class="num">8.8%</td></tr>
+                <tr><td class="num">2</td><td>邱太太</td><td class="num">84.4万</td><td class="num">9.6万</td><td class="num">6.75%</td></tr>
+                <tr><td class="num">3</td><td>三只松鼠</td><td class="num">60.9万</td><td class="num">4.6万</td><td class="num">4.87%</td></tr>
+                <tr><td class="num">4</td><td>金诚铭语</td><td class="num">34.7万</td><td class="num">2.0万</td><td class="num">2.78%</td></tr>
+                <tr><td class="num">5</td><td>沃隆</td><td class="num">33.3万</td><td class="num">1.0万</td><td class="num">2.67%</td></tr>
+                <tr><td class="num">6</td><td>贵人福</td><td class="num">32.2万</td><td class="num">4.9万</td><td class="num">2.58%</td></tr>
+                <tr><td class="num">7</td><td>正儿八经</td><td class="num">31.1万</td><td class="num">5.6万</td><td class="num">2.49%</td></tr>
+                <tr><td class="num">8</td><td>福南记</td><td class="num">29.1万</td><td class="num">4.6万</td><td class="num">2.33%</td></tr>
+                <tr><td class="num">9</td><td>金豆芽</td><td class="num">24.9万</td><td class="num">1.2万</td><td class="num">2.0%</td></tr>
+                <tr><td class="num">10</td><td>鲜生纪</td><td class="num">19.5万</td><td class="num">3.0万</td><td class="num">1.56%</td></tr>
+                <tr><td class="num">11</td><td>琳芝妹妹</td><td class="num">18.5万</td><td class="num">2.4万</td><td class="num">1.48%</td></tr>
+                <tr><td class="num">12</td><td>御祚铭品</td><td class="num">16.9万</td><td class="num">2.0万</td><td class="num">1.35%</td></tr>
+                <tr><td class="num">13</td><td>都乐</td><td class="num">16.7万</td><td class="num">1.1万</td><td class="num">1.34%</td></tr>
+                <tr><td class="num">14</td><td>苏瑆农场</td><td class="num">12.9万</td><td class="num">2.1万</td><td class="num">1.03%</td></tr>
+                <tr><td class="num">15</td><td>蛋有礼</td><td class="num">12.2万</td><td class="num">1.4万</td><td class="num">0.98%</td></tr>
+            </table>
+        </div>
+        
+        <div class="card">
+            <h2>TOP15产品</h2>
+            <table>
+                <tr><th class="num">排名</th><th>产品</th><th class="num">销售额</th><th class="num">毛利</th><th class="num">占比</th></tr>
+                <tr><td class="num">1</td><td>圣祥奶皮子酸奶120g</td><td class="num">55.4万</td><td class="num">2.8万</td><td class="num">4.43%</td></tr>
+                <tr><td class="num">2</td><td>圣祥双皮酪酸奶160g</td><td class="num">51.4万</td><td class="num">2.3万</td><td class="num">4.11%</td></tr>
+                <tr><td class="num">3</td><td>金诚铭语乌鸡蛋（花原筐）40枚</td><td class="num">34.7万</td><td class="num">2.0万</td><td class="num">2.78%</td></tr>
+                <tr><td class="num">4</td><td>紫光园奶皮子酸奶（风味发酵乳）120g</td><td class="num">23.2万</td><td class="num">0.6万</td><td class="num">1.86%</td></tr>
+                <tr><td class="num">5</td><td>左江水牛纯牛奶210ml＊12盒</td><td class="num">17.6万</td><td class="num">1.3万</td><td class="num">1.4%</td></tr>
+                <tr><td class="num">6</td><td>邱太太金华1号火腿（木盒）2.5kg</td><td class="num">17.0万</td><td class="num">0.7万</td><td class="num">1.36%</td></tr>
+                <tr><td class="num">7</td><td>百菲酪水牛奶200ml*12盒</td><td class="num">16.0万</td><td class="num">0.4万</td><td class="num">1.28%</td></tr>
+                <tr><td class="num">8</td><td>金豆芽金银花柚子汁礼盒装100ml*13袋（2026新年礼盒）</td><td class="num">15.9万</td><td class="num">0.8万</td><td class="num">1.27%</td></tr>
+                <tr><td class="num">9</td><td>正儿八经有机五谷杂粮2.24kg</td><td class="num">15.3万</td><td class="num">3.0万</td><td class="num">1.22%</td></tr>
+                <tr><td class="num">10</td><td>熹象银耳燕窝新年款（红）（198g*6瓶）</td><td class="num">15.0万</td><td class="num">1.5万</td><td class="num">1.2%</td></tr>
+                <tr><td class="num">11</td><td>（冻）象未来榴莲肉900g（小）</td><td class="num">14.3万</td><td class="num">0.6万</td><td class="num">1.14%</td></tr>
+                <tr><td class="num">12</td><td>正儿八经有机黄小米2.1kg</td><td class="num">14.3万</td><td class="num">2.2万</td><td class="num">1.14%</td></tr>
+                <tr><td class="num">13</td><td>邱太太金华火腿（竹盒）2.5kg</td><td class="num">14.1万</td><td class="num">0.5万</td><td class="num">1.13%</td></tr>
+                <tr><td class="num">14</td><td>（冻）白小乐韩国首尔炸鸡1kg</td><td class="num">13.9万</td><td class="num">0.1万</td><td class="num">1.11%</td></tr>
+                <tr><td class="num">15</td><td>熹象黑枸杞240g（产自柴达木盆地）</td><td class="num">13.9万</td><td class="num">2.6万</td><td class="num">1.11%</td></tr>
+            </table>
+        </div>
+        
+        <div class="card">
+            <h2>TOP15业务员</h2>
+            <table>
+                <tr><th class="num">排名</th><th>业务员</th><th class="num">销售额</th><th class="num">毛利</th><th class="num">毛利率</th></tr>
+                <tr><td class="num">1</td><td>周涛</td><td class="num">239.1万</td><td class="num">23.0万</td><td class="num">9.61%</td></tr>
+                <tr><td class="num">2</td><td>李薇</td><td class="num">222.6万</td><td class="num">21.5万</td><td class="num">9.67%</td></tr>
+                <tr><td class="num">3</td><td>门店</td><td class="num">191.0万</td><td class="num">6.6万</td><td class="num">3.48%</td></tr>
+                <tr><td class="num">4</td><td>付玉冰1</td><td class="num">148.8万</td><td class="num">10.1万</td><td class="num">6.78%</td></tr>
+                <tr><td class="num">5</td><td>付玉冰</td><td class="num">135.1万</td><td class="num">14.6万</td><td class="num">10.84%</td></tr>
+                <tr><td class="num">6</td><td>杨宇</td><td class="num">120.2万</td><td class="num">13.1万</td><td class="num">10.87%</td></tr>
+                <tr><td class="num">7</td><td>田金丽</td><td class="num">112.1万</td><td class="num">10.5万</td><td class="num">9.33%</td></tr>
+                <tr><td class="num">8</td><td>李薇1</td><td class="num">44.5万</td><td class="num">6.0万</td><td class="num">13.5%</td></tr>
+                <tr><td class="num">9</td><td>马海鹤</td><td class="num">19.0万</td><td class="num">1.4万</td><td class="num">7.22%</td></tr>
+                <tr><td class="num">10</td><td>总经办</td><td class="num">17.9万</td><td class="num">0.4万</td><td class="num">2.13%</td></tr>
+            </table>
+        </div>
+        
+        <div class="card">
+            <h2>TOP15客户</h2>
+            <table>
+                <tr><th class="num">排名</th><th>客户</th><th class="num">销售额</th><th class="num">毛利</th></tr>
+                <tr><td class="num">1</td><td>小阿璐</td><td class="num">163.6万</td><td class="num">5.8万</td></tr>
+                <tr><td class="num">2</td><td>首衡集配</td><td class="num">96.6万</td><td class="num">10.0万</td></tr>
+                <tr><td class="num">3</td><td>洋洋--韩娜</td><td class="num">62.5万</td><td class="num">6.9万</td></tr>
+                <tr><td class="num">4</td><td>洋洋--总店</td><td class="num">58.0万</td><td class="num">6.9万</td></tr>
+                <tr><td class="num">5</td><td>洋洋--鸿浩车</td><td class="num">57.6万</td><td class="num">4.8万</td></tr>
+                <tr><td class="num">6</td><td>丁丁果</td><td class="num">49.3万</td><td class="num">5.2万</td></tr>
+                <tr><td class="num">7</td><td>毛毛</td><td class="num">42.6万</td><td class="num">2.6万</td></tr>
+                <tr><td class="num">8</td><td>棠棣鲜集购物1</td><td class="num">40.8万</td><td class="num">4.9万</td></tr>
+                <tr><td class="num">9</td><td>呼呼</td><td class="num">37.4万</td><td class="num">5.1万</td></tr>
+                <tr><td class="num">10</td><td>洋洋--秦泰</td><td class="num">22.2万</td><td class="num">2.0万</td></tr>
+                <tr><td class="num">11</td><td>大管家</td><td class="num">20.2万</td><td class="num">-0.7万</td></tr>
+                <tr><td class="num">12</td><td>心心</td><td class="num">19.4万</td><td class="num">2.6万</td></tr>
+                <tr><td class="num">13</td><td>棠棣鲜集购物</td><td class="num">18.5万</td><td class="num">1.2万</td></tr>
+                <tr><td class="num">14</td><td>唐阳</td><td class="num">18.0万</td><td class="num">1.5万</td></tr>
+                <tr><td class="num">15</td><td>安心</td><td class="num">16.8万</td><td class="num">1.4万</td></tr>
+            </table>
+        </div>
+    </div>
+    
+    <script>
+        const dailyData = [["2025-12-15", 86139.07],["2025-12-16", 135271.26],["2025-12-17", 135588.67],["2025-12-18", 145519.76],["2025-12-19", 110093.48],["2025-12-20", 90785.6],["2025-12-21", 101126.47],["2025-12-22", 134417.18],["2025-12-23", 144362.2],["2025-12-24", 142311.24],["2025-12-25", 87193.65],["2025-12-26", 131347.21],["2025-12-27", 131355.02],["2025-12-28", 104628.99],["2025-12-29", 143161.79],["2025-12-30", 166259.73],["2025-12-31", 100139.35],["2026-01-01", 104934.47],["2026-01-02", 122529.13],["2026-01-03", 90935.78],["2026-01-04", 104822.15],["2026-01-05", 87067.37],["2026-01-06", 126312.91],["2026-01-07", 186125.9],["2026-01-08", 159888.16],["2026-01-09", 196417.02],["2026-01-10", 149516.36],["2026-01-11", 165058.0],["2026-01-12", 170561.22],["2026-01-13", 241135.49],["2026-01-14", 192226.88],["2026-01-15", 166369.39],["2026-01-16", 141421.2],["2026-01-17", 264515.95],["2026-01-18", 358537.02],["2026-01-19", 174268.29],["2026-01-20", 137142.98],["2026-01-21", 303174.02999999997],["2026-01-22", 275846.25],["2026-01-23", 251695.53],["2026-01-24", 179891.82],["2026-01-25", 193913.77],["2026-01-26", 282257.5],["2026-01-27", 275713.45],["2026-01-28", 294208.61],["2026-01-29", 275481.01],["2026-01-30", 488992.23],["2026-01-31", 180051.95],["2026-02-01", 222936.97],["2026-02-02", 346687.25],["2026-02-03", 268905.14],["2026-02-04", 415166.7],["2026-02-05", 266948.23],["2026-02-06", 354749.9],["2026-02-07", 213362.59],["2026-02-08", 306515.24],["2026-02-09", 288199.81],["2026-02-10", 239604.87],["2026-02-11", 246238.82],["2026-02-12", 170131.71],["2026-02-13", 88384.41],["2026-02-14", 59739.5],["2026-02-22", 86945.8],["2026-02-23", 127311.57],["2026-02-24", 76503.66],["2026-02-25", 86330.25],["2026-02-26", 59603.34],["2026-02-27", 64511.3],["2026-02-28", 83345.57]];
+        
+        new Chart(document.getElementById('dailyChart'), {
+            type: 'bar',
+            data: {
+                labels: dailyData.map(d => d[0].slice(5)),
+                datasets: [{
+                    label: '日销售额(元)',
+                    data: dailyData.map(d => d[1]),
+                    backgroundColor: 'rgba(39, 174, 96, 0.7)',
+                    borderColor: 'rgba(39, 174, 96, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {{ legend: {{ display: false }} }},
+                scales: {{
+                    y: {{
+                        beginAtZero: true,
+                        ticks: {{ callback: value => (value/10000).toFixed(0) + '万' }}
+                    }}
+                }}
+            }}
+        });
+    </script>
+</body>
+</html>
