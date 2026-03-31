@@ -43,14 +43,17 @@
         .month-sales { font-size: 24px; font-weight: bold; color: #27ae60; }
         .month-profit { font-size: 14px; color: #666; }
         
-        .chart-container { height: 300px; margin: 15px 0; }
+        .chart-container { height: 350px; margin: 15px 0; }
         
-        .pie-chart { display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; margin: 15px 0; }
-        .pie-container { position: relative; width: 160px; height: 160px; }
-        .pie-circle { width: 100%; height: 100%; border-radius: 50%; background: conic-gradient(#27ae60 0% 80%, #ddd 80% 100%); }
-        .pie-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 100px; height: 100px; background: white; border-radius: 50%; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-        .pie-value { font-size: 20px; font-weight: bold; color: #27ae60; }
+        .pie-section { display: flex; gap: 40px; justify-content: center; align-items: center; flex-wrap: wrap; }
+        .pie-container { position: relative; width: 180px; height: 180px; }
+        .pie-circle { width: 100%; height: 100%; border-radius: 50%; background: conic-gradient(#27ae60 0% 54.6%, #e74c3c 54.6% 100%); }
+        .pie-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 120px; height: 120px; background: white; border-radius: 50%; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        .pie-value { font-size: 24px; font-weight: bold; color: #27ae60; }
         .pie-label { font-size: 11px; color: #666; text-align: center; }
+        .pie-legend { font-size: 14px; }
+        .legend-item { margin: 10px 0; }
+        .legend-color { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 8px; }
         
         .region-section { margin-bottom: 20px; }
         .region-header { display: flex; justify-content: space-between; align-items: center; background: linear-gradient(135deg, #3498db 0%, #2980b9 100%); color: white; padding: 12px 15px; border-radius: 8px 8px 0 0; }
@@ -68,15 +71,6 @@
         
         .target-achieved { color: #27ae60; font-weight: bold; }
         .target-failed { color: #f44336; font-weight: bold; }
-        
-        .cat-section { margin-bottom: 25px; border: 1px solid #eee; border-radius: 10px; overflow: hidden; }
-        .cat-header { background: linear-gradient(135deg, #27ae60 0%, #1e8449 100%); color: white; padding: 15px; }
-        .cat-title { font-size: 18px; font-weight: bold; }
-        .cat-stats { font-size: 13px; opacity: 0.9; margin-top: 5px; }
-        .cat-content { padding: 15px; background: white; }
-        
-        .up { color: #27ae60; }
-        .down { color: #f44336; }
     </style>
 </head>
 <body>
@@ -84,29 +78,50 @@
         <h1>金诚铭语 - 销售数据看板</h1>
         
         <div class="card">
-            <h2>农历新年同比分析</h2>
+            <h2>礼盒销售 - 农历新年同比分析</h2>
             <div class="yoy-section">
                 <div class="yoy-grid">
                     <div class="yoy-item">
-                        <div class="yoy-value">850万</div>
-                        <div class="yoy-label">去年同期</div>
+                        <div class="yoy-value">468万</div>
+                        <div class="yoy-label">去年礼盒销售</div>
                     </div>
                     <div class="yoy-item">
-                        <div class="yoy-value">1250万</div>
-                        <div class="yoy-label">今年</div>
+                        <div class="yoy-value">683万</div>
+                        <div class="yoy-label">今年礼盒销售</div>
                     </div>
                     <div class="yoy-item">
-                        <div class="yoy-highlight">+47.1%</div>
-                        <div class="yoy-label">同比增长</div>
+                        <div class="yoy-highlight">+46.0%</div>
+                        <div class="yoy-label">礼盒同比增长</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="pie-section" style="margin-top: 20px;">
+                <div class="pie-container">
+                    <div class="pie-circle"></div>
+                    <div class="pie-center">
+                        <div class="pie-value">54.6%</div>
+                        <div class="pie-label">礼盒占整体<br>销售比例</div>
+                    </div>
+                </div>
+                <div class="pie-legend">
+                    <div class="legend-item">
+                        <span class="legend-color" style="background: #27ae60;"></span>
+                        <span>礼盒销售: 682.8万</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-color" style="background: #e74c3c;"></span>
+                        <span>其他销售: 567.5万</span>
                     </div>
                 </div>
             </div>
         </div>
         
         <div class="card">
-            <h2>每日销售趋势</h2>
+            <h2>农历新年倒计时 - 累计销售对比</h2>
+            <p style="color: #666; font-size: 13px; margin-bottom: 10px;">（从除夕夜倒数第N天的累计销售对比）</p>
             <div class="chart-container">
-                <canvas id="dailyChart"></canvas>
+                <canvas id="lunarChart"></canvas>
             </div>
         </div>
         
@@ -154,7 +169,29 @@
         </div>
         
         <div class="card">
-            <h2>品类销售占比</h2>
+            <h2>礼盒品类销售</h2>
+            <table>
+                <tr><th>品类</th><th class="num">销售额</th><th class="num">占礼盒</th><th class="num">毛利</th><th class="num">毛利率</th></tr>
+                <tr><td>滋补礼盒</td><td class="num">193.1万</td><td class="num">28.29%</td><td class="num">31.1万</td><td class="num">16.08%</td></tr>
+                <tr><td>坚果礼盒</td><td class="num">173.6万</td><td class="num">25.42%</td><td class="num">14.0万</td><td class="num">8.06%</td></tr>
+                <tr><td>农特礼盒</td><td class="num">68.2万</td><td class="num">9.99%</td><td class="num">11.1万</td><td class="num">16.2%</td></tr>
+                <tr><td>肉类礼盒</td><td class="num">54.9万</td><td class="num">8.05%</td><td class="num">4.2万</td><td class="num">7.56%</td></tr>
+                <tr><td>蛋类礼盒</td><td class="num">54.5万</td><td class="num">7.98%</td><td class="num">3.9万</td><td class="num">7.13%</td></tr>
+                <tr><td>糕点礼盒</td><td class="num">35.7万</td><td class="num">5.22%</td><td class="num">3.6万</td><td class="num">9.98%</td></tr>
+                <tr><td>水饮礼盒</td><td class="num">25.0万</td><td class="num">3.67%</td><td class="num">1.1万</td><td class="num">4.5%</td></tr>
+                <tr><td>茶饮礼盒</td><td class="num">19.7万</td><td class="num">2.88%</td><td class="num">3.4万</td><td class="num">17.14%</td></tr>
+                <tr><td>糖巧礼盒</td><td class="num">16.4万</td><td class="num">2.39%</td><td class="num">1.1万</td><td class="num">6.97%</td></tr>
+                <tr><td>冲调礼盒</td><td class="num">15.8万</td><td class="num">2.32%</td><td class="num">3.1万</td><td class="num">19.25%</td></tr>
+                <tr><td>菌菇礼盒</td><td class="num">7.7万</td><td class="num">1.12%</td><td class="num">1.3万</td><td class="num">16.47%</td></tr>
+                <tr><td>酒类礼盒</td><td class="num">7.1万</td><td class="num">1.04%</td><td class="num">-0.2万</td><td class="num">-3.0%</td></tr>
+                <tr><td>罐头礼盒</td><td class="num">6.0万</td><td class="num">0.88%</td><td class="num">-0.4万</td><td class="num">-7.37%</td></tr>
+                <tr><td>零食礼盒</td><td class="num">4.1万</td><td class="num">0.6%</td><td class="num">0.3万</td><td class="num">7.36%</td></tr>
+                <tr><td>海产礼盒</td><td class="num">0.9万</td><td class="num">0.13%</td><td class="num">0.1万</td><td class="num">9.62%</td></tr>
+            </table>
+        </div>
+        
+        <div class="card">
+            <h2>所有品类销售占比</h2>
             <table>
                 <tr><th>品类</th><th class="num">销售额</th><th class="num">占比</th><th class="num">毛利</th><th class="num">毛利率</th></tr>
                 <tr><td>-</td><td class="num">567.5万</td><td class="num">45.39%</td><td class="num">29.8万</td><td class="num">5.25%</td></tr>
@@ -381,8 +418,8 @@
             <div class="rec-header rec-opportunity">机会点</div>
             <div class="rec-content">
                 <ul>
-                    <li><strong>同比增长47%</strong>，年货节市场需求强劲</li>
-                    <li><strong>1月销售爆发</strong>¥634万，占整体50.7%</li>
+                    <li><strong>礼盒同比增长46%</strong>，年货节礼盒需求强劲</li>
+                    <li><strong>礼盒占比54.6%</strong>，礼盒是核心业务</li>
                     <li><strong>滋补礼盒毛利率16%</strong>，高端产品表现好</li>
                 </ul>
             </div>
@@ -403,7 +440,7 @@
             <div class="rec-header rec-advice">行动建议</div>
             <div class="rec-content">
                 <ul>
-                    <li>优化产品结构，提升高毛利品类占比</li>
+                    <li>优化礼盒产品结构，提升高毛利品类占比</li>
                     <li>减少亏损品类（酒类、罐头）进货</li>
                     <li>复制周涛/李薇经验到其他业务员</li>
                 </ul>
@@ -412,24 +449,38 @@
     </div>
     
     <script>
-        const dailyData = [["2025-12-15", 86139.07],["2025-12-16", 135271.26],["2025-12-17", 135588.67],["2025-12-18", 145519.76],["2025-12-19", 110093.48],["2025-12-20", 90785.6],["2025-12-21", 101126.47],["2025-12-22", 134417.18],["2025-12-23", 144362.2],["2025-12-24", 142311.24],["2025-12-25", 87193.65],["2025-12-26", 131347.21],["2025-12-27", 131355.02],["2025-12-28", 104628.99],["2025-12-29", 143161.79],["2025-12-30", 166259.73],["2025-12-31", 100139.35],["2026-01-01", 104934.47],["2026-01-02", 122529.13],["2026-01-03", 90935.78],["2026-01-04", 104822.15],["2026-01-05", 87067.37],["2026-01-06", 126312.91],["2026-01-07", 186125.9],["2026-01-08", 159888.16],["2026-01-09", 196417.02],["2026-01-10", 149516.36],["2026-01-11", 165058.0],["2026-01-12", 170561.22],["2026-01-13", 241135.49],["2026-01-14", 192226.88],["2026-01-15", 166369.39],["2026-01-16", 141421.2],["2026-01-17", 264515.95],["2026-01-18", 358537.02],["2026-01-19", 174268.29],["2026-01-20", 137142.98],["2026-01-21", 303174.02999999997],["2026-01-22", 275846.25],["2026-01-23", 251695.53],["2026-01-24", 179891.82],["2026-01-25", 193913.77],["2026-01-26", 282257.5],["2026-01-27", 275713.45],["2026-01-28", 294208.61],["2026-01-29", 275481.01],["2026-01-30", 488992.23],["2026-01-31", 180051.95],["2026-02-01", 222936.97],["2026-02-02", 346687.25],["2026-02-03", 268905.14],["2026-02-04", 415166.7],["2026-02-05", 266948.23],["2026-02-06", 354749.9],["2026-02-07", 213362.59],["2026-02-08", 306515.24],["2026-02-09", 288199.81],["2026-02-10", 239604.87],["2026-02-11", 246238.82],["2026-02-12", 170131.71],["2026-02-13", 88384.41],["2026-02-14", 59739.5],["2026-02-22", 86945.8],["2026-02-23", 127311.57],["2026-02-24", 76503.66],["2026-02-25", 86330.25],["2026-02-26", 59603.34],["2026-02-27", 64511.3],["2026-02-28", 83345.57]];
+        const lunarData = [["倒数50天", 1058, 20712],["倒数49天", 2947, 42199],["倒数48天", 5806, 52340],["倒数47天", 11979, 55407],["倒数46天", 18183, 74232],["倒数45天", 20488, 77474],["倒数44天", 25478, 122321],["倒数43天", 27945, 149237],["倒数42天", 36763, 176305],["倒数41天", 89833, 200143],["倒数40天", 101281, 217678],["倒数39天", 109673, 228524],["倒数38天", 121047, 262984],["倒数37天", 149043, 299095],["倒数36天", 175266, 314993],["倒数35天", 231322, 329582],["倒数34天", 284645, 346266],["倒数33天", 288896, 365768],["倒数32天", 310294, 436833],["倒数31天", 413759, 499783],["倒数30天", 493770, 585626],["倒数29天", 541115, 689192],["倒数28天", 615994, 752480],["倒数27天", 669367, 846802],["倒数26天", 695855, 1027865],["倒数25天", 773936, 1147218],["倒数24天", 849024, 1215961],["倒数23天", 1159384, 1282540],["倒数22天", 1249517, 1482411],["倒数21天", 1391543, 1768909],["倒数20天", 1467458, 1858709],["倒数19天", 1596008, 1931559],["倒数18天", 1716578, 2111265],["倒数17天", 1816423, 2297578],["倒数16天", 1894785, 2475892],["倒数15天", 2071132, 2597557],["倒数14天", 2505279, 2717212],["倒数13天", 2839994, 2916202],["倒数12天", 3252906, 3133671],["倒数11天", 3602286, 3341474],["倒数10天", 3948930, 3575274],["倒数9天", 4221808, 4000701],["倒数8天", 4593413, 4126880],["倒数7天", 4852499, 4277900],["倒数6天", 5210780, 4555472],["倒数5天", 5501782, 4758066],["倒数4天", 5901369, 5076594],["倒数3天", 6207914, 5268229],["倒数2天", 6631660, 5507583],["倒数1天", 6957204, 5651905]];
         
-        new Chart(document.getElementById('dailyChart'), {
-            type: 'bar',
-            data: {
-                labels: dailyData.map(d => d[0].slice(5)),
-                datasets: [{
-                    label: '日销售额(元)',
-                    data: dailyData.map(d => d[1]),
-                    backgroundColor: 'rgba(39, 174, 96, 0.7)',
-                    borderColor: 'rgba(39, 174, 96, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
+        new Chart(document.getElementById('lunarChart'), {
+            type: 'line',
+            data: {{
+                labels: lunarData.map(d => d[0]),
+                datasets: [
+                    {{
+                        label: '2025年累计',
+                        data: lunarData.map(d => d[1]),
+                        borderColor: 'rgba(231, 76, 60, 1)',
+                        backgroundColor: 'rgba(231, 76, 60, 0.1)',
+                        fill: true,
+                        tension: 0.3
+                    }},
+                    {{
+                        label: '2026年累计',
+                        data: lunarData.map(d => d[2]),
+                        borderColor: 'rgba(39, 174, 96, 1)',
+                        backgroundColor: 'rgba(39, 174, 96, 0.1)',
+                        fill: true,
+                        tension: 0.3
+                    }}
+                ]
+            }},
+            options: {{
                 responsive: true,
                 maintainAspectRatio: false,
-                plugins: {{ legend: {{ display: false }} }},
+                plugins: {{ 
+                    legend: {{ position: 'top' }},
+                    title: {{ display: true, text: '农历新年倒计时 - 累计销售对比' }}
+                }},
                 scales: {{
                     y: {{
                         beginAtZero: true,
@@ -437,7 +488,7 @@
                     }}
                 }}
             }}
-        });
+        }});
     </script>
 </body>
 </html>
