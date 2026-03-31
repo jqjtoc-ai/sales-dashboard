@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>金诚铭语 - 年货节销售分析看板</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); min-height: 100vh; color: #fff; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+        header { text-align: center; padding: 30px 0; }
+        header h1 { font-size: 2.5em; background: linear-gradient(90deg, #ffd700, #ff6b6b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        header p { color: #888; margin-top: 10px; }
+        
+        .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin: 30px 0; }
+        .card { background: rgba(255,255,255,0.05); border-radius: 16px; padding: 20px; border: 1px solid rgba(255,255,255,0.1); }
+        .card h3 { color: #888; font-size: 13px; font-weight: 500; margin-bottom: 8px; }
+        .card .value { font-size: 1.8em; font-weight: 700; }
+        .card .value.gold { color: #ffd700; }
+        .card .value.green { color: #4ade80; }
+        .card .value.red { color: #f87171; }
+        
+        .section { background: rgba(255,255,255,0.05); border-radius: 16px; padding: 24px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.1); }
+        .section h2 { font-size: 1.3em; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        
+        .charts { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 20px; }
+        .chart-box { background: rgba(0,0,0,0.2); border-radius: 12px; padding: 20px; }
+        
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 8px 10px; text-align: right; border-bottom: 1px solid rgba(255,255,255,0.1); font-size: 12px; }
+        th { color: #888; font-weight: 500; font-size: 11px; text-align: center; }
+        th:first-child, td:first-child { text-align: left; }
+        tr:hover { background: rgba(255,255,255,0.03); }
+        
+        .rank { display: inline-block; min-width: 20px; height: 20px; border-radius: 50%; background: rgba(255,215,0,0.2); color: #ffd700; text-align: center; line-height: 20px; font-size: 10px; margin-right: 6px; }
+        .rank.top3 { background: #ffd700; color: #000; }
+        
+        .cat-box { background: rgba(0,0,0,0.2); border-radius: 12px; padding: 16px; margin-bottom: 15px; }
+        .cat-box h3 { color: #ffd700; margin-bottom: 12px; font-size: 1em; display: flex; justify-content: space-between; align-items: center; }
+        
+        .progress-bar { height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; margin-top: 6px; overflow: hidden; }
+        .progress-bar .fill { height: 100%; border-radius: 3px; }
+        .progress-bar .fill.high { background: #4ade80; }
+        .progress-bar .fill.mid { background: #fbbf24; }
+        .progress-bar .fill.low { background: #f87171; }
+        
+        details { margin: 8px 0; }
+        summary { cursor: pointer; color: #ffd700; font-weight: 600; padding: 10px; background: rgba(0,0,0,0.2); border-radius: 8px; }
+        
+        .swot-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+        .swot-box { background: rgba(0,0,0,0.3); border-radius: 12px; padding: 20px; }
+        .swot-box h3 { margin-bottom: 15px; font-size: 1.1em; padding-bottom: 10px; border-bottom: 2px solid; }
+        .swot-box.strength h3 { color: #4ade80; border-color: #4ade80; }
+        .swot-box.weakness h3 { color: #f87171; border-color: #f87171; }
+        .swot-box.opportunity h3 { color: #60a5fa; border-color: #60a5fa; }
+        .swot-box.threat h3 { color: #fbbf24; border-color: #fbbf24; }
+        .swot-box ul { margin-left: 20px; }
+        .swot-box li { margin: 10px 0; line-height: 1.6; }
+        
+        .action-box { background: linear-gradient(135deg, rgba(255,215,0,0.1) 0%, rgba(255,107,107,0.1) 100%); border: 1px solid rgba(255,215,0,0.3); border-radius: 12px; padding: 24px; margin: 20px 0; }
+        .action-box h3 { color: #ffd700; margin-bottom: 20px; font-size: 1.2em; }
+        .action-item { display: flex; align-items: flex-start; margin: 15px 0; padding: 15px; background: rgba(0,0,0,0.2); border-radius: 8px; }
+        .action-item .priority { font-size: 11px; padding: 3px 8px; border-radius: 4px; margin-right: 12px; white-space: nowrap; }
+        .action-item .priority.high { background: #f87171; color: #fff; }
+        .action-item .priority.medium { background: #fbbf24; color: #000; }
+        .action-item .priority.low { background: #4ade80; color: #000; }
+        
+        .pct { color: #4ade80; }
+        .pct.low { color: #f87171; }
+        .pct.mid { color: #fbbf24; }
+        
+        .footer { text-align: center; padding: 30px; color: #666; font-size: 13px; }
+        
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        
+        .yoy-positive { color: #4ade80; }
+        .yoy-negative { color: #f87171; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🐲 金诚铭语年货节销售分析</h1>
+            <p>2026年货节销售数据分析 | 统计周期：2025.12.15 - 2026.03.02</p>
+        </header>
+        
+        <!-- 核心指标 -->
+        <div class="cards">
+            <div class="card"><h3>整体销售金额</h3><div class="value">12,207,697</div></div>
+            <div class="card"><h3>礼盒销售金额</h3><div class="value gold">6,557,527</div></div>
+            <div class="card"><h3>同比增长率</h3><div class="value green">+47.8%</div></div>
+            <div class="card"><h3>总销售件数</h3><div class="value">154,855</div></div>
+        </div>
+        
+        <!-- 两年对比 -->
+        <div class="section">
+            <h2>📈 2025 vs 2026 农历年前对比</h2>
+            <p style="color:#888;margin-bottom:15px;font-size:13px">按农历年前相同天数对齐对比（2025农历年→2026农历年）</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>农历年</th>
+                        <th>2025当日</th>
+                        <th>2026当日</th>
+                        <th>2025累计</th>
+                        <th>2026累计</th>
+                        <th>同比增长</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>年前40天</td><td>1,058</td><td>20,712</td><td>1,058</td><td>20,712</td><td class="yoy-positive">+19,654</td></tr>
+                    <tr><td>年前35天</td><td>6,205</td><td>18,826</td><td>18,183</td><td>74,232</td><td class="yoy-positive">+56,049</td></tr>
+                    <tr><td>年前30天</td><td>53,070</td><td>23,838</td><td>89,833</td><td>200,143</td><td class="yoy-positive">+110,309</td></tr>
+                    <tr><td>年前25天</td><td>103,465</td><td>62,951</td><td>413,759</td><td>499,783</td><td class="yoy-positive">+86,024</td></tr>
+                    <tr><td>年前20天</td><td>310,360</td><td>66,579</td><td>1,159,384</td><td>1,282,540</td><td class="yoy-positive">+123,156</td></tr>
+                    <tr><td>年前15天</td><td>349,380</td><td>207,803</td><td>3,602,286</td><td>3,341,474</td><td class="yoy-negative">-260,812</td></tr>
+                    <tr><td>年前10天</td><td>371,605</td><td>126,179</td><td>4,593,413</td><td>4,126,880</td><td class="yoy-negative">-466,533</td></tr>
+                    <tr><td>年前5天</td><td>412,912</td><td>217,469</td><td>3,252,906</td><td>3,133,671</td><td class="yoy-negative">-119,235</td></tr>
+                </tbody>
+            </table>
+            
+            <div class="charts" style="margin-top:20px">
+                <div class="chart-box">
+                    <canvas id="yoyChart"></canvas>
+                </div>
+                <div class="chart-box">
+                    <canvas id="cumChart"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 品类销售环形图 -->
+        <div class="section">
+            <h2>📊 品类销售占比（%）</h2>
+            <div class="charts">
+                <div class="chart-box">
+                    <canvas id="categoryChart"></canvas>
+                </div>
+                <div class="chart-box">
+                    <canvas id="targetChart"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 品类目标达成 -->
+        <div class="section">
+            <h2>📈 品类目标达成详情</h2>
+            <table>
+                <thead><tr><th>品类</th><th>销售金额</th><th>目标金额</th><th>达成率</th><th>进度</th></tr></thead>
+                <tbody>
+                    <tr><td>坚果礼盒</td><td>1,679,582</td><td>2,300,000</td><td class="pct low">73.0%</td><td><div class="progress-bar"><div class="fill low" style="width:73%"></div></div></td></tr>
+                    <tr><td>滋补礼盒</td><td>1,818,140</td><td>2,150,000</td><td class="pct mid">84.6%</td><td><div class="progress-bar"><div class="fill mid" style="width:85%"></div></div></td></tr>
+                    <tr><td>水饮礼盒</td><td>250,461</td><td>50,000</td><td class="pct">500.9%</td><td><div class="progress-bar"><div class="fill high" style="width:100%"></div></div></td></tr>
+                    <tr><td>糕点礼盒</td><td>339,702</td><td>150,000</td><td class="pct">226.5%</td><td><div class="progress-bar"><div class="fill high" style="width:100%"></div></div></td></tr>
+                    <tr><td>蛋类礼盒</td><td>544,711</td><td>600,000</td><td class="pct low">90.8%</td><td><div class="progress-bar"><div class="fill mid" style="width:91%"></div></div></td></tr>
+                    <tr><td>肉类礼盒</td><td>516,960</td><td>620,000</td><td class="pct low">83.4%</td><td><div class="progress-bar"><div class="fill mid" style="width:83%"></div></div></td></tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- 各类别Top品牌和产品 -->
+        <div class="section">
+            <h2>🏆 各品类Top品牌 & 产品</h2>
+            
+            <details open>
+                <summary>🥜 坚果礼盒 (销售: 1,679,582 | 达成率: 73.0%)</summary>
+                <div class="cat-box">
+                    <div class="grid-2">
+                        <div>
+                            <h4 style="color:#ffd700;margin:10px 0">Top品牌</h4>
+                            <table><tr><th>#</th><th>品牌</th><th>销售额</th><th>占比</th></tr>
+                                <tr><td><span class="rank top3">1</span></td><td>三只松鼠</td><td>592,378</td><td>35.3%</td></tr>
+                                <tr><td><span class="rank top3">2</span></td><td>沃隆</td><td>331,422</td><td>19.7%</td></tr>
+                                <tr><td><span class="rank top3">3</span></td><td>琳芝妹妹</td><td>158,900</td><td>9.5%</td></tr>
+                            </table>
+                        </div>
+                        <div>
+                            <h4 style="color:#ffd700;margin:10px 0">Top产品</h4>
+                            <table><tr><th>#</th><th>产品</th><th>销售额</th><th>占比</th></tr>
+                                <tr><td>1</td><td>(新）沃隆每日坚果A750g</td><td>132,516</td><td>7.9%</td></tr>
+                                <tr><td>2</td><td>沃隆新年快乐礼盒1.59kg</td><td>122,344</td><td>7.3%</td></tr>
+                                <tr><td>3</td><td>九月笙新年快乐坚果礼盒</td><td>118,902</td><td>7.1%</td></tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </details>
+            
+            <details open>
+                <summary>💊 滋补礼盒 (销售: 1,818,140 | 达成率: 84.6%)</summary>
+                <div class="cat-box">
+                    <div class="grid-2">
+                        <div>
+                            <h4 style="color:#ffd700;margin:10px 0">Top品牌</h4>
+                            <table><tr><th>#</th><th>品牌</th><th>销售额</th><th>占比</th></tr>
+                                <tr><td><span class="rank top3">1</span></td><td>熹象</td><td>552,765</td><td>30.4%</td></tr>
+                                <tr><td><span class="rank top3">2</span></td><td>邱太太</td><td>504,265</td><td>27.7%</td></tr>
+                                <tr><td><span class="rank top3">3</span></td><td>贵人福</td><td>205,173</td><td>11.3%</td></tr>
+                            </table>
+                        </div>
+                        <div>
+                            <h4 style="color:#ffd700;margin:10px 0">Top产品</h4>
+                            <table><tr><th>#</th><th>产品</th><th>销售额</th><th>占比</th></tr>
+                                <tr><td>1</td><td>熹象银耳燕窝新年款</td><td>147,597</td><td>8.1%</td></tr>
+                                <tr><td>2</td><td>熹象黑枸杞240g</td><td>126,072</td><td>6.9%</td></tr>
+                                <tr><td>3</td><td>邱太太鲜炖银耳燕窝</td><td>94,483</td><td>5.2%</td></tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </details>
+        </div>
+        
+        <!-- SWOT分析 -->
+        <div class="section">
+            <h2>🔍 SWOT分析</h2>
+            <div class="swot-grid">
+                <div class="swot-box strength">
+                    <h3>💪 优势 (Strengths)</h3>
+                    <ul>
+                        <li><strong>同比表现前期强势</strong>：年前40-20天同比增长持续增长</li>
+                        <li><strong>滋补礼盒表现稳健</strong>：达成率84.6%，熹象+邱太太双品牌驱动</li>
+                        <li><strong>水饮礼盒超预期</strong>：达成率500.9%，金豆芽成为年度黑马</li>
+                    </ul>
+                </div>
+                
+                <div class="swot-box weakness">
+                    <h3>⚠️ 劣势 (Weaknesses)</h3>
+                    <ul>
+                        <li><strong>年后销售下滑</strong>：年前15天起同比转负，年前10天下滑最大</li>
+                        <li><strong>坚果礼盒目标未达成</strong>：达成率仅73%，三只松鼠占比过高</li>
+                        <li><strong>客户集中度高</strong>：前5大客户占比超50%</li>
+                    </ul>
+                </div>
+                
+                <div class="swot-box opportunity">
+                    <h3>🎯 机会点 (Opportunities)</h3>
+                    <ul>
+                        <li><strong>年前黄金期把握</strong>：年前25-20天为销售高峰，可加大备货</li>
+                        <li><strong>水饮成功可复制</strong>：金豆芽经验可复制到其他品类</li>
+                        <li><strong>年后清仓机会</strong>：年后库存可促销处理</li>
+                    </ul>
+                </div>
+                
+                <div class="swot-box threat">
+                    <h3>🚨 威胁 (Threats)</h3>
+                    <ul>
+                        <li><strong>年后消费疲软</strong>：年前15天后同比持续为负</li>
+                        <li><strong>库存积压风险</strong>：年后销售下滑导致库存积压</li>
+                        <li><strong>竞争加剧</strong>：同行年后清仓力度大</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 经营建议 -->
+        <div class="section">
+            <h2>📋 经营建议</h2>
+            <div class="action-box">
+                <h3>🎯 具体行动计划</h3>
+                
+                <div class="action-item">
+                    <span class="priority high">高优先</span>
+                    <div>
+                        <strong>优化年前备货节奏</strong>
+                        <p style="color:#aaa;font-size:12px;margin-top:5px">年前25-20天为销售高峰，需提前备足货，避免断货</p>
+                    </div>
+                </div>
+                
+                <div class="action-item">
+                    <span class="priority high">高优先</span>
+                    <div>
+                        <strong>年后清仓预案</strong>
+                        <p style="color:#aaa;font-size:12px;margin-top:5px">年前15天起销售下滑，需提前规划年后促销方案</p>
+                    </div>
+                </div>
+                
+                <div class="action-item">
+                    <span class="priority medium">中优先</span>
+                    <div>
+                        <strong>调整品类结构</strong>
+                        <p style="color:#aaa;font-size:12px;margin-top:5px">减少肉类、火腿等高价礼盒进货比例</p>
+                    </div>
+                </div>
+                
+                <div class="action-item">
+                    <span class="priority medium">中优先</span>
+                    <div>
+                        <strong>客户分散策略</strong>
+                        <p style="color:#aaa;font-size:12px;margin-top:5px">发展中小客户，降低大客户依赖度</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>🐲 数据来源：金诚铭语2026年年货节日报表 | 生成时间：2026-03-31</p>
+        </div>
+    </div>
+    
+    <script>
+        // 同比每日对比
+        const yoyData = {
+            labels: ['年前40天','年前35天','年前30天','年前25天','年前20天','年前15天','年前10天','年前5天'],
+            datasets: [
+                {
+                    label: '2025',
+                    data: [1058, 6205, 53070, 103465, 310360, 349380, 371605, 412912],
+                    borderColor: '#60a5fa',
+                    backgroundColor: 'rgba(96,165,250,0.1)',
+                    fill: true
+                },
+                {
+                    label: '2026',
+                    data: [20712, 18826, 23838, 62951, 66579, 207803, 126179, 217469],
+                    borderColor: '#ffd700',
+                    backgroundColor: 'rgba(255,215,0,0.1)',
+                    fill: true
+                }
+            ]
+        };
+        
+        new Chart(document.getElementById('yoyChart'), {
+            type: 'line',
+            data: yoyData,
+            options: {
+                responsive: true,
+                plugins: { title: { display: true, text: '每日销售对比', color: '#fff' }, legend: { labels: { color: '#fff' } } },
+                scales: {
+                    y: { ticks: { color: '#888' }, grid: { color: 'rgba(255,255,255,0.1)' } },
+                    x: { ticks: { color: '#888' }, grid: { display: false } }
+                }
+            }
+        });
+        
+        // 累计对比
+        const cumData = {
+            labels: ['年前40天','年前35天','年前30天','年前25天','年前20天','年前15天','年前10天','年前5天'],
+            datasets: [
+                {
+                    label: '2025累计',
+                    data: [1058, 18183, 89833, 413759, 1159384, 3602286, 4593413, 3252906],
+                    borderColor: '#60a5fa',
+                    backgroundColor: 'transparent'
+                },
+                {
+                    label: '2026累计',
+                    data: [20712, 74232, 200143, 499783, 1282540, 3341474, 4126880, 3133671],
+                    borderColor: '#ffd700',
+                    backgroundColor: 'transparent'
+                }
+            ]
+        };
+        
+        new Chart(document.getElementById('cumChart'), {
+            type: 'line',
+            data: cumData,
+            options: {
+                responsive: true,
+                plugins: { title: { display: true, text: '累计销售对比', color: '#fff' }, legend: { labels: { color: '#fff' } } },
+                scales: {
+                    y: { ticks: { color: '#888' }, grid: { color: 'rgba(255,255,255,0.1)' } },
+                    x: { ticks: { color: '#888' }, grid: { display: false } }
+                }
+            }
+        });
+        
+        const categoryData = {
+            labels: ['滋补礼盒 14.9%', '坚果礼盒 13.8%', '农特礼盒 5.3%', '蛋类礼盒 4.5%', '肉类礼盒 4.2%', '糕点礼盒 2.8%', '水饮礼盒 2.1%'],
+            datasets: [{
+                data: [1818139.66, 1679582.5, 652365.5, 544710.9, 516960.3, 339702.1, 250461.16],
+                backgroundColor: ['#ffd700', '#ff6b6b', '#4ade80', '#60a5fa', '#f472b6', '#a78bfa', '#34d399'],
+                borderWidth: 2,
+                borderColor: '#1a1a2e'
+            }]
+        };
+        
+        new Chart(document.getElementById('categoryChart'), {
+            type: 'doughnut',
+            data: categoryData,
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'right', labels: { color: '#fff', padding: 12, font: { size: 11 } } },
+                    title: { display: true, text: '品类销售占比（%）', color: '#fff', font: { size: 16 } }
+                }
+            }
+        });
+        
+        const targetData = {
+            labels: ['坚果礼盒', '滋补礼盒', '水饮礼盒', '糕点礼盒', '蛋类礼盒', '肉类礼盒'],
+            datasets: [{
+                label: '达成率 %',
+                data: [73.0, 84.6, 500.9, 226.5, 90.8, 83.4],
+                backgroundColor: ['#fbbf24', '#fbbf24', '#4ade80', '#4ade80', '#4ade80', '#f87171']
+            }]
+        };
+        
+        new Chart(document.getElementById('targetChart'), {
+            type: 'bar',
+            data: targetData,
+            options: {
+                responsive: true,
+                indexAxis: 'y',
+                plugins: { legend: { display: false }, title: { display: true, text: '品类目标达成率', color: '#fff', font: { size: 16 } } },
+                scales: {
+                    y: { ticks: { color: '#888' }, grid: { color: 'rgba(255,255,255,0.1)' } },
+                    x: { ticks: { color: '#888', callback: function(value) { return value + '%' } }, grid: { color: 'rgba(255,255,255,0.1)' }, suggestedMax: 120 }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

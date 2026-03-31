@@ -51,9 +51,6 @@
         .pie-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 120px; height: 120px; background: white; border-radius: 50%; display: flex; flex-direction: column; justify-content: center; align-items: center; }
         .pie-value { font-size: 24px; font-weight: bold; color: #27ae60; }
         .pie-label { font-size: 11px; color: #666; text-align: center; }
-        .pie-legend { font-size: 14px; }
-        .legend-item { margin: 10px 0; }
-        .legend-color { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 8px; }
         
         .region-section { margin-bottom: 20px; }
         .region-header { display: flex; justify-content: space-between; align-items: center; background: linear-gradient(135deg, #3498db 0%, #2980b9 100%); color: white; padding: 12px 15px; border-radius: 8px 8px 0 0; }
@@ -99,30 +96,39 @@
                 </div>
             </div>
             
+            <h3 style="margin-top: 20px;">礼盒月度对比</h3>
+            <div class="monthly-grid">
+                <div class="month-card">
+                    <div class="month-name">12月</div>
+                    <div class="month-sales">31万</div>
+                    <div class="month-profit">去年: 20万 +53%</div>
+                </div>
+                <div class="month-card">
+                    <div class="month-name">1月</div>
+                    <div class="month-sales">392万</div>
+                    <div class="month-profit">去年: 28万 +1299%</div>
+                </div>
+                <div class="month-card">
+                    <div class="month-name">2月</div>
+                    <div class="month-sales">261万</div>
+                    <div class="month-profit">去年: 12万 +2071%</div>
+                </div>
+            </div>
+            
             <div class="pie-section" style="margin-top: 20px;">
                 <div class="pie-container">
                     <div class="pie-circle"></div>
                     <div class="pie-center">
-                        <div class="pie-value">54.6%</div>
+                        <div class="pie-value">{box_ratio:.1f}%</div>
                         <div class="pie-label">礼盒占整体<br>销售比例</div>
-                    </div>
-                </div>
-                <div class="pie-legend">
-                    <div class="legend-item">
-                        <span class="legend-color" style="background: #27ae60;"></span>
-                        <span>礼盒销售: 682.8万</span>
-                    </div>
-                    <div class="legend-item">
-                        <span class="legend-color" style="background: #e74c3c;"></span>
-                        <span>其他销售: 567.5万</span>
                     </div>
                 </div>
             </div>
         </div>
         
         <div class="card">
-            <h2>农历新年倒计时 - 累计销售对比</h2>
-            <p style="color: #666; font-size: 13px; margin-bottom: 10px;">（从除夕夜倒数第N天的累计销售对比）</p>
+            <h2>礼盒农历倒计时 - 累计销售对比</h2>
+            <p style="color: #666; font-size: 13px; margin-bottom: 10px;">（基于农历年前N天相同天数对比，估算礼盒累计销售）</p>
             <div class="chart-container">
                 <canvas id="lunarChart"></canvas>
             </div>
@@ -132,19 +138,19 @@
             <h2>核心指标</h2>
             <div class="kpi">
                 <div class="kpi-item">
-                    <div class="kpi-value">1250.3万</div>
+                    <div class="kpi-value">{total_sales/10000:.1f}万</div>
                     <div class="kpi-label">总销售额</div>
                 </div>
                 <div class="kpi-item">
-                    <div class="kpi-value">107.2万</div>
+                    <div class="kpi-value">{total_profit/10000:.1f}万</div>
                     <div class="kpi-label">总毛利</div>
                 </div>
                 <div class="kpi-item">
-                    <div class="kpi-value">8.6%</div>
+                    <div class="kpi-value">{total_profit/total_sales*100:.1f}%</div>
                     <div class="kpi-label">综合毛利率</div>
                 </div>
                 <div class="kpi-item">
-                    <div class="kpi-value">22,579</div>
+                    <div class="kpi-value">{len(sales):,}</div>
                     <div class="kpi-label">订单数</div>
                 </div>
             </div>
@@ -196,7 +202,7 @@
         <div class="cat-section">
             <div class="cat-header">
                 <div class="cat-title">坚果礼盒</div>
-                <div class="cat-stats">销售额: 173.6万 | 占比: 13.88% | 毛利率: 8.06%</div>
+                <div class="cat-stats">销售额: 173.6万 | 占比: 13.88%</div>
             </div>
             <div class="cat-content">
                 <h4>TOP10产品</h4>
@@ -233,7 +239,7 @@
         <div class="cat-section">
             <div class="cat-header">
                 <div class="cat-title">滋补礼盒</div>
-                <div class="cat-stats">销售额: 193.1万 | 占比: 15.45% | 毛利率: 16.08%</div>
+                <div class="cat-stats">销售额: 193.1万 | 占比: 15.45%</div>
             </div>
             <div class="cat-content">
                 <h4>TOP10产品</h4>
@@ -270,7 +276,7 @@
         <div class="cat-section">
             <div class="cat-header">
                 <div class="cat-title">农特礼盒</div>
-                <div class="cat-stats">销售额: 68.2万 | 占比: 5.46% | 毛利率: 16.2%</div>
+                <div class="cat-stats">销售额: 68.2万 | 占比: 5.46%</div>
             </div>
             <div class="cat-content">
                 <h4>TOP10产品</h4>
@@ -307,7 +313,7 @@
         <div class="cat-section">
             <div class="cat-header">
                 <div class="cat-title">肉类礼盒</div>
-                <div class="cat-stats">销售额: 54.9万 | 占比: 4.39% | 毛利率: 7.56%</div>
+                <div class="cat-stats">销售额: 54.9万 | 占比: 4.39%</div>
             </div>
             <div class="cat-content">
                 <h4>TOP10产品</h4>
@@ -344,7 +350,7 @@
         <div class="cat-section">
             <div class="cat-header">
                 <div class="cat-title">蛋类礼盒</div>
-                <div class="cat-stats">销售额: 54.5万 | 占比: 4.36% | 毛利率: 7.13%</div>
+                <div class="cat-stats">销售额: 54.5万 | 占比: 4.36%</div>
             </div>
             <div class="cat-content">
                 <h4>TOP10产品</h4>
@@ -489,7 +495,7 @@
             <div class="rec-content">
                 <ul>
                     <li><strong>周涛/李薇双核心</strong>，贡献37%销售</li>
-                    <li><strong>熹象品牌</strong>销售额最高¥110万，毛利率16.8%</li>
+                    <li><strong>熹象品牌</strong>销售额最高¥110万</li>
                     <li><strong>VIP客户渠道</strong>毛利率达10%+</li>
                 </ul>
             </div>
@@ -508,7 +514,7 @@
     </div>
     
     <script>
-        const lunarData = [["第50天", 1058, 20712],["第49天", 2947, 42199],["第48天", 5806, 52340],["第47天", 11979, 55407],["第46天", 18183, 74232],["第45天", 20488, 77474],["第44天", 25478, 122321],["第43天", 27945, 149237],["第42天", 36763, 176305],["第41天", 89833, 200143],["第40天", 101281, 217678],["第39天", 109673, 228524],["第38天", 121047, 262984],["第37天", 149043, 299095],["第36天", 175266, 314993],["第35天", 231322, 329582],["第34天", 284645, 346266],["第33天", 288896, 365768],["第32天", 310294, 436833],["第31天", 413759, 499783],["第30天", 493770, 585626],["第29天", 541115, 689192],["第28天", 615994, 752480],["第27天", 669367, 846802],["第26天", 695855, 1027865],["第25天", 773936, 1147218],["第24天", 849024, 1215961],["第23天", 1159384, 1282540],["第22天", 1249517, 1482411],["第21天", 1391543, 1768909]];
+        const lunarData = [["12-20", 582, 11310],["12-21", 1621, 23044],["12-22", 3194, 28582],["12-23", 6588, 30257],["12-24", 10001, 40537],["12-25", 11268, 42307],["12-26", 14013, 66797],["12-27", 15370, 81496],["12-28", 20220, 96277],["12-29", 49408, 109294],["12-30", 55705, 118870],["12-31", 60320, 124793],["01-01", 66576, 143611],["01-02", 81973, 163330],["01-03", 96396, 172012],["01-04", 127227, 179978],["01-05", 156555, 189089],["01-06", 158893, 199739],["01-07", 170662, 238546],["01-08", 227567, 272922],["01-09", 271573, 319799],["01-10", 297613, 376355],["01-11", 338797, 410915],["01-12", 368152, 462422],["01-13", 382720, 561298],["01-14", 425665, 626474],["01-15", 466963, 664013],["01-16", 637661, 700371],["01-17", 687234, 809517],["01-18", 765349, 965967],["01-19", 807102, 1015006],["01-20", 877804, 1054788],["01-21", 944118, 1152922],["01-22", 999033, 1254664],["01-23", 1042132, 1352038],["01-24", 1139123, 1418476],["01-25", 1377903, 1483818],["01-26", 1561997, 1592482],["01-27", 1789098, 1711238],["01-28", 1981257, 1824715]];
         
         new Chart(document.getElementById('lunarChart'), {
             type: 'line',
@@ -516,7 +522,7 @@
                 labels: lunarData.map(d => d[0]),
                 datasets: [
                     {{
-                        label: '2025年累计',
+                        label: '2025年礼盒累计(估)',
                         data: lunarData.map(d => d[1]),
                         borderColor: 'rgba(231, 76, 60, 1)',
                         backgroundColor: 'rgba(231, 76, 60, 0.1)',
@@ -524,7 +530,7 @@
                         tension: 0.3
                     }},
                     {{
-                        label: '2026年累计',
+                        label: '2026年礼盒累计',
                         data: lunarData.map(d => d[2]),
                         borderColor: 'rgba(39, 174, 96, 1)',
                         backgroundColor: 'rgba(39, 174, 96, 0.1)',
@@ -538,7 +544,7 @@
                 maintainAspectRatio: false,
                 plugins: {{ 
                     legend: {{ position: 'top' }},
-                    title: {{ display: true, text: '农历新年倒计时 - 累计销售对比' }}
+                    title: {{ display: true, text: '礼盒农历倒计时 - 累计销售对比' }}
                 }},
                 scales: {{
                     y: {{
