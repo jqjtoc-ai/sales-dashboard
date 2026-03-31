@@ -46,11 +46,24 @@
         details { margin: 8px 0; }
         summary { cursor: pointer; color: #ffd700; font-weight: 600; padding: 10px; background: rgba(0,0,0,0.2); border-radius: 8px; }
         
-        .analysis-box { background: rgba(0,0,0,0.3); border-radius: 12px; padding: 20px; margin: 15px 0; }
-        .analysis-box h3 { color: #ff6b6b; margin-bottom: 15px; font-size: 1.1em; }
-        .analysis-box h3.opportunity { color: #4ade80; }
-        .analysis-box ul { margin-left: 20px; }
-        .analysis-box li { margin: 8px 0; line-height: 1.6; }
+        .swot-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+        .swot-box { background: rgba(0,0,0,0.3); border-radius: 12px; padding: 20px; }
+        .swot-box h3 { margin-bottom: 15px; font-size: 1.1em; padding-bottom: 10px; border-bottom: 2px solid; }
+        .swot-box.strength h3 { color: #4ade80; border-color: #4ade80; }
+        .swot-box.weakness h3 { color: #f87171; border-color: #f87171; }
+        .swot-box.opportunity h3 { color: #60a5fa; border-color: #60a5fa; }
+        .swot-box.threat h3 { color: #fbbf24; border-color: #fbbf24; }
+        .swot-box ul { margin-left: 20px; }
+        .swot-box li { margin: 10px 0; line-height: 1.6; }
+        .swot-box li strong { color: #fff; }
+        
+        .action-box { background: linear-gradient(135deg, rgba(255,215,0,0.1) 0%, rgba(255,107,107,0.1) 100%); border: 1px solid rgba(255,215,0,0.3); border-radius: 12px; padding: 24px; margin: 20px 0; }
+        .action-box h3 { color: #ffd700; margin-bottom: 20px; font-size: 1.2em; }
+        .action-item { display: flex; align-items: flex-start; margin: 15px 0; padding: 15px; background: rgba(0,0,0,0.2); border-radius: 8px; }
+        .action-item .priority { font-size: 11px; padding: 3px 8px; border-radius: 4px; margin-right: 12px; white-space: nowrap; }
+        .action-item .priority.high { background: #f87171; color: #fff; }
+        .action-item .priority.medium { background: #fbbf24; color: #000; }
+        .action-item .priority.low { background: #4ade80; color: #000; }
         
         .pct { color: #4ade80; }
         .pct.low { color: #f87171; }
@@ -63,7 +76,7 @@
     <div class="container">
         <header>
             <h1>🐲 金诚铭语年货节销售分析</h1>
-            <p>2026年货节期间销售数据汇总 | 统计周期：2025.12.15 - 2026.03.02</p>
+            <p>2026年货节销售数据分析 | 统计周期：2025.12.15 - 2026.03.02</p>
         </header>
         
         <!-- 核心指标 -->
@@ -74,7 +87,7 @@
             <div class="card"><h3>总销售件数</h3><div class="value">154,855</div></div>
         </div>
         
-        <!-- 品类销售环形图（带百分比标签） -->
+        <!-- 品类销售环形图 -->
         <div class="section">
             <h2>📊 品类销售占比（%）</h2>
             <div class="charts">
@@ -103,196 +116,179 @@
             </table>
         </div>
         
-        <!-- 所有品类Top10品牌和产品 -->
+        <!-- 各类别Top品牌和产品 -->
         <div class="section">
             <h2>🏆 各品类Top10品牌 & 产品</h2>
             
             <details open>
-                <summary>🥜 坚果礼盒 Top10品牌 & 产品 (销售: 1,679,582)</summary>
+                <summary>🥜 坚果礼盒 (销售: 1,679,582 | 达成率: 73.0%)</summary>
                 <div class="cat-box">
-                    <h3>Top10品牌 <span class="rate">达成率 73.0%</span></h3>
                     <table><tr><th>#</th><th>品牌</th><th>销售额</th><th>占比</th></tr>
                         <tr><td><span class="rank top3">1</span></td><td>三只松鼠</td><td>592,378</td><td>35.3%</td></tr>
                         <tr><td><span class="rank top3">2</span></td><td>沃隆</td><td>331,422</td><td>19.7%</td></tr>
                         <tr><td><span class="rank top3">3</span></td><td>琳芝妹妹</td><td>158,900</td><td>9.5%</td></tr>
-                        <tr><td><span class="rank">4</span></td><td>九月笙</td><td>119,292</td><td>7.1%</td></tr>
-                        <tr><td><span class="rank">5</span></td><td>鲜生纪</td><td>128,220</td><td>7.6%</td></tr>
-                        <tr><td><span class="rank">6</span></td><td>都乐</td><td>118,600</td><td>7.1%</td></tr>
-                        <tr><td><span class="rank">7</span></td><td>其他</td><td>230,870</td><td>13.7%</td></tr>
-                    </table>
-                    <h3 style="margin-top:15px">Top10产品</h3>
-                    <table><tr><th>#</th><th>产品</th><th>销售额</th><th>占比</th></tr>
-                        <tr><td>1</td><td>(新）沃隆每日坚果A750g</td><td>132,516</td><td>7.9%</td></tr>
-                        <tr><td>2</td><td>沃隆新年快乐礼盒1.59kg</td><td>122,344</td><td>7.3%</td></tr>
-                        <tr><td>3</td><td>九月笙新年快乐（一路发）坚果礼盒</td><td>118,902</td><td>7.1%</td></tr>
-                        <tr><td>4</td><td>三只松鼠坚果礼盒鸿瑞款1180g</td><td>114,804</td><td>6.8%</td></tr>
-                        <tr><td>5</td><td>鲜生纪臻果好礼坚果礼盒1.48kg</td><td>90,374</td><td>5.4%</td></tr>
-                        <tr><td>6</td><td>三只松鼠坚果礼盒橙金款1558g</td><td>69,751</td><td>4.2%</td></tr>
-                        <tr><td>7</td><td>都乐环球臻果礼坚果礼盒1.3kg</td><td>63,584</td><td>3.8%</td></tr>
-                        <tr><td>8</td><td>三只松鼠零食礼福遇臻礼1.165kg</td><td>45,830</td><td>2.7%</td></tr>
-                        <tr><td>9</td><td>三只松鼠贺岁礼坚果礼盒1171g</td><td>45,601</td><td>2.7%</td></tr>
-                        <tr><td>10</td><td>三只松鼠盛世丹宸坚果礼盒1988g</td><td>41,014</td><td>2.4%</td></tr>
+                        <tr><td>4</td><td>九月笙</td><td>119,292</td><td>7.1%</td></tr>
+                        <tr><td>5</td><td>鲜生纪</td><td>128,220</td><td>7.6%</td></tr>
                     </table>
                 </div>
             </details>
             
             <details open>
-                <summary>💊 滋补礼盒 Top10品牌 & 产品 (销售: 1,818,140)</summary>
+                <summary>💊 滋补礼盒 (销售: 1,818,140 | 达成率: 84.6%)</summary>
                 <div class="cat-box">
-                    <h3>Top10品牌 <span class="rate">达成率 84.6%</span></h3>
                     <table><tr><th>#</th><th>品牌</th><th>销售额</th><th>占比</th></tr>
                         <tr><td><span class="rank top3">1</span></td><td>熹象</td><td>552,765</td><td>30.4%</td></tr>
                         <tr><td><span class="rank top3">2</span></td><td>邱太太</td><td>504,265</td><td>27.7%</td></tr>
                         <tr><td><span class="rank top3">3</span></td><td>贵人福</td><td>205,173</td><td>11.3%</td></tr>
-                        <tr><td><span class="rank">4</span></td><td>其他</td><td>555,937</td><td>30.6%</td></tr>
-                    </table>
-                    <h3 style="margin-top:15px">Top10产品</h3>
-                    <table><tr><th>#</th><th>产品</th><th>销售额</th><th>占比</th></tr>
-                        <tr><td>1</td><td>熹象银耳燕窝新年款（红）（198g*6瓶）</td><td>147,597</td><td>8.1%</td></tr>
-                        <tr><td>2</td><td>熹象黑枸杞240g（产自柴达木盆地）</td><td>126,072</td><td>6.9%</td></tr>
-                        <tr><td>3</td><td>邱太太鲜炖银耳燕窝198g*6瓶</td><td>94,483</td><td>5.2%</td></tr>
-                        <tr><td>4</td><td>邱太太金汤小米海参252g*6碗（精品盒）</td><td>71,831</td><td>4.0%</td></tr>
-                        <tr><td>5</td><td>邱太太鲜炖阿胶（20g*10瓶）200g</td><td>61,438</td><td>3.4%</td></tr>
-                        <tr><td>6</td><td>熹象燕窝阿胶固元糕新年款520g</td><td>58,528</td><td>3.2%</td></tr>
-                        <tr><td>7</td><td>贵人福典藏山海八珍318g</td><td>48,776</td><td>2.7%</td></tr>
-                        <tr><td>8</td><td>贵人福山海宴332g</td><td>47,428</td><td>2.6%</td></tr>
-                        <tr><td>9</td><td>邱太太花开富贵鲜炖燕窝150ml*6罐</td><td>44,496</td><td>2.4%</td></tr>
-                        <tr><td>10</td><td>熹象佛跳墙礼盒（260g*6罐）1560g</td><td>40,680</td><td>2.2%</td></tr>
                     </table>
                 </div>
             </details>
             
             <details>
-                <summary>🥚 蛋类礼盒 Top10品牌 & 产品 (销售: 544,711)</summary>
+                <summary>🥚 蛋类礼盒 (销售: 544,711 | 达成率: 90.8%)</summary>
                 <div class="cat-box">
-                    <h3>Top10品牌 <span class="rate">达成率 90.8%</span></h3>
                     <table><tr><th>#</th><th>品牌</th><th>销售额</th><th>占比</th></tr>
                         <tr><td><span class="rank top3">1</span></td><td>金诚铭语</td><td>347,048</td><td>63.7%</td></tr>
                         <tr><td><span class="rank top3">2</span></td><td>蛋有礼</td><td>121,926</td><td>22.4%</td></tr>
                         <tr><td><span class="rank top3">3</span></td><td>丫蛋西施</td><td>59,054</td><td>10.8%</td></tr>
                     </table>
-                    <h3 style="margin-top:15px">Top10产品</h3>
-                    <table><tr><th>#</th><th>产品</th><th>销售额</th><th>占比</th></tr>
-                        <tr><td>1</td><td>金诚铭语乌鸡蛋（花原筐）40枚</td><td>347,048</td><td>63.7%</td></tr>
-                        <tr><td>2</td><td>丫蛋西施迷妮猫步步高升海鸭蛋16枚</td><td>28,336</td><td>5.2%</td></tr>
-                        <tr><td>3</td><td>蛋有礼甄选海鸭蛋（正方盒）</td><td>27,427</td><td>5.0%</td></tr>
-                        <tr><td>4</td><td>蛋有礼马上发财海鸭蛋800g（16枚）</td><td>24,704</td><td>4.5%</td></tr>
-                        <tr><td>5</td><td>蛋有礼琉榴圆非遗金马送福海鸭蛋1200g</td><td>24,150</td><td>4.4%</td></tr>
-                        <tr><td>6</td><td>蛋有礼富得流油海鸭蛋（红）</td><td>23,312</td><td>4.3%</td></tr>
-                        <tr><td>7</td><td>蛋有礼年年有余海鸭蛋800g（16枚）</td><td>22,333</td><td>4.1%</td></tr>
-                        <tr><td>8</td><td>蛋美哒5A级初产鲜鸡蛋（30枚）</td><td>8,396</td><td>1.5%</td></tr>
-                        <tr><td>9</td><td>蛋美哒虫草蛋（40枚）</td><td>7,539</td><td>1.4%</td></tr>
-                        <tr><td>10</td><td>丫蛋西贵人运旺壹号烤鸭蛋16枚</td><td>6,000</td><td>1.1%</td></tr>
-                    </table>
                 </div>
             </details>
             
             <details>
-                <summary>🍖 肉类礼盒 Top10品牌 & 产品 (销售: 516,960)</summary>
+                <summary>🍖 肉类礼盒 (销售: 516,960 | 达成率: 83.4%)</summary>
                 <div class="cat-box">
-                    <h3>Top10品牌 <span class="rate">达成率 83.4%</span></h3>
                     <table><tr><th>#</th><th>品牌</th><th>销售额</th><th>占比</th></tr>
                         <tr><td><span class="rank top3">1</span></td><td>邱太太</td><td>302,557</td><td>58.5%</td></tr>
                         <tr><td><span class="rank top3">2</span></td><td>福南记</td><td>108,707</td><td>21.0%</td></tr>
                         <tr><td><span class="rank top3">3</span></td><td>熹象</td><td>72,596</td><td>14.0%</td></tr>
                     </table>
-                    <h3 style="margin-top:15px">Top10产品</h3>
-                    <table><tr><th>#</th><th>产品</th><th>销售额</th><th>占比</th></tr>
-                        <tr><td>1</td><td>邱太太金华1号火腿（木盒）2.5kg</td><td>167,482</td><td>32.4%</td></tr>
-                        <tr><td>2</td><td>邱太太金华火腿（竹盒）2.5kg</td><td>135,075</td><td>26.1%</td></tr>
-                        <tr><td>3</td><td>熹象金华火腿2.5kg</td><td>72,596</td><td>14.0%</td></tr>
-                        <tr><td>4</td><td>福南记金华火腿3.65kg</td><td>40,840</td><td>7.9%</td></tr>
-                        <tr><td>5</td><td>福南记金华火腿3kg</td><td>33,470</td><td>6.5%</td></tr>
-                        <tr><td>6</td><td>福南记金华火腿2.5kg</td><td>25,013</td><td>4.8%</td></tr>
-                        <tr><td>7</td><td>金诚恒润火锅羊蝎子礼盒</td><td>12,030</td><td>2.3%</td></tr>
-                        <tr><td>8</td><td>御祚铭品黑金金华火腿2.5kg</td><td>9,455</td><td>1.8%</td></tr>
-                        <tr><td>9</td><td>福南记金华火腿切片1.28kg</td><td>9,384</td><td>1.8%</td></tr>
-                        <tr><td>10</td><td>御祚铭品金华火腿（红封面）2.5kg</td><td>7,867</td><td>1.5%</td></tr>
-                    </table>
                 </div>
             </details>
             
             <details>
-                <summary>🍵 茶饮礼盒 Top10品牌 & 产品 (销售: 187,090)</summary>
+                <summary>🧃 水饮礼盒 (销售: 250,461 | 达成率: 500.9%)</summary>
                 <div class="cat-box">
-                    <h3>Top10品牌</h3>
                     <table><tr><th>#</th><th>品牌</th><th>销售额</th><th>占比</th></tr>
-                        <tr><td><span class="rank top3">1</span></td><td>凯萨皇冠</td><td>49,962</td><td>26.7%</td></tr>
-                        <tr><td><span class="rank top3">2</span></td><td>懂润</td><td>47,819</td><td>25.6%</td></tr>
-                        <tr><td><span class="rank top3">3</span></td><td>知福</td><td>15,738</td><td>8.4%</td></tr>
+                        <tr><td><span class="rank top3">1</span></td><td>金豆芽</td><td>249,453</td><td>99.6%</td></tr>
                     </table>
                 </div>
             </details>
             
             <details>
-                <summary>🍪 糕点礼盒 Top10品牌 & 产品 (销售: 339,702)</summary>
+                <summary>🍪 糕点礼盒 (销售: 339,702 | 达成率: 226.5%)</summary>
                 <div class="cat-box">
-                    <h3>Top10品牌 <span class="rate">达成率 226.5%</span></h3>
                     <table><tr><th>#</th><th>品牌</th><th>销售额</th><th>占比</th></tr>
                         <tr><td><span class="rank top3">1</span></td><td>熹象</td><td>144,318</td><td>42.5%</td></tr>
                         <tr><td><span class="rank top3">2</span></td><td>桂顺斋</td><td>80,454</td><td>23.7%</td></tr>
-                        <tr><td><span class="rank top3">3</span></td><td>轩妈</td><td>38,366</td><td>11.3%</td></tr>
-                    </table>
-                </div>
-            </details>
-            
-            <details>
-                <summary>🧃 水饮礼盒 Top10品牌 & 产品 (销售: 250,461)</summary>
-                <div class="cat-box">
-                    <h3>Top10品牌 <span class="rate">达成率 500.9%</span></h3>
-                    <table><tr><th>#</th><th>品牌</th><th>销售额</th><th>占比</th></tr>
-                        <tr><td><span class="rank top3">1</span></td><td>金豆芽</td><td>249,453</td><td>99.6%</td></tr>
-                        <tr><td><span class="rank top3">2</span></td><td>雀洲</td><td>1,008</td><td>0.4%</td></tr>
-                    </table>
-                </div>
-            </details>
-            
-            <details>
-                <summary>🍬 糖巧礼盒 Top10品牌 & 产品 (销售: 160,220)</summary>
-                <div class="cat-box">
-                    <h3>Top10品牌</h3>
-                    <table><tr><th>#</th><th>品牌</th><th>销售额</th><th>占比</th></tr>
-                        <tr><td><span class="rank top3">1</span></td><td>大白兔</td><td>58,781</td><td>36.7%</td></tr>
-                        <tr><td><span class="rank top3">2</span></td><td>德芙</td><td>37,561</td><td>23.4%</td></tr>
-                        <tr><td><span class="rank top3">3</span></td><td>费列罗</td><td>28,825</td><td>18.0%</td></tr>
                     </table>
                 </div>
             </details>
         </div>
         
-        <!-- 数据分析建议 -->
+        <!-- SWOT分析 -->
         <div class="section">
-            <h2>💡 数据分析与经营建议</h2>
-            
-            <div class="analysis-box">
-                <h3>⚠️ 威胁点 (Threats)</h3>
-                <ul>
-                    <li><strong>蛋类礼盒达成率仅20.3%</strong>：目标600,000仅完成121,926，是最大缺口，需重点关注库存和动销</li>
-                    <li><strong>肉类礼盒达成率仅17.5%</strong>：火腿产品销售不及预期，可能受消费降级影响</li>
-                    <li><strong>坚果礼盒目标达成率73%</strong>：三只松鼠占比过高(35.3%)，品牌过于集中，风险较大</li>
-                    <li><strong>前5大客户占比超50%</strong>：客户集中度高，首衡集配+洋洋系占比近50%，渠道风险明显</li>
-                </ul>
+            <h2>🔍 SWOT分析</h2>
+            <div class="swot-grid">
+                <div class="swot-box strength">
+                    <h3>💪 优势 (Strengths)</h3>
+                    <ul>
+                        <li><strong>滋补礼盒表现稳健</strong>：达成率84.6%，熹象+邱太太双品牌驱动，行业口碑好</li>
+                        <li><strong>水饮礼盒超预期</strong>：达成率500.9%，金豆芽成为年度黑马</li>
+                        <li><strong>糕点礼盒超额完成</strong>：达成率226.5%，熹象、桂顺斋表现突出</li>
+                        <li><strong>客户基础稳定</strong>：首衡集配、洋洋系等重点客户贡献稳定</li>
+                        <li><strong>品牌资源丰富</strong>：熹象、邱太太、三只松鼠等一线品牌加持</li>
+                    </ul>
+                </div>
+                
+                <div class="swot-box weakness">
+                    <h3>⚠️ 劣势 (Weaknesses)</h3>
+                    <ul>
+                        <li><strong>坚果礼盒目标未达成</strong>：达成率仅73%，三只松鼠占比过高(35.3%)，品牌集中风险</li>
+                        <li><strong>肉类礼盒达成率低</strong>：仅83.4%，火腿品类表现疲软</li>
+                        <li><strong>客户集中度高</strong>：前5大客户占比超50%，首衡集配+洋洋系近50%</li>
+                        <li><strong>蛋类礼盒达成率90.8%</strong>：虽接近目标但仍有10%缺口</li>
+                        <li><strong>品牌依赖度过高</strong>：部分品类过度依赖单一品牌</li>
+                    </ul>
+                </div>
+                
+                <div class="swot-box opportunity">
+                    <h3>🎯 机会点 (Opportunities)</h3>
+                    <ul>
+                        <li><strong>水饮/糕点可复制</strong>：金豆芽、熹象成功经验可复制到其他品类</li>
+                        <li><strong>糖巧/茶饮/冲调无目标</strong>：可设定目标挖掘增量，糖巧销售160,220可冲击目标</li>
+                        <li><strong>中小客户开发</strong>：目前客户集中，可发展更多中小渠道分散风险</li>
+                        <li><strong>明年年货节规划</strong>：可提前规划水饮礼盒目标，锁定金豆芽供应</li>
+                        <li><strong>品牌组合优化</strong>：引入新品牌制衡，减少单一品牌依赖</li>
+                    </ul>
+                </div>
+                
+                <div class="swot-box threat">
+                    <h3>🚨 威胁 (Threats)</h3>
+                    <ul>
+                        <li><strong>消费降级趋势</strong>：肉类、火腿等高价礼盒表现不佳，需关注价格带</li>
+                        <li><strong>竞争加剧</strong>：同行年货节力度大，需差异化竞争</li>
+                        <li><strong>客户流失风险</strong>：大客户依赖度高，若流失影响巨大</li>
+                        <li><strong>库存积压风险</strong>：蛋类礼盒未完全消化，需关注库存周转</li>
+                        <li><strong>品牌授权风险</strong>：三只松鼠等品牌政策变化可能影响销售</li>
+                    </ul>
+                </div>
             </div>
-            
-            <div class="analysis-box">
-                <h3 class="opportunity">✅ 机会点 (Opportunities)</h3>
-                <ul>
-                    <li><strong>水饮礼盒超额完成(500.9%)</strong>：金豆芽表现亮眼，可考虑扩大品类或增加同类产品</li>
-                    <li><strong>糕点礼盒超额完成(226.5%)</strong>：熹象、桂顺斋表现突出，可作为明年主推方向</li>
-                    <li><strong>滋补礼盒表现稳定(84.6%)</strong>：熹象、邱太太双品牌驱动，建议加大投入</li>
-                    <li><strong>糖巧/茶饮/冲调礼盒无目标但销售可观</strong>：可设定目标，挖掘增量空间</li>
-                </ul>
-            </div>
-            
-            <div class="analysis-box">
-                <h3>🎯 具体建议</h3>
-                <ul>
-                    <li><strong>针对蛋类礼盒</strong>：建议清库存、调整进货计划，或推出促销方案刺激销售</li>
-                    <li><strong>客户结构优化</strong>：建议发展更多中小客户，降低前5大客户依赖度</li>
-                    <li><strong>品牌组合优化</strong>：坚果礼盒需引入新品牌制衡，避免过度依赖三只松鼠</li>
-                    <li><strong>爆品复制</strong>：金豆芽、熹象燕窝等成功案例可复制到其他品类</li>
-                    <li><strong>客户分级运营</strong>：首衡集配、洋洋系为重点客户，需维护好客情</li>
-                </ul>
+        </div>
+        
+        <!-- 经营建议 -->
+        <div class="section">
+            <h2>📋 经营建议</h2>
+            <div class="action-box">
+                <h3>🎯 具体行动计划</h3>
+                
+                <div class="action-item">
+                    <span class="priority high">高优先</span>
+                    <div>
+                        <strong>优化客户结构</strong>
+                        <p style="color:#aaa;font-size:12px;margin-top:5px">降低前5大客户占比至40%以下，重点发展中小客户，建立客户分层管理体系</p>
+                    </div>
+                </div>
+                
+                <div class="action-item">
+                    <span class="priority high">高优先</span>
+                    <div>
+                        <strong>调整品类结构</strong>
+                        <p style="color:#aaa;font-size:12px;margin-top:5px">蛋类礼盒需清库存降风险；肉类礼盒调整价格带或换成畅销品</p>
+                    </div>
+                </div>
+                
+                <div class="action-item">
+                    <span class="priority high">高优先</span>
+                    <div>
+                        <strong>品牌组合优化</strong>
+                        <p style="color:#aaa;font-size:12px;margin-top:5px">坚果礼盒引入新品牌制衡三只松鼠；复制熹象成功模式到其他品类</p>
+                    </div>
+                </div>
+                
+                <div class="action-item">
+                    <span class="priority medium">中优先</span>
+                    <div>
+                        <strong>设定新目标</strong>
+                        <p style="color:#aaa;font-size:12px;margin-top:5px">糖巧、冲调、茶饮设定合理目标，挖掘增量空间</p>
+                    </div>
+                </div>
+                
+                <div class="action-item">
+                    <span class="priority medium">中优先</span>
+                    <div>
+                        <strong>客户分级运营</strong>
+                        <p style="color:#aaa;font-size:12px;margin-top:5px">首衡集配、洋洋系为重点客户需维护客情；中小客户差异化服务</p>
+                    </div>
+                </div>
+                
+                <div class="action-item">
+                    <span class="priority low">常规</span>
+                    <div>
+                        <strong>数据监控系统</strong>
+                        <p style="color:#aaa;font-size:12px;margin-top:5px">建立周度数据跟踪机制，及时发现异常并调整策略</p>
+                    </div>
+                </div>
             </div>
         </div>
         
@@ -302,7 +298,6 @@
     </div>
     
     <script>
-        // 品类销售环形图 - 带百分比标签
         const categoryData = {
             labels: ['滋补礼盒 14.9%', '坚果礼盒 13.8%', '农特礼盒 5.3%', '蛋类礼盒 4.5%', '肉类礼盒 4.2%', '糕点礼盒 2.8%', '水饮礼盒 2.1%', '茶饮礼盒 1.5%', '糖巧礼盒 1.3%', '冲调礼盒 1.3%'],
             datasets: [{
@@ -319,10 +314,7 @@
             options: {
                 responsive: true,
                 plugins: {
-                    legend: { 
-                        position: 'right', 
-                        labels: { color: '#fff', padding: 12, font: { size: 11 } } 
-                    },
+                    legend: { position: 'right', labels: { color: '#fff', padding: 12, font: { size: 11 } } },
                     title: { display: true, text: '品类销售占比（%）', color: '#fff', font: { size: 16 } },
                     tooltip: {
                         callbacks: {
@@ -338,7 +330,6 @@
             }
         });
         
-        // 目标达成率柱状图
         const targetData = {
             labels: ['坚果礼盒', '滋补礼盒', '水饮礼盒', '糕点礼盒', '蛋类礼盒', '肉类礼盒'],
             datasets: [{
