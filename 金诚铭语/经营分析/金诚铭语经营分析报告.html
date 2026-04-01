@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>金诚铭语经营分析报告 2023-2025</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang SC', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+        
+        header {
+            text-align: center;
+            color: #fff;
+            margin-bottom: 40px;
+        }
+        header h1 { 
+            font-size: 2.5em; 
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        header p { 
+            font-size: 1.1em; 
+            opacity: 0.9;
+        }
+        
+        .card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        
+        .card h2 {
+            color: #1a1a2e;
+            font-size: 1.4em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e94560;
+        }
+        
+        /* 核心指标卡片 */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .kpi-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+        }
+        
+        .kpi-card.green { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); }
+        .kpi-card.red { background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%); }
+        .kpi-card.orange { background: linear-gradient(135deg, #f2994a 0%, #f2c94c 100%); }
+        
+        .kpi-card .value { font-size: 2em; font-weight: bold; margin: 10px 0; }
+        .kpi-card .label { font-size: 0.9em; opacity: 0.9; }
+        .kpi-card .trend { 
+            font-size: 0.85em; 
+            margin-top: 8px;
+            padding: 4px 12px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 20px;
+            display: inline-block;
+        }
+        
+        /* 表格样式 */
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #eee; }
+        th { background: #f8f9fa; font-weight: 600; color: #1a1a2e; }
+        tr:hover { background: #f8f9fa; }
+        
+        .up { color: #27ae60; }
+        .down { color: #e74c3c; }
+        
+        /* 进度条 */
+        .progress-bar {
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+        .progress-bar .fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+        .fill.green { background: linear-gradient(90deg, #11998e, #38ef7d); }
+        .fill.red { background: linear-gradient(90deg, #eb3349, #f45c43); }
+        .fill.blue { background: linear-gradient(90deg, #667eea, #764ba2); }
+        
+        /* 建议框 */
+        .alert {
+            padding: 20px;
+            border-radius: 12px;
+            margin: 15px 0;
+        }
+        .alert-danger { background: #fff5f5; border-left: 4px solid #e74c3c; }
+        .alert-warning { background: #fffbf0; border-left: 4px solid #f39c12; }
+        .alert-success { background: #f0fff4; border-left: 4px solid #27ae60; }
+        
+        .alert h3 { margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+        
+        /* 页脚 */
+        footer {
+            text-align: center;
+            color: rgba(255,255,255,0.7);
+            padding: 20px;
+            font-size: 0.9em;
+        }
+        
+        .nav-menu {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-menu a {
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 20px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-menu a:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+        
+        @media (max-width: 768px) {
+            .kpi-grid { grid-template-columns: 1fr; }
+            .container { padding: 20px 15px; }
+            header h1 { font-size: 1.8em; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📊 金诚铭语经营分析报告</h1>
+            <p>财年周期：每年4月 - 次年3月</p>
+        </header>
+        
+        <div class="nav-menu">
+            <a href="index.html">🏠 首页</a>
+            <a href="金诚铭语/index.html">金诚铭语</a>
+            <a href="金诚铭语/销售报告/index.html">销售报告</a>
+        </div>
+        
+        <!-- 核心指标 -->
+        <div class="kpi-grid">
+            <div class="kpi-card red">
+                <div class="label">FY2025 销售额</div>
+                <div class="value">4367万</div>
+                <div class="trend">📉 同比-21.9%</div>
+            </div>
+            <div class="kpi-card green">
+                <div class="label">毛利率</div>
+                <div class="value">7.79%</div>
+                <div class="trend">⬆️ +2.38% vs FY2023</div>
+            </div>
+            <div class="kpi-card green">
+                <div class="label">净利率</div>
+                <div class="value">-0.40%</div>
+                <div class="trend">⬆️ 亏损收窄</div>
+            </div>
+            <div class="kpi-card orange">
+                <div class="label">库存</div>
+                <div class="value">259万</div>
+                <div class="trend">📉 -29% vs FY2023</div>
+            </div>
+        </div>
+        
+        <!-- 三年对比表 -->
+        <div class="card">
+            <h2>📈 三年核心指标对比</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>指标</th>
+                        <th>FY2023 (2023.4-2024.3)</th>
+                        <th>FY2024 (2024.4-2025.3)</th>
+                        <th>FY2025 (2025.4-2026.3)</th>
+                        <th>两年变化</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>销售额</strong></td>
+                        <td>5718万</td>
+                        <td>5592万</td>
+                        <td>4367万</td>
+                        <td class="down">📉 -24%</td>
+                    </tr>
+                    <tr>
+                        <td><strong>毛利率</strong></td>
+                        <td>5.41%</td>
+                        <td>6.68%</td>
+                        <td>7.79%</td>
+                        <td class="up">⬆️ +2.38%</td>
+                    </tr>
+                    <tr>
+                        <td><strong>运营费用</strong></td>
+                        <td>335万</td>
+                        <td>344万</td>
+                        <td>343万</td>
+                        <td>→ 持平</td>
+                    </tr>
+                    <tr>
+                        <td><strong>净利润</strong></td>
+                        <td>-34.6万</td>
+                        <td>-25.1万</td>
+                        <td>-17.5万</td>
+                        <td class="up">⬆️ 减亏50%</td>
+                    </tr>
+                    <tr>
+                        <td><strong>净利率</strong></td>
+                        <td>-0.60%</td>
+                        <td>-0.45%</td>
+                        <td>-0.40%</td>
+                        <td class="up">⬆️ 改善</td>
+                    </tr>
+                    <tr>
+                        <td><strong>库存</strong></td>
+                        <td>365万</td>
+                        <td>333万</td>
+                        <td>259万</td>
+                        <td class="up">📉 -29%</td>
+                    </tr>
+                    <tr>
+                        <td><strong>厂家收入</strong></td>
+                        <td>-</td>
+                        <td>55.4万</td>
+                        <td>27.0万</td>
+                        <td class="down">📉 -51%</td>
+                    </tr>
+                    <tr>
+                        <td><strong>退货率</strong></td>
+                        <td>0.07%</td>
+                        <td>0.30%</td>
+                        <td>0.34%</td>
+                        <td class="down">⬆️ 恶化</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- 进步板块 -->
+        <div class="card">
+            <h2>✅ 进步的地方</h2>
+            <div class="alert alert-success">
+                <h3>🎉 毛利率持续提升</h3>
+                <p>从5.41%提升到7.79%，两年提升2.38个百分点，说明产品结构优化或采购成本控制改善。</p>
+                <div class="progress-bar">
+                    <div class="fill green" style="width: 78%;"></div>
+                </div>
+            </div>
+            <div class="alert alert-success">
+                <h3>🎉 亏损大幅收窄</h3>
+                <p>净利润从-34.6万改善到-17.5万，亏损减少50%。</p>
+                <div class="progress-bar">
+                    <div class="fill green" style="width: 60%;"></div>
+                </div>
+            </div>
+            <div class="alert alert-success">
+                <h3>🎉 库存管理效率提升</h3>
+                <p>库存从365万降到259万，减少106万（-29%），周转率保持在16.9次。</p>
+                <div class="progress-bar">
+                    <div class="fill green" style="width: 85%;"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 退步板块 -->
+        <div class="card">
+            <h2>⚠️ 退步的地方</h2>
+            <div class="alert alert-danger">
+                <h3>🔴 销售额断崖式下跌（最严重）</h3>
+                <p>FY2025销售额仅4367万，比FY2023少1351万（-24%），两年持续下滑。</p>
+                <div class="progress-bar">
+                    <div class="fill red" style="width: 76%;"></div>
+                </div>
+                <p><strong>可能原因：</strong></p>
+                <ul>
+                    <li>客户流失</li>
+                    <li>产品老化/竞争力下降</li>
+                    <li>市场竞争加剧</li>
+                    <li>主动收缩业务</li>
+                </ul>
+            </div>
+            <div class="alert alert-warning">
+                <h3>🟠 厂家收入锐减</h3>
+                <p>厂家返利+费用从55.4万降到27万，减少28万（-51%），需加强厂商关系。</p>
+                <div class="progress-bar">
+                    <div class="fill red" style="width: 49%;"></div>
+                </div>
+            </div>
+            <div class="alert alert-warning">
+                <h3>🟡 运营费用率上升</h3>
+                <p>费用率从5.9%升至7.9%，需排查并控制不必要支出。</p>
+                <div class="progress-bar">
+                    <div class="fill blue" style="width: 79%;"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 建议板块 -->
+        <div class="card">
+            <h2>💡 下一步建议</h2>
+            <div class="alert alert-danger">
+                <h3>1️⃣ 重点解决销售额下滑</h3>
+                <ul>
+                    <li>分析客户流失原因，挽回重点客户</li>
+                    <li>调研市场竞品，调整产品结构</li>
+                    <li>开拓新渠道/新区域</li>
+                </ul>
+            </div>
+            <div class="alert alert-warning">
+                <h3>2️⃣ 加强厂家关系</h3>
+                <ul>
+                    <li>主动争取更多返利政策</li>
+                    <li>申请更多市场费用支持</li>
+                    <li>争取厂家搭赠资源</li>
+                </ul>
+            </div>
+            <div class="alert alert-success">
+                <h3>3️⃣ 保持现有优势</h3>
+                <ul>
+                    <li>继续优化毛利率</li>
+                    <li>保持低库存策略</li>
+                    <li>控制运营费用</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- 结论 -->
+        <div class="card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #fff;">
+            <h2 style="color: #fff; border-bottom-color: rgba(255,255,255,0.3);">📋 整体评价</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 20px;">
+                <div style="text-align: center; padding: 20px; background: rgba(255,255,255,0.1); border-radius: 12px;">
+                    <div style="font-size: 2em; margin-bottom: 10px;">👍</div>
+                    <div><strong>盈利改善</strong></div>
+                    <div style="opacity: 0.8; font-size: 0.9em;">净利率-0.6%→-0.4%</div>
+                </div>
+                <div style="text-align: center; padding: 20px; background: rgba(255,255,255,0.1); border-radius: 12px;">
+                    <div style="font-size: 2em; margin-bottom: 10px;">👍</div>
+                    <div><strong>库存管理</strong></div>
+                    <div style="opacity: 0.8; font-size: 0.9em;">库存降29%，周转快</div>
+                </div>
+                <div style="text-align: center; padding: 20px; background: rgba(255,255,255,0.1); border-radius: 12px;">
+                    <div style="font-size: 2em; margin-bottom: 10px;">👎</div>
+                    <div><strong>规模收缩</strong></div>
+                    <div style="opacity: 0.8; font-size: 0.9em;">销售额持续下滑</div>
+                </div>
+                <div style="text-align: center; padding: 20px; background: rgba(255,255,255,0.1); border-radius: 12px;">
+                    <div style="font-size: 2em; margin-bottom: 10px;">👎</div>
+                    <div><strong>厂商关系</strong></div>
+                    <div style="opacity: 0.8; font-size: 0.9em;">厂家收入减少51%</div>
+                </div>
+            </div>
+            <div style="margin-top: 25px; padding: 20px; background: rgba(0,0,0,0.2); border-radius: 12px;">
+                <h3 style="margin-bottom: 10px;">🎯 结论</h3>
+                <p>公司在"降本增效"方面有进步（毛利率提升、亏损收窄、库存下降），但"开源"严重不足，销售额持续萎缩是最大隐患。建议重点分析销售额下滑原因，同时加强厂家关系争取更多资源支持。</p>
+            </div>
+        </div>
+        
+        <footer>
+            <p>🐲 数据来源：金诚铭语2025财年有效产出目标 | 分析日期：2026年4月</p>
+        </footer>
+    </div>
+</body>
+</html>
