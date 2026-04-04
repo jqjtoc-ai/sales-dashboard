@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>至汇贸易 2月经营分析报告</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f5f5; color: #333; }
+        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
+        
+        header { background: linear-gradient(135deg, #1a1a2e, #16213e); color: #fff; padding: 30px; border-radius: 12px; margin-bottom: 20px; }
+        header h1 { font-size: 1.8em; margin-bottom: 10px; }
+        header p { color: #888; font-size: 14px; }
+        
+        .card { background: #fff; padding: 20px; margin-bottom: 15px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .card h2 { font-size: 1.2em; margin-bottom: 15px; color: #1a1a2e; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        
+        .kpi-row { display: flex; gap: 15px; flex-wrap: wrap; }
+        .kpi { flex: 1; min-width: 140px; background: #f8f9fa; padding: 15px; border-radius: 8px; text-align: center; }
+        .kpi .label { font-size: 12px; color: #666; margin-bottom: 5px; }
+        .kpi .value { font-size: 1.4em; font-weight: bold; color: #1a1a2e; }
+        .kpi .value.up { color: #27ae60; }
+        .kpi .value.down { color: #e74c3c; }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { padding: 12px; text-align: right; border-bottom: 1px solid #eee; }
+        th { background: #f8f9fa; color: #666; font-weight: 600; font-size: 13px; text-align: right; }
+        th:first-child, td:first-child { text-align: left; }
+        tr:hover { background: #f8f9fa; }
+        
+        .tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; margin-right: 5px; }
+        .tag.bc { background: #e4f4fd; color: #3498db; }
+        .tag.sc { background: #fef5e7; color: #f39c12; }
+        
+        .footer { text-align: center; padding: 20px; color: #888; font-size: 12px; }
+        
+        .highlight { background: #fff3cd; padding: 2px 6px; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🐲 至汇贸易 2月经营分析报告</h1>
+            <p>2026年2月 | TIOE经营指标分析</p>
+        </header>
+        
+        <!-- 总体概览 -->
+        <div class="card">
+            <h2>📊 总体经营指标</h2>
+            <div class="kpi-row">
+                <div class="kpi">
+                    <div class="label">销售结算金额</div>
+                    <div class="value">714.3万</div>
+                </div>
+                <div class="kpi">
+                    <div class="label">退货结算金额</div>
+                    <div class="value" style="color:#e74c3c">150.4万</div>
+                </div>
+                <div class="kpi">
+                    <div class="label">净销售额</div>
+                    <div class="value up">563.9万</div>
+                </div>
+                <div class="kpi">
+                    <div class="label">毛利</div>
+                    <div class="value up">177.1万</div>
+                </div>
+                <div class="kpi">
+                    <div class="label">毛利率</div>
+                    <div class="value">31.4%</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 部门汇总 -->
+        <div class="card">
+            <h2>🏢 部门销售排名</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>部门</th>
+                        <th>净销售额</th>
+                        <th>毛利</th>
+                        <th>毛利率</th>
+                        <th>退货率</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="tag bc">包场南区</span></td>
+                        <td>175.6万</td>
+                        <td>63.8万</td>
+                        <td>36.4%</td>
+                        <td>7.0%</td>
+                    </tr>
+                    <tr>
+                        <td><span class="tag bc">包场北区</span></td>
+                        <td>157.5万</td>
+                        <td>58.6万</td>
+                        <td>37.2%</td>
+                        <td>19.7%</td>
+                    </tr>
+                    <tr>
+                        <td><span class="tag sc">商超流通北区</span></td>
+                        <td>123.8万</td>
+                        <td>29.3万</td>
+                        <td>23.7%</td>
+                        <td>35.2%</td>
+                    </tr>
+                    <tr>
+                        <td><span class="tag sc">商超流通南区</span></td>
+                        <td>105.8万</td>
+                        <td>25.4万</td>
+                        <td>24.0%</td>
+                        <td>22.8%</td>
+                    </tr>
+                    <tr>
+                        <td>总部</td>
+                        <td>1.8万</td>
+                        <td style="color:#e74c3c">-0.1万</td>
+                        <td style="color:#e74c3c">-4.4%</td>
+                        <td>3.9%</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- TOP客户 -->
+        <div class="card">
+            <h2>🏆 销售TOP10客户</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>排名</th>
+                        <th>客户名称</th>
+                        <th>部门</th>
+                        <th>净销售额</th>
+                        <th>毛利</th>
+                        <th>毛利率</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>长坡坚惠散柜</td>
+                        <td>包场北区</td>
+                        <td>15.0万</td>
+                        <td>6.2万</td>
+                        <td>41.7%</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>高州南塘坚惠超市</td>
+                        <td>包场北区</td>
+                        <td>14.3万</td>
+                        <td>6.5万</td>
+                        <td>45.1%</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>石鼓好而多散柜</td>
+                        <td>包场北区</td>
+                        <td>10.3万</td>
+                        <td>4.0万</td>
+                        <td>39.1%</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>龙山多客隆</td>
+                        <td>包场南区</td>
+                        <td>10.2万</td>
+                        <td>4.2万</td>
+                        <td>40.9%</td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>北斗星散柜(分界店)</td>
+                        <td>包场南区</td>
+                        <td>9.8万</td>
+                        <td>4.0万</td>
+                        <td>40.4%</td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td>化州市长岐镇真好超市</td>
+                        <td>包场南区</td>
+                        <td>9.0万</td>
+                        <td>2.7万</td>
+                        <td>29.5%</td>
+                    </tr>
+                    <tr>
+                        <td>7</td>
+                        <td>马贵坚惠散柜</td>
+                        <td>包场北区</td>
+                        <td>8.9万</td>
+                        <td>3.4万</td>
+                        <td>38.4%</td>
+                    </tr>
+                    <tr>
+                        <td>8</td>
+                        <td>茂名明湖超市散柜</td>
+                        <td>包场南区</td>
+                        <td>8.5万</td>
+                        <td>2.5万</td>
+                        <td>29.0%</td>
+                    </tr>
+                    <tr>
+                        <td>9</td>
+                        <td>马踏平民散柜</td>
+                        <td>包场南区</td>
+                        <td>8.4万</td>
+                        <td>3.2万</td>
+                        <td>37.8%</td>
+                    </tr>
+                    <tr>
+                        <td>10</td>
+                        <td>信宜昌大昌东汇城店</td>
+                        <td>包场北区</td>
+                        <td>7.9万</td>
+                        <td>2.5万</td>
+                        <td>32.1%</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- 问题分析 -->
+        <div class="card">
+            <h2>⚠️ 需要关注的问题</h2>
+            <ul style="padding-left: 20px; line-height: 1.8;">
+                <li><strong>退货率过高：</strong>商超流通北区退货率35.2%，包场北区退货率19.7%，需重点跟进</li>
+                <li><strong>商超渠道毛利率偏低：</strong>商超流通北区23.7%、南区24.0%，远低于包场渠道36%+</li>
+                <li><strong>总部亏损：</strong>总部毛利-0.1万，需查看具体原因</li>
+                <li><strong>退货金额偏高：</strong>总退货150.4万，退货率21.1%</li>
+            </ul>
+        </div>
+        
+        <div class="footer">
+            <p>🐲 数据来源：TIOE系统 | 至汇贸易</p>
+        </div>
+    </div>
+</body>
+</html>
