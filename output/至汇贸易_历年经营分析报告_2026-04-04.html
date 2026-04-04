@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>至汇贸易 历年经营数据分析报告</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f5f5; color: #333; }
+        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
+        
+        header { background: linear-gradient(135deg, #1a1a2e, #16213e); color: #fff; padding: 30px; border-radius: 12px; margin-bottom: 20px; }
+        header h1 { font-size: 1.6em; margin-bottom: 10px; }
+        header p { color: #888; font-size: 14px; }
+        
+        .card { background: #fff; padding: 20px; margin-bottom: 15px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .card h2 { font-size: 1.2em; margin-bottom: 15px; color: #1a1a2e; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        
+        .kpi-row { display: flex; gap: 15px; flex-wrap: wrap; }
+        .kpi { flex: 1; min-width: 120px; background: #f8f9fa; padding: 15px; border-radius: 8px; text-align: center; }
+        .kpi .label { font-size: 12px; color: #666; margin-bottom: 5px; }
+        .kpi .value { font-size: 1.4em; font-weight: bold; }
+        .kpi .value.up { color: #27ae60; }
+        .kpi .value.down { color: #e74c3c; }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 14px; }
+        th, td { padding: 10px 8px; text-align: right; border-bottom: 1px solid #eee; }
+        th { background: #f8f9fa; color: #666; font-weight: 600; font-size: 12px; }
+        th:first-child, td:first-child { text-align: left; }
+        
+        .tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; }
+        .tag.bc { background: #e4f4fd; color: #3498db; }
+        .tag.sc { background: #fef5e7; color: #f39c12; }
+        .tag.warn { background: #fce4e4; color: #e74c3c; }
+        .tag.good { background: #e4f4fd; color: #27ae60; }
+        
+        ul { padding-left: 20px; line-height: 1.8; }
+        li { margin-bottom: 8px; }
+        
+        .chart-placeholder { background: #f8f9fa; padding: 30px; text-align: center; border-radius: 8px; color: #888; margin: 15px 0; }
+        
+        .highlight { background: #fff3cd; padding: 2px 6px; border-radius: 4px; }
+        .big-number { font-size: 2em; font-weight: bold; color: #1a1a2e; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🐲 至汇贸易 历年经营数据分析报告</h1>
+            <p>数据周期：2024年7月 - 2025年12月 | 分析时间：2026年4月</p>
+        </header>
+        
+        <!-- 核心指标 -->
+        <div class="card">
+            <h2>📊 核心经营指标</h2>
+            <div class="kpi-row">
+                <div class="kpi">
+                    <div class="label">2025年销售额</div>
+                    <div class="value up">2.46亿</div>
+                </div>
+                <div class="kpi">
+                    <div class="label">同比增长率</div>
+                    <div class="value up">+95.8%</div>
+                </div>
+                <div class="kpi">
+                    <div class="label">2025年毛利</div>
+                    <div class="value">7004万</div>
+                </div>
+                <div class="kpi">
+                    <div class="label">综合毛利率</div>
+                    <div class="value">28.5%</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 年度趋势 -->
+        <div class="card">
+            <h2>📈 年度销售趋势</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>期间</th>
+                        <th>销售额</th>
+                        <th>毛利</th>
+                        <th>毛利率</th>
+                        <th>退货率</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>2024年7-12月</td>
+                        <td>1.25亿</td>
+                        <td>4107万</td>
+                        <td>32.7%</td>
+                        <td>4.9%</td>
+                    </tr>
+                    <tr>
+                        <td>2025年1-12月</td>
+                        <td>2.46亿</td>
+                        <td>7004万</td>
+                        <td>28.5%</td>
+                        <td>7.7%</td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" style="text-align:left">同比变化</td>
+                        <td style="color:#27ae60">+95.8%</td>
+                    </tr>
+                </tbody>
+            </table>
+            <ul style="margin-top:15px">
+                <li>✅ 销售额翻倍增长，说明市场拓展成效显著</li>
+                <li>⚠️ 毛利率下降4.2个百分点，需要关注盈利能力</li>
+                <li>⚠️ 退货率从4.9%上升到7.7%，退货成本增加</li>
+            </ul>
+        </div>
+        
+        <!-- 渠道分析 -->
+        <div class="card">
+            <h2>🏢 渠道分析（包场 vs 商超流通）</h2>
+            <div class="kpi-row">
+                <div class="kpi">
+                    <div class="label">包场销售额</div>
+                    <div class="value">4618万</div>
+                    <div class="label" style="margin-top:5px">毛利率 <span class="tag good">37.4%</span></div>
+                </div>
+                <div class="kpi">
+                    <div class="label">商超销售额</div>
+                    <div class="value">1.94亿</div>
+                    <div class="label" style="margin-top:5px">毛利率 <span class="tag warn">23.6%</span></div>
+                </div>
+            </div>
+            <table style="margin-top:15px">
+                <thead>
+                    <tr>
+                        <th>渠道</th>
+                        <th>销售额占比</th>
+                        <th>毛利占比</th>
+                        <th>毛利率</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="tag bc">包场</span></td>
+                        <td>19.3%</td>
+                        <td>27.5%</td>
+                        <td>37.4%</td>
+                    </tr>
+                    <tr>
+                        <td><span class="tag sc">商超流通</span></td>
+                        <td>80.7%</td>
+                        <td>72.5%</td>
+                        <td>23.6%</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- 季节性分析 -->
+        <div class="card">
+            <h2>📅 月度销售走势</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>月份</th>
+                        <th>2024年</th>
+                        <th>2025年</th>
+                        <th>同比</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>7月</td><td>1659万</td><td>1867万</td><td style="color:#27ae60">+12.5%</td></tr>
+                    <tr><td>8月</td><td>1907万</td><td>1885万</td><td style="color:#e74c3c">-1.2%</td></tr>
+                    <tr><td>9月</td><td>1887万</td><td>2041万</td><td style="color:#27ae60">+8.2%</td></tr>
+                    <tr><td>10月</td><td>945万</td><td>1588万</td><td style="color:#27ae60">+68.1%</td></tr>
+                    <tr><td>11月</td><td>2240万</td><td>1736万</td><td style="color:#e74c3c">-22.5%</td></tr>
+                    <tr><td>12月</td><td>3908万</td><td>2382万</td><td style="color:#e74c3c">-39.1%</td></tr>
+                    <tr><td>1月</td><td>-</td><td>3815万</td><td>-</td></tr>
+                    <tr><td>2月</td><td>-</td><td>1129万</td><td>-</td></tr>
+                </tbody>
+            </table>
+            <ul style="margin-top:15px">
+                <li>📈 销售高峰：1月（春节前备货）、12月（年货节）</li>
+                <li>📉 销售低谷：2月（春节淡季）、10月（换季期）</li>
+            </ul>
+        </div>
+        
+        <!-- 问题诊断 -->
+        <div class="card">
+            <h2>⚠️ 问题诊断</h2>
+            <ul>
+                <li><strong>1. 商超渠道毛利率持续走低</strong><br>
+                商超毛利率仅23.6%，远低于包场37.4%。2025年7月甚至降到6.6%，异常偏低。需要排查原因：是否有促销活动过猛？费用补贴太高？</li>
+                
+                <li><strong>2. 退货率偏高</strong><br>
+                综合退货率7.7%，其中2月高达26.6%。春节后退货是行业惯例，但需控制在15%以内。</li>
+                
+                <li><strong>3. 2024年下半年数据异常</strong><br>
+                2024年10月毛利率显示60%，数据可能有误或包含特殊科目。</li>
+                
+                <li><strong>4. 12月销售下滑明显</strong><br>
+                2025年12月销售比2024年同期下降39%，需关注是否市场竞争加剧或客户流失。</li>
+            </ul>
+        </div>
+        
+        <!-- 专业建议 -->
+        <div class="card">
+            <h2>💡 经营建议</h2>
+            <ul>
+                <li><strong>1. 优化商超渠道盈利模型</strong><br>
+                ▸ 提高包场渠道销售占比至25%以上<br>
+                ▸ 商超渠道控制费用返点不超过15%<br>
+                ▸ 建立商超单品毛利考核机制（低于20%单品需优化）</li>
+                
+                <li><strong>2. 降低退货率</strong><br>
+                ▸ 2月退货率26.6%需重点管控<br>
+                ▸ 建立客户信用评级，高退货客户限制发货<br>
+                ▸ 推行"先进先出"库存管理</li>
+                
+                <li><strong>3. 季节性经营策略</strong><br>
+                ▸ 1月/12月旺季备足库存<br>
+                ▸ 2月淡季做好客情维护<br>
+                ▸ 7-8月夏季推出清凉解暑品类</li>
+                
+                <li><strong>4. 提升盈利能力</strong><br>
+                ▸ 综合毛利率目标：维持在30%以上<br>
+                ▸ 高毛利产品（毛利率>40%）加大推广力度</li>
+                
+                <li><strong>5. 客户结构优化</strong><br>
+                ▸ 重点维护TOP20客户（贡献60%销售）<br>
+                ▸ 淘汰低毛利、高退货的亏损客户</li>
+            </ul>
+        </div>
+        
+        <!-- 下一步行动 -->
+        <div class="card">
+            <h2>🎯 下一步行动建议</h2>
+            <ol style="padding-left:20px; line-height:1.8">
+                <li>本周：与商超部门负责人座谈，排查7月毛利率异常原因</li>
+                <li>本月：制定2026年各渠道毛利率考核目标</li>
+                <li>季度：优化客户结构，筛选TOP30优质客户重点维护</li>
+                <li>年度：建立数据化管理看板，实现月度经营分析自动化</li>
+            </ol>
+        </div>
+        
+        <div class="footer">
+            <p>🐲 报告生成 | 至汇贸易经营分析</p>
+        </div>
+    </div>
+</body>
+</html>
