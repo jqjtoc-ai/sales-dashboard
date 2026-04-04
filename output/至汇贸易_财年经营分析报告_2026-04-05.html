@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>至汇贸易 财年经营分析报告</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f5f5; color: #333; }
+        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
+        
+        header { background: linear-gradient(135deg, #1a1a2e, #16213e); color: #fff; padding: 30px; border-radius: 12px; margin-bottom: 20px; }
+        header h1 { font-size: 1.6em; margin-bottom: 10px; }
+        header p { color: #888; font-size: 14px; }
+        
+        .card { background: #fff; padding: 20px; margin-bottom: 15px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .card h2 { font-size: 1.2em; margin-bottom: 15px; color: #1a1a2e; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        
+        .kpi-row { display: flex; gap: 15px; flex-wrap: wrap; }
+        .kpi { flex: 1; min-width: 120px; background: #f8f9fa; padding: 15px; border-radius: 8px; text-align: center; }
+        .kpi .label { font-size: 12px; color: #666; margin-bottom: 5px; }
+        .kpi .value { font-size: 1.4em; font-weight: bold; }
+        .kpi .value.up { color: #27ae60; }
+        .kpi .value.down { color: #e74c3c; }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 14px; }
+        th, td { padding: 10px 8px; text-align: right; border-bottom: 1px solid #eee; }
+        th { background: #f8f9fa; color: #666; font-weight: 600; font-size: 12px; }
+        th:first-child, td:first-child { text-align: left; }
+        
+        .tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; }
+        .tag.up { background: #d4edda; color: #155724; }
+        .tag.down { background: #f8d7da; color: #721c24; }
+        .tag.neutral { background: #e2e3e5; color: #383d41; }
+        
+        ul { padding-left: 20px; line-height: 1.8; }
+        li { margin-bottom: 8px; }
+        
+        .highlight-box { padding: 15px; border-radius: 8px; margin: 15px 0; }
+        .highlight-box.good { background: #d4edda; border-left: 4px solid #28a745; }
+        .highlight-box.bad { background: #f8d7da; border-left: 4px solid #dc3545; }
+        
+        .section-title { font-size: 1.1em; font-weight: 600; margin: 20px 0 10px 0; color: #1a1a2e; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🐲 至汇贸易 财年经营分析报告</h1>
+            <p>财年2024 vs 财年2025 对比分析 | 分析时间：2026年4月</p>
+        </header>
+        
+        <!-- 财年说明 -->
+        <div class="card">
+            <h2>📅 财年说明</h2>
+            <p style="color:#666; line-height:1.8;">
+                财年定义：每年4月1日至次年3月31日<br>
+                • 财年2024：2024年4月 - 2025年3月<br>
+                • 财年2025：2025年4月 - 2026年3月（当前数据截至2026年2月）
+            </p>
+        </div>
+        
+        <!-- 核心指标对比 -->
+        <div class="card">
+            <h2>📊 核心指标对比</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>指标</th>
+                        <th>财年2024</th>
+                        <th>财年2025</th>
+                        <th>变化</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>销售额</td>
+                        <td>2.79亿</td>
+                        <td>2.37亿</td>
+                        <td><span class="tag down">-15.1%</span></td>
+                    </tr>
+                    <tr>
+                        <td>毛利</td>
+                        <td>8,281万</td>
+                        <td>6,310万</td>
+                        <td><span class="tag down">-23.8%</span></td>
+                    </tr>
+                    <tr>
+                        <td>毛利率</td>
+                        <td>29.7%</td>
+                        <td>26.6%</td>
+                        <td><span class="tag down">-3.0%</span></td>
+                    </tr>
+                    <tr>
+                        <td>退货率</td>
+                        <td>5.8%</td>
+                        <td>6.0%</td>
+                        <td><span class="tag neutral">+0.2%</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- 进步的地方 -->
+        <div class="highlight-box good">
+            <h3 style="color:#155724; margin-bottom:10px;">✅ 表现进步的地方</h3>
+            <ul style="color:#155724;">
+                <li><strong>1. 商超渠道大幅增长</strong><br>
+                销售额从7,383万增长至9,999万（+35.4%），毛利从1,645万增长至2,318万（+40.9%）。商超渠道扩张成效显著。</li>
+                
+                <li><strong>2. 9月单月表现优异</strong><br>
+                同比增长销售+8.0%，毛利+7.3%，是全年唯一毛利增长的月份。</li>
+                
+                <li><strong>3. 4月销售增长强劲</strong><br>
+                新财年开局良好，销售额从2,000万增长至2,541万（+27.1%）。</li>
+            </ul>
+        </div>
+        
+        <!-- 退步的地方 -->
+        <div class="highlight-box bad">
+            <h3 style="color:#721c24; margin-bottom:10px;">⚠️ 表现退步的地方</h3>
+            <ul style="color:#721c24;">
+                <li><strong>1. 整体销售额和毛利下滑</strong><br>
+                销售额下降15.1%（-4,200万），毛利下降23.8%（-1,971万）。</li>
+                
+                <li><strong>2. 毛利率持续下降</strong><br>
+                综合毛利率从29.7%下降至26.6%，下降3个百分点，盈利能力承压。</li>
+                
+                <li><strong>3. 包场渠道萎缩</strong><br>
+                销售额从5,573万下降至4,948万（-11.2%），毛利从2,198万下降至1,881万（-14.4%）。高毛利渠道在流失。</li>
+                
+                <li><strong>4. 7月异常波动</strong><br>
+                销售增长6.1%，但毛利暴降52.2%（从518万降至248万），需排查原因。</li>
+                
+                <li><strong>5. 12月旺季下滑严重</strong><br>
+                销售下降36.3%，毛利下降43.3%（从1,180万降至669万），年货节表现不佳。</li>
+                
+                <li><strong>6. 下半年持续低迷</strong><br>
+                10月、11月、12月连续三个月下滑超过18%。</li>
+            </ul>
+        </div>
+        
+        <!-- 渠道分析 -->
+        <div class="card">
+            <h2>🏢 渠道分析</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>渠道</th>
+                        <th>FY2024销售</th>
+                        <th>FY2025销售</th>
+                        <th>销售变化</th>
+                        <th>FY2024毛利</th>
+                        <th>FY2025毛利</th>
+                        <th>毛利变化</th>
+                        <th>毛利率</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>包场</td>
+                        <td>5,573万</td>
+                        <td>4,948万</td>
+                        <td><span class="tag down">-11.2%</span></td>
+                        <td>2,198万</td>
+                        <td>1,881万</td>
+                        <td><span class="tag down">-14.4%</span></td>
+                        <td>39.4%→38.0%</td>
+                    </tr>
+                    <tr>
+                        <td>商超</td>
+                        <td>7,383万</td>
+                        <td>9,999万</td>
+                        <td><span class="tag up">+35.4%</span></td>
+                        <td>1,645万</td>
+                        <td>2,318万</td>
+                        <td><span class="tag up">+40.9%</span></td>
+                        <td>22.3%→23.2%</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- 月度对比 -->
+        <div class="card">
+            <h2>📅 月度同比对比</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>月份</th>
+                        <th>FY2024销售</th>
+                        <th>FY2025销售</th>
+                        <th>销售变化</th>
+                        <th>FY2024毛利</th>
+                        <th>FY2025毛利</th>
+                        <th>毛利变化</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>4月</td>
+                        <td>2,000万</td>
+                        <td>2,541万</td>
+                        <td><span class="tag up">+27.1%</span></td>
+                        <td>645万</td>
+                        <td>670万</td>
+                        <td><span class="tag up">+3.9%</span></td>
+                    </tr>
+                    <tr>
+                        <td>5月</td>
+                        <td>2,357万</td>
+                        <td>2,409万</td>
+                        <td><span class="tag up">+2.2%</span></td>
+                        <td>752万</td>
+                        <td>714万</td>
+                        <td><span class="tag down">-5.1%</span></td>
+                    </tr>
+                    <tr>
+                        <td>6月</td>
+                        <td>1,904万</td>
+                        <td>1,627万</td>
+                        <td><span class="tag down">-14.5%</span></td>
+                        <td>601万</td>
+                        <td>413万</td>
+                        <td><span class="tag down">-31.3%</span></td>
+                    </tr>
+                    <tr>
+                        <td>7月</td>
+                        <td>1,759万</td>
+                        <td>1,867万</td>
+                        <td><span class="tag up">+6.1%</span></td>
+                        <td>518万</td>
+                        <td>248万</td>
+                        <td><span class="tag down">-52.2%</span></td>
+                    </tr>
+                    <tr>
+                        <td>8月</td>
+                        <td>1,995万</td>
+                        <td>1,981万</td>
+                        <td><span class="tag down">-0.7%</span></td>
+                        <td>591万</td>
+                        <td>539万</td>
+                        <td><span class="tag down">-8.8%</span></td>
+                    </tr>
+                    <tr>
+                        <td>9月</td>
+                        <td>1,957万</td>
+                        <td>2,113万</td>
+                        <td><span class="tag up">+8.0%</span></td>
+                        <td>572万</td>
+                        <td>614万</td>
+                        <td><span class="tag up">+7.3%</span></td>
+                    </tr>
+                    <tr>
+                        <td>10月</td>
+                        <td>1,981万</td>
+                        <td>1,731万</td>
+                        <td><span class="tag down">-12.6%</span></td>
+                        <td>567万</td>
+                        <td>464万</td>
+                        <td><span class="tag down">-18.2%</span></td>
+                    </tr>
+                    <tr>
+                        <td>11月</td>
+                        <td>2,314万</td>
+                        <td>1,897万</td>
+                        <td><span class="tag down">-18.0%</span></td>
+                        <td>679万</td>
+                        <td>498万</td>
+                        <td><span class="tag down">-26.6%</span></td>
+                    </tr>
+                    <tr>
+                        <td>12月</td>
+                        <td>3,974万</td>
+                        <td>2,532万</td>
+                        <td><span class="tag down">-36.3%</span></td>
+                        <td>1,180万</td>
+                        <td>669万</td>
+                        <td><span class="tag down">-43.3%</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- 总结与建议 -->
+        <div class="card">
+            <h2>💡 总结与建议</h2>
+            <div class="section-title">核心问题</div>
+            <ul>
+                <li>销售和毛利绝对值下滑，盈利能力下降</li>
+                <li>高毛利的包场渠道在萎缩（-14.4%毛利）</li>
+                <li>下半年（10-12月）持续疲软</li>
+                <li>7月和12月出现异常波动，需深入分析</li>
+            </ul>
+            
+            <div class="section-title">建议措施</div>
+            <ul>
+                <li><strong>稳定包场渠道：</strong>包场是核心盈利来源（毛利率38%），需重点维护，避免流失</li>
+                <li><strong>提升商超毛利：</strong>商超毛利率仅23.2%，需优化产品结构和费用管控</li>
+                <li><strong>分析异常月份：</strong>重点排查7月毛利暴跌50%的原因</li>
+                <li><strong>强化旺季销售：</strong>12月是年货节关键期，今年下滑43%，需提前规划</li>
+                <li><strong>改善下半年表现：</strong>10-12月连续下滑，需制定促销策略</li>
+            </ul>
+        </div>
+        
+        <div class="footer" style="text-align:center; padding:20px; color:#888; font-size:12px;">
+            <p>🐲 报告生成 | 至汇贸易经营分析</p>
+        </div>
+    </div>
+</body>
+</html>
